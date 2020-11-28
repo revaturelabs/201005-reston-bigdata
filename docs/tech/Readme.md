@@ -1,9 +1,12 @@
-
-  ## Collection of resources and info from Tech.
+## Collection of resources and info from Tech.
   
-  #### Files
+#### Files
   
 **technotes-0.1.pdf**: slideshow about Elastic Stack (aka ELK), still working: k8/docker/helm/kafka/architecture
+
+---
+
+#### Directories
   
 | dir | description |
 |---|---|
