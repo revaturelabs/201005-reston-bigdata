@@ -3,7 +3,7 @@
   
   #### Files
   
-**technotes-0.1.pdf ** - slideshow about Elastic Stack (aka ELK), still working: k8/docker/helm/kafka/architecture
+**technotes-0.1.pdf**: slideshow about Elastic Stack (aka ELK), still working: k8/docker/helm/kafka/architecture
   
 | dir | description |
 |---|---|
