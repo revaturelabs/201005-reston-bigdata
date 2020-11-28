@@ -1,11 +1,15 @@
-s is a sample configuration for git.  
-#   To use it, rename it .gitconfig and place it in your home (~) directory
+# Sample configuration for git.  
+# To use it, rename it .gitconfig and place it in your home (~) directory
 # 
 
 [core]
     whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
     editor = code --wait
 #   excludesFile = ~/.gitignore
+
+[user]
+    name = First Last
+    email = email@email.com
 
 [alias]
     aa = add --all
@@ -102,8 +106,4 @@ s is a sample configuration for git.
     clean = git-lfs clean -- %f
     smudge = git-lfs smudge -- %f
     process = git-lfs filter-process
-
-[user]
-    name = First Last
-    email = email@email.com
 
