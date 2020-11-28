@@ -1,6 +1,6 @@
 ## Git configuration files
 
-- **git-cheatsheet.md** commonly used with teams.
+- **git-cheatsheet.md** commonly used git cmds for teams.
 
 #### Subdirectories
 
