@@ -1,0 +1,41 @@
+#
+# Sample gitignore from https://github.com/odersky/scala/blob/master/gitignore.SAMPLE
+#
+#   To use, rename to .gitignore and place in repo directory or alternatively, add the
+# core.excludesFile configuration to your Git config file and append this file's path.
+# 
+
+/.gitignore
+/test/files/.gitignore
+
+*.jar
+*~
+
+#sbt
+/project/target/
+/project/project/target
+
+/target/
+/src/jline/target/
+
+# target directories for ant build
+/build/
+/dists/
+
+# other
+/out/
+/bin/
+/sandbox/
+
+# eclipse, intellij
+/.classpath
+/.project
+/src/intellij/*.iml
+/src/intellij/*.ipr
+/src/intellij/*.iws
+/.cache
+/.idea
+/.settings
+
+# bak files produced by ./cleanup-commit
+*.bak
