@@ -11,6 +11,9 @@
 //       and package.  Each jar should be in the target folder of the module, under scala version.
 //
 // git: https://github.com/dannyhlee/intellij_sbt_multi_jar_project
+//
+
+
 ThisBuild / scalaVersion  := "2.11.12"
 ThisBuild / version       := "1.0"
 ThisBuild / libraryDependencies ++= commonDependencies
