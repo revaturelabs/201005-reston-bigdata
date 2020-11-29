@@ -1,6 +1,6 @@
 ## Overview
 
-This directory holds resources about the Kubernetes/Docker architecture and AWS.  
+This directory holds resources about the Kubernetes/Docker architecture.
 
 ## Resources
 
