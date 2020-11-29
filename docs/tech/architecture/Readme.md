@@ -1,3 +1,7 @@
+## Overview
+
+This directory holds resources about the Kubernetes/Docker architecture and AWS.  
+
 ## Resources
 
 An excellent overview of Docker and Kubernetes by James Quigley [youtube](https://www.youtube.com/watch?v=1xo-0gCVhTU) (55:07)
