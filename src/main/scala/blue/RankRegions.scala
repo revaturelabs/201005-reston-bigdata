@@ -112,5 +112,4 @@ def main(args: Array[String]): Unit = {
 
     rankRegionsByMetric.plotMetrics(spark, regionByInfectionRateFull, "infections_per_pop_100k", "infections")
     rankRegionsByMetric.plotMetrics(spark, regionByGDPFull, "GDP", "GDP")
-  }
-*/
+  }*/
