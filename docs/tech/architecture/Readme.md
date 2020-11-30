@@ -10,4 +10,4 @@ This directory holds resources about the Kubernetes/Docker architecture.
 --- 
 ## System Architecture (proposed)
 
-![Proposed system architecture](architecture/architecture-overview.png)
+![Proposed system architecture](architecture-overview.png)
