@@ -33,7 +33,7 @@ borders_dictionary = Map[String, List[String]](
     ),
     "Angola" -> List(
         "Congo",
-        "Democratic Repbulic of Congo"
+        "Democratic Repbulic of Congo",
         "Nambia",
         "Zambia"
     ),
@@ -453,7 +453,7 @@ borders_dictionary = Map[String, List[String]](
         "Lebanon",
         "Palestine",
         "Syria"
-    )
+    ),
     "Isle of Man" -> List(),
     "India" -> List(
         "Bangladesh",
