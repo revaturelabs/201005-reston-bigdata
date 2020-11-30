@@ -2,7 +2,7 @@ import org.apache.spark
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.functions.{asc, desc, round}
 import org.apache.spark.sql.{DataFrame, SparkSession, functions}
-object Runner {
+object orangeRunner {
   def main(args: Array[String]): Unit={
     val appName = "Orange"
     val spark = SparkSession.builder()
