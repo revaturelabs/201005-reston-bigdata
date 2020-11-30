@@ -13,6 +13,9 @@ object Question8 {
     //Grab all available region names
     val regionNames = df.select("name").sort("name").distinct().rdd.map(_.get(0).toString).collect()
 
+    var gdpDataRegions = ArrayBuffer[Array[Double]]()
+    var casesDataRegions = ArrayBuffer[Array[Double]]()
+
     for(region <- 0 to regionNames.length-1){
       //sort DataFrame according to GDP and filter by each region
       val regionArray = df.select("name", "agg_gdp", "agg_cases").
@@ -28,10 +31,14 @@ object Question8 {
         casesData += regionArray(i).get(2).toString.toDouble
       }
       //get the regions correlation
+      gdpDataRegions += gdpData.toArray
+      casesDataRegions += casesData.toArray
       val correlation = StatFunc.correlation(gdpData.toArray, casesData.toArray)
       println(s"Region ${regionNames(region)}'s GDP-Infection rate correlation: ${correlation}'")
     }
+    GraphFunc.graphSeries(gdpDataRegions.toArray,casesDataRegions.toArray,name = regionNames, style='-', legend=true)
   }
+
 
   def regionFirstPeak(spark: SparkSession, df: DataFrame): Unit= {
 
