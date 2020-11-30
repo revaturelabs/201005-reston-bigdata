@@ -70,6 +70,7 @@ object RankRegions {
   }
 
 }
+<<<<<<< HEAD:pj3-bigdata/src/main/scala/blue/RankRegions.scala
 /*
 def main(args: Array[String]): Unit = {
     val spark = SparkSession.builder()
@@ -120,3 +121,5 @@ def main(args: Array[String]): Unit = {
   }
 */
 
+=======
+>>>>>>> 7d027fe33b1549ed74e31ba6d0f212eddb0671c6:src/main/scala/blue/RankRegions.scala
