@@ -10,7 +10,7 @@ object StatFunc {
    * @param xArray the independent data series
    * @param yArray the dependent data series
    * @param neighbors number of data points to evaluate after a potential peak
-   * @param minDifference number to filter out noise where noise is difference between peak and avg of neighbors
+   * @param minDifference number to filter out noise where noise is difference between peak and avg value of neighbors
    * @return a first peak coordinate that satisfies conditions
    */
   def firstPeak(xArray: Array[Double], yArray: Array[Double], neighbors: Int, minDifference: Double): (Double, Double) ={
