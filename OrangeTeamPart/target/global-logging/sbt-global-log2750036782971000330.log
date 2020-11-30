@@ -1,9 +1,0 @@
-[debug] > Exec(all {file:/C:/Users/Roger3/revgit/Projects/OrangeTeamPart/}orangeteampart/products {file:/C:/Users/Roger3/revgit/Projects/OrangeTeamPart/}orangeteampart/test:products, None, None)
-[debug] Evaluating tasks: Compile / products, Test / products
-[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
-[info] compiling 1 Scala source to C:\Users\Roger3\revgit\Projects\OrangeTeamPart\target\scala-2.12\classes ...
-[info] done compiling
-[success] Total time: 1 s, completed Nov 25, 2020 1:23:19 PM
-[debug] > Exec(idea-shell, None, None)
-[debug] > Exec(, None, None)
-[debug] > Exec(idea-shell, None, None)
