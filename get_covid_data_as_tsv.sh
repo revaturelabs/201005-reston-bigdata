@@ -2,8 +2,9 @@
 #   covid_data/ directory holds all data TSVs
 #   covid_data/countries_general_stats.tsv holds the general stats that do not change daily
 #       each country is stored in a row of this file
-#   covid_data/{COUNTRY_NAME}_daily_stats.tsv holds the stats that may change from day to day
+#   covid_data/daily_stats.tsv holds the stats that may change from day to day
 #       each day is stored in a row of the file named after the country
+#       the country that a given day record corresponds to is in the COUNTRY field
 #   covid_data/{COUNTRY_NAME}.json holds the json representation of that countries data
 #   the first row 
 
