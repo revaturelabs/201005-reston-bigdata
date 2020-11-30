@@ -14,7 +14,3 @@
 |/architecture| Kubernetes, Docker and system architecture related |
 |/sbt| sbt related stuff, only multi-project jar build.sbt sample file.
 
---- 
-## System Architecture (proposed)
-
-![Proposed system architecture](architecture/architecture-overview.png)
