@@ -6,17 +6,17 @@ object Runner {
   def main(args: Array[String]): Unit={
     val appName = "Orange"
     val spark = SparkSession.builder()
-      .appName("Hello Spark Structured Streaming")
+      .appName(appName)
       .master("local[4]")
       .getOrCreate()
     import spark.implicits._
     spark.sparkContext.setLogLevel("WARN")
 
-    //import the covid data as well as the border data from the provided border data
+    //import the covid data from testData file as well as the border data from the provided border data
     val country_data = spark.read.option("multiline", "true").json("testData")
     val borders = spark.read.option("header", "true").csv("border_data.csv")
 
-          //create "infection_rate" from covid data
+          //create "infection_rate" from covid data directory with daily covid data
         val infection_rate = country_data
           .select($"location", $"population", functions.explode($"data")) //.explode will separate our nested data so we can access it
           .select($"location", $"population", $"col.date", $"col.total_cases")
@@ -34,7 +34,7 @@ object Runner {
 
     /*
     bcountries for border countries, joins the border_data.csv from https://github.com/geodatasource/country-borders with infection_rate
-    to give us all the countries that border a country and the infection rate of the home country. The infection rate of the bordering country
+    to give us all the countries that border a country(home country) and the infection rate of the home country. The infection rate of the bordering country
     will be retrieved in the next join
      */
     val bcountries = borders.join(infection_rate, borders("country_name") === infection_rate("location"), "inner")
@@ -78,10 +78,12 @@ object Runner {
         infection_rate("infection_rate_per_capita").as("infection_rate_per_capita(%)"))
 //    waterLockedInfRate.show(10)
 
+
+
     //RESULT QUERIES
 
     /*
-    query to give result to question 1. by using delta > 0, we can ensure no duplicates of countries in opposite directions, such as
+    query to give result to part 1. by using delta > 0, we can ensure no duplicates of countries in opposite directions, such as
     having both Israel-Lebanon and Lebanon-Israel.
      */
     println("Largest Difference(Delta) in Bordering Countries")
@@ -90,15 +92,17 @@ object Runner {
       .orderBy(desc("delta")) //using desc here allows us to get the largest differences at the top, and smaller differences at the end
       .show(10)
 
-    //queries for land and water locked countries.
-//    landLockedInfRate.select("*")
-//      .orderBy(asc("infection_rate_per_capita(%)"))
-//      .show(50)
+    /* Queries to give us the answer to the second part of our question. Using the Dataframes for land and water locked countries, we can do simple
+    queries to give the required answers
+     */
+//       landLockedInfRate.select("*")
+//       .orderBy(asc("infection_rate_per_capita(%)"))
+//         .show(10)
 
     println("Highest Infection Rate in Land Locked Countries\n")
     landLockedInfRate.select("*")
       .orderBy(desc("infection_rate_per_capita(%)"))
-      .show(50)
+      .show(10)
 
     println("Highest Infection Rate in Water Locked Countries\n")
     waterLockedInfRate.select("*")
@@ -120,8 +124,7 @@ object Runner {
     landLocked
   }
 
-  //uses the dataframe of our border countries and looks for there to be a NULL for border country. This means there is no land border, meaning the country is
-  //waterlocked
+  //uses the dataframe of our border countries and looks for there to be a NULL for border country. This means there is no land border, meaning the country is waterlocked
   def createWaterLocked(infectionFrame: DataFrame , spark:SparkSession): DataFrame ={
     import spark.implicits._
     val waterLocked = infectionFrame.filter($"country_border_code".isNull)
