@@ -49,3 +49,37 @@ Merging steps:
 4. *Optional: delete branch*
 5. Commit and push, if necessary.
 
+--- 
+
+If you forked the repo, and want to update your repo from the changes in the original (aka upstream)
+
+1. **V**iew your remote repositories: 
+```
+$ git remote -v
+origin  git@github.com:username/201005-reston-bigdata.git (fetch)
+origin  git@github.com:username/201005-reston-bigdata.git (push)
+```
+2. Add an upstream repository and check your remotes again:
+```
+$ git remote add upstream git@github.com:revaturelabs/201005-reston-bigdata.git
+$ git remote -v
+origin  git@github.com:username/201005-reston-bigdata.git (fetch)
+origin  git@github.com:username/201005-reston-bigdata.git (push)
+upstream        git@github.com:revaturelabs/201005-reston-bigdata.git (fetch)
+upstream        git@github.com:revaturelabs/201005-reston-bigdata.git (push)
+```
+3. To pull the changes on the upstream repo:
+```
+// just main branch
+$ git pull upstream main
+//all branches
+$ git pull upstream
+```
+extra: Delete a remote
+```
+$ git remote rm name
+```
+extra: Rename a remote
+```
+$ git remote rename old-name new-name
+```
