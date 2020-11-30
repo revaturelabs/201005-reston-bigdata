@@ -50,13 +50,6 @@ Merging steps:
 5. Commit and push, if necessary.
 
 --- 
-List files that have conflicts:
-
-```
-git diff --name-only --diff-filter=U
-```
-
----
 Pull all branches from remote:
 ```
 git branch -r | grep -v '\->' | while read remote; do git branch --track "${remote#origin/}" "$remote"; done  
