@@ -50,6 +50,13 @@ Merging steps:
 5. Commit and push, if necessary.
 
 --- 
+Pull all branches from remote:
+```
+git branch -r | grep -v '\->' | while read remote; do git branch --track "${remote#origin/}" "$remote"; done  
+git fetch --all  
+git pull --all  
+```
+---
 
 If you forked the repo, and want to update your repo from the changes in the original (aka upstream)
 
