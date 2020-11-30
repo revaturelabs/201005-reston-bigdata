@@ -86,32 +86,32 @@ object Runner {
     query to give result to part 1. by using delta > 0, we can ensure no duplicates of countries in opposite directions, such as
     having both Israel-Lebanon and Lebanon-Israel.
      */
-    println("Largest Difference(Delta) in Bordering Countries")
-    res1.select("*")
-      .where($"delta" > 0)
-      .orderBy(desc("delta")) //using desc here allows us to get the largest differences at the top, and smaller differences at the end
-      .show(10)
+//    println("Largest Difference(Delta) in Bordering Countries")
+//    res1.select("*")
+//      .where($"delta" > 0)
+//      .orderBy(desc("delta")) //using desc here allows us to get the largest differences at the top, and smaller differences at the end
+//      .show(10)
 
 
     /* Queries to give us the answer to the second part of our question. Using the Dataframes for land and water locked countries, we can do simple
     queries to give the required answers
      */
-//       landLockedInfRate.select("*")
-//       .orderBy(asc("infection_rate_per_capita(%)"))
-//         .show(10)
+       landLockedInfRate.select("*")
+       .orderBy(asc("infection_rate_per_capita(%)"))
+         .show(10)
 
 
     //queries for land and water locked countries.
 
-    println("Highest Infection Rate in Land Locked Countries\n")
-    landLockedInfRate.select("*")
-      .orderBy(desc("infection_rate_per_capita(%)"))
-      .show(10)
-
-    println("Highest Infection Rate in Water Locked Countries\n")
-    waterLockedInfRate.select("*")
-      .orderBy(desc("infection_rate_per_capita(%)"))
-      .show(10)
+//    println("Highest Infection Rate in Land Locked Countries\n")
+//    landLockedInfRate.select("*")
+//      .orderBy(desc("infection_rate_per_capita(%)"))
+//      .show(10)
+//
+//    println("Highest Infection Rate in Water Locked Countries\n")
+//    waterLockedInfRate.select("*")
+//      .orderBy(desc("infection_rate_per_capita(%)"))
+//      .show(10)
 
     // second.printSchema()
 
