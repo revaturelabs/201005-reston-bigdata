@@ -91,14 +91,11 @@ object Runner {
       .show(10)
 
     //queries for land and water locked countries.
-    landLockedInfRate.select("*")
-      .orderBy(asc("infection_rate_per_capita(%)"))
-      .show(50)
-
     println("Highest Infection Rate in Land Locked Countries\n")
     landLockedInfRate.select("*")
       .orderBy(desc("infection_rate_per_capita(%)"))
-      .show(50)
+      .show(10)
+    
     println("Highest Infection Rate in Water Locked Countries\n")
     waterLockedInfRate.select("*")
       .orderBy(desc("infection_rate_per_capita(%)"))
