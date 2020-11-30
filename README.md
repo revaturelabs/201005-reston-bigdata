@@ -40,8 +40,8 @@ to reach its first peak in infection rate per capita?
 - Oceania
 
 ## Helm Charts Used
-- Kafka: bitnami/kafka
-- Zookeeper: bitnami/zookeeper
-- Spark: bitnami/spark
+- Kafka: [bitnami/kafka](https://artifacthub.io/packages/helm/bitnami/kafka) uses Kafka 2.6.0
+- Zookeeper: [bitnami/zookeeper](https://artifacthub.io/packages/helm/bitnami/zookeeper) uses Zookeeper 3.6.2
+- Spark: [bitnami/spark](https://artifacthub.io/packages/helm/bitnami/spark) uses Spark 3.0.1
 - Ingress: nginx
 - Elastic Stack: Custom
