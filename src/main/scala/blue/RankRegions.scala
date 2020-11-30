@@ -70,34 +70,3 @@ object RankRegions {
   }
 
 }
-/*
-def main(args: Array[String]): Unit = {
-    val spark = SparkSession.builder()
-      .appName("Twitter Sample Stream")
-      .master("local[4]")
-      .getOrCreate()
-
-    spark.sparkContext.setLogLevel("ERROR")
-    val ds = spark.read.format("csv").option("header", "true").load("test_data2.csv")
-    ds.printSchema()
-
-    import spark.implicits._
-
-    val popDS = ds
-      .groupBy($"region" as "region_t")
-      .agg(functions.sum($"population") as "agg_population")
-
-    val infectionDS = ds.groupBy($"region" as "region_t", $"date" as "date_t")
-      .agg(functions.sum($"infection") as "new_cases")
-
-    val fullDS = popDS
-      .join(infectionDS, "region_t")
-      .as("tempDS")
-      .join(ds as "main", $"region" === $"region_t" && $"date" === $"date_t")
-      .drop("date_t")
-      .drop("region_t")
-      .withColumnRenamed("region", "name")
-
-	Question1.initialSolution(spark, fullDS)
-  }
-*/
