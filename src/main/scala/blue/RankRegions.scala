@@ -3,6 +3,9 @@ package blue
 import breeze.linalg.{DenseVector, linspace}
 import breeze.plot.{Figure, plot}
 import org.apache.spark.sql.{DataFrame, SparkSession, functions}
+import org.apache.xmlgraphics.image.codec.png.PNGEncodeParam.RGB
+import org.jfree.chart._
+import org.jfree.chart.annotations.XYTextAnnotation
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -42,7 +45,14 @@ object RankRegions {
   def plotMetrics(spark: SparkSession, data: DataFrame, metric: String, filename: String): Unit ={
     import spark.implicits._
     val regionList = data.select("name").distinct().collect().map(_.getString(0))
-    regionList.foreach(println)
+    val regionLegend = new LegendItemCollection
+    val colors = List(Color.black, Color.blue, Color.cyan, Color.green, Color.magenta,
+      Color.orange, Color.red, Color.yellow)
+    val colorCodes: ArrayBuffer[Array[Int]] = ArrayBuffer()
+    for (ii <- 0 to regionList.length-1) {
+      colorCodes.append(Array(colors(ii).getRed, colors(ii).getGreen, colors(ii).getBlue))
+      regionLegend.add(new LegendItem(regionList(ii), colors(ii)))
+    }
     val dates: Array[String] = data
       .select("date")
       .where($"name" === regionList(0))
@@ -57,12 +67,16 @@ object RankRegions {
         .collect
         .map(_.getDouble(0))))
     }
+
     val f = Figure()
     val p = f.subplot(0)
     for (ii <- 0 to regionList.length-1) {
-      p += plot(days, metricPlottable(ii))
+      p += plot(days, metricPlottable(ii), colorcode = s"[${colorCodes(ii)(0)},${colorCodes(ii)(1)},${colorCodes(ii)(2)}]")
     }
     p.legend = true
+    p.plot.setFixedLegendItems(regionLegend)
+    p.xlabel = "Days since 1st of January, 2020"
+    p.ylabel = metric
     f.refresh()
     f.saveas(s"${filename}.png")
   }
