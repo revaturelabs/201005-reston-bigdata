@@ -42,7 +42,6 @@ object RankRegions {
   def plotMetrics(spark: SparkSession, data: DataFrame, metric: String, filename: String): Unit ={
     import spark.implicits._
     val regionList = data.select("name").distinct().collect().map(_.getString(0))
-    regionList.foreach(println)
     val dates: Array[String] = data
       .select("date")
       .where($"name" === regionList(0))
@@ -57,15 +56,19 @@ object RankRegions {
         .collect
         .map(_.getDouble(0))))
     }
+
     val f = Figure()
     val p = f.subplot(0)
     for (ii <- 0 to regionList.length-1) {
-      p += plot(days, metricPlottable(ii))
+      p += plot(days, metricPlottable(ii), name = regionList(ii))
     }
     p.legend = true
+    p.xlabel = "Days since 1st of January, 2020"
+    p.ylabel = metric
     f.refresh()
     f.saveas(s"${filename}.png")
   }
+
 }
 /*
 def main(args: Array[String]): Unit = {
@@ -112,4 +115,8 @@ def main(args: Array[String]): Unit = {
 
     rankRegionsByMetric.plotMetrics(spark, regionByInfectionRateFull, "infections_per_pop_100k", "infections")
     rankRegionsByMetric.plotMetrics(spark, regionByGDPFull, "GDP", "GDP")
-  }*/
+  }
+	Question1.initialSolution(spark, fullDS)
+  }
+*/
+
