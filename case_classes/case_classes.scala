@@ -2,8 +2,6 @@
 import java.text.SimpleDateFormat
 import java.util.Date
 
-package object OWID_parsing {
-
 val dateFormat = new SimpleDateFormat("yyyy-MM-dd")
 
 case class Region(
