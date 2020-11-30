@@ -18,6 +18,7 @@ libraryDependencies  ++= Seq(
   "org.apache.bahir" %% "spark-streaming-twitter" % "2.4.0",
   "org.apache.httpcomponents" % "httpclient" % "4.5.12",
   "commons-io" % "commons-io" % "2.8.0",
+  "org.jsoup" % "jsoup" % "1.13.1",
 )
 
 scalaVersion := "2.12.10"

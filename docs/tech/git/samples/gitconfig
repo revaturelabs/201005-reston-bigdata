@@ -1,0 +1,109 @@
+# Sample configuration for git.  
+# To use it, rename it .gitconfig and place it in your home (~) directory
+# 
+
+[core]
+    whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
+    editor = code --wait
+#   excludesFile = ~/.gitignore
+
+[user]
+    name = First Last
+    email = email@email.com
+
+[alias]
+    aa = add --all
+    ak = !git add -A && git commit -m
+    ai = add --interactive
+    amend = commit -a --amend
+    b = branch
+    ba = branch -a
+    br = branch
+    c = commit
+    ca = commit --amend
+    cf = !sh -c \"git commit --fixup $@\"
+    co = checkout
+    com = commit
+    cob = !sh -c \"git checkout -b $@\"
+    cor = !sh -c \"git checkout --track -b $@ origin/$@\"
+    cp = cherry-pick
+    cpa = cherry-pick --abort
+    cpc = cherry-pick --continue
+    cs = !sh -c \"git commit --squash $@\"
+    d = diff
+    df = diff
+    dc = diff --cached
+    ds = diff --stat
+    dsc = diff --stat --cached
+    fpr = !sh -c \"git fetch origin pull/$@/head:$@-pr\"
+    l = log
+    lf = log --follow
+    lg = !"git lg1"
+    lg1 = !"git lg1-specific --all"
+    lg2 = !"git lg2-specific --all"
+    lg3 = !"git lg3-specific --all"
+    lg1-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'
+    lg2-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)'
+    lg3-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset) %C(bold cyan)(committed: %cD)%C(reset) %C(auto)%d%C(reset)%n''          %C(white)%s%C(reset)%n''          %C(dim white)- %an <%ae> %C(reset) %C(dim white)(committer: %cn <%ce>)%C(reset)'
+    m = merge
+    mb = merge-base master HEAD
+    ms = merge --squash
+    pl = pull
+    plog = log --graph --pretty=format:'%h -%d %s %n' --abbrev-commit --date=relative --branches
+    ppu = !"git fetch origin -v; git fetch upstream -v; git merge upstream/master"
+    pr = pull --rebase
+    ps = push
+    pu = push
+    psc = !sh -c \"git push --set-upstream origin \\$(git rev-parse --abbrev-ref HEAD)\"
+    psd = !sh -c \"git push origin :\\$(git rev-parse --abbrev-ref HEAD)\"
+    psf = push --force-with-lease
+    r = reset HEAD
+    rb = rebase
+    rba = rebase --abort
+    rbc = rebase --continue
+    rbi = rebase --interactive --autosquash
+    rbm = rebase --interactive --autosquash origin/master
+    rh = reset --hard
+    rs = reset --soft
+    save = !git add -A && git commit -m 'SAVEPOINT'
+    st = status
+    sh = show
+    switch = !legit switch \"$@\"
+    shs = show --stat
+    undo = reset HEAD~1 --mixed
+    who = shortlog -s --
+    wip = commit -am "WIP"
+    wipe = !git add -A && git commit -qm 'WIPE SAVEPOINT' && git reset HEAD~1 --hard
+
+    [color]
+    ui = true
+    diff = auto
+    status = auto
+    branch = auto
+
+[format]
+    pretty = %C(yellow)%h%Creset %s %C(red)(%an, %cr)%Creset
+
+[diff "ruby"]
+    funcname = ^ *\\(\\(class\\|module\\|def\\) .*\\)
+
+[push]
+    default = current
+
+[difftool "sourcetree"]
+    cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+    path =
+
+[mergetool "sourcetree"]
+    cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+  trustExitCode = true
+    
+[merge]
+    tool = opendiff
+
+[filter "lfs"]
+    required = true
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+
