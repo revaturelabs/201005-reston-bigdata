@@ -20,11 +20,11 @@ object Runner {
         val infection_rate = country_data
           .select($"location", $"population", functions.explode($"data")) //.explode will separate our nested data so we can access it
           .select($"location", $"population", $"col.date", $"col.total_cases")
-          .groupBy("location", "population")          //group by location
-          .agg(functions.max("total_cases").as("total_cases")) //since the data doesnt remove cases from total_cases,
+          .groupBy("location", "population")
+          .agg(functions.max("total_cases").as("total_cases")) //since the covid data doesn't remove cases from total_cases,
                                                                                   // using max value will give us the most recent value
           //.where($"location" === "United States")
-          .select($"location", $"population", $"total_cases",         //specific fields we want from this data
+          .select($"location", $"population", $"total_cases",
             (($"total_cases" / $"population")*100).as("infection_rate_per_capita")) //make value a percent as opposed to a decimal
           .sort(functions.desc("infection_rate_per_capita"))
           .withColumn("infection_rate_per_capita", 'infection_rate_per_capita.cast("Decimal(5,3)")) //make values easier to read
