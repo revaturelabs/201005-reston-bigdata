@@ -3,9 +3,6 @@ package blue
 import breeze.linalg.{DenseVector, linspace}
 import breeze.plot.{Figure, plot}
 import org.apache.spark.sql.{DataFrame, SparkSession, functions}
-import org.apache.xmlgraphics.image.codec.png.PNGEncodeParam.RGB
-import org.jfree.chart._
-import org.jfree.chart.annotations.XYTextAnnotation
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -101,22 +98,6 @@ def main(args: Array[String]): Unit = {
       .drop("region_t")
       .withColumnRenamed("region", "name")
 
-
-    val regionByInfectionRateFull = rankRegionsByMetric.calculateMetric(spark, fullDS, "new_cases", "agg_population",
-      100000, "infections_per_pop_100k")
-
-    val regionByInfectionRate = rankRegionsByMetric.latestRankByMetric(spark, fullDS, "new_cases", "agg_population",
-      100000, "infections_per_pop_100k")
-    regionByInfectionRate.show()
-
-    val regionByGDPFull = rankRegionsByMetric.calculateMetric(spark, fullDS, "GDP", "none",
-      1, "GDP")
-
-    val regionByGDP = rankRegionsByMetric.latestRankByMetric(spark, fullDS, "GDP", "none",
-      1, "GDP")
-    regionByGDP.show()
-
-    rankRegionsByMetric.plotMetrics(spark, regionByInfectionRateFull, "infections_per_pop_100k", "infections")
-    rankRegionsByMetric.plotMetrics(spark, regionByGDPFull, "GDP", "GDP")
+	Question1.initialSolution(spark, fullDS)
   }
 */
