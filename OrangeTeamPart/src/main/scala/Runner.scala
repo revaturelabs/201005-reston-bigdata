@@ -92,12 +92,16 @@ object Runner {
       .orderBy(desc("delta")) //using desc here allows us to get the largest differences at the top, and smaller differences at the end
       .show(10)
 
+
     /* Queries to give us the answer to the second part of our question. Using the Dataframes for land and water locked countries, we can do simple
     queries to give the required answers
      */
 //       landLockedInfRate.select("*")
 //       .orderBy(asc("infection_rate_per_capita(%)"))
 //         .show(10)
+
+
+    //queries for land and water locked countries.
 
     println("Highest Infection Rate in Land Locked Countries\n")
     landLockedInfRate.select("*")
