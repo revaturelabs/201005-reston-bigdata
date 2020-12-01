@@ -1,4 +1,4 @@
-val development_ranking: Map[String, List[String]] = Map(
+val development_ranking: Map[String, List[String]] = Map( //rankings determined based on HDI, Human Development Index
     "First" -> List(
         "Norway",
         "Switzerland",
