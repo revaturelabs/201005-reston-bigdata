@@ -8,8 +8,9 @@ object Runner {
     // Command Line Interface format that accepts params
     // Have a use case for your question below
     args match {
+        //purple team's questions
       case Array("hbr") => HashtagsByRegion.getHashtagsByRegion()
-      case Array("hwb") => HashtagsWithCovid.getHashtagsByRegion()
+      case Array("hwb") => HashtagsWithCovid.getHashtagsWithCovid()
       case _ => println("Hello World")
     }
   }

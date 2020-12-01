@@ -6,8 +6,7 @@ import scala.collection.convert.ImplicitConversions.`collection AsScalaIterable`
 
 object HashtagsWithCovid {
 
-
-  def getHashtagsByRegion(): Unit = {
+  def getHashtagsWithCovid(): Unit = {
     //What are the top 10 commonly used hashtags used alongside COVID hashtags?
 
     //for local testing purposes (pass spark session from runner in prod)
