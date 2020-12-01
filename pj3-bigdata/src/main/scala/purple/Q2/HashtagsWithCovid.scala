@@ -24,8 +24,7 @@ object HashtagsWithCovid {
 
   private def question2(spark: SparkSession, df: DataFrame): Unit = {
     import spark.implicits._
-    val covidRelatedWordsList = List("corona","Corona","Covid","COVID","covid")
-    val covidHashtags = covidRelatedWordsList.map(word => s"$word")
+    val covidRelatedWordsList = CovidTermsList.getTermsList
     df
       .select($"data.text")
       //map to Row(List(Hashtags))
@@ -39,14 +38,20 @@ object HashtagsWithCovid {
       .filter(hashtags => {
         val hashtagList = hashtags.getList[String](0)
         //this filter statement seems inefficient
-        hashtagList.exists(hashtag => covidHashtags.exists(hashtag.contains(_)))
+        hashtagList.exists(
+          hashtag => covidRelatedWordsList.exists(
+            covidHashtag => hashtag.toLowerCase().contains(covidHashtag.toLowerCase())
+          )
+        )
       })
       //explode out all remaining List(Hashtags)
       .select(functions.explode($"Hashtags").as("Hashtag"))
       //remove all items that are on the our filter list
       .filter(hashtag => {
         val hashtagStr = hashtag.getString(0)
-        !covidHashtags.exists(hashtagStr.contains(_))
+        !covidRelatedWordsList.exists(
+          covidHashtag => hashtagStr.toLowerCase().contains(covidHashtag.toLowerCase())
+        )
       })
       .groupBy($"Hashtag")
       .count()

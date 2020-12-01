@@ -1,7 +1,7 @@
 package purple.Q1
 
 object RegionDictionary {
-  val regionMap = Map (
+  private val regionMap = Map (
     "Africa" ->
       List(
         "Algeria",
