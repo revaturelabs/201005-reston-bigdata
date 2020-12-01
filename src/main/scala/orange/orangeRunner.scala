@@ -37,8 +37,9 @@ object orangeRunner {
     val infection_rate = country_cases
       .join(country_pop, country_cases("COUNTRY") === country_pop("COUNTRY"))
       .select(country_cases("COUNTRY"), $"TOTAL CASES", $"POPULATION",
-        ($"TOTAL CASES" * 100 / $"POPULATION").as("INFECTION RATE PER CAPITA"))
+        ($"TOTAL CASES" * 100 / $"POPULATION").as("infection_rate_per_capita"))
       .sort(functions.asc("COUNTRY"))
+      .withColumn("infection_rate_per_capita",'infection_rate_per_capita.cast("Decimal(5,3)"))
 
           //create "infection_rate" from covid data directory with daily covid data
         /*val infection_rate = country_data
@@ -63,7 +64,7 @@ object orangeRunner {
      */
     val bcountries = borders.join(infection_rate, borders("country_name") === infection_rate("COUNTRY"), "inner")
       .select(borders("country_name"), borders("country_code"), borders("country_border_name"),
-        borders("country_border_code"), infection_rate("INFECTION RATE PER CAPITA").as("home_country_infection_rate_per_capita"))
+        borders("country_border_code"), infection_rate("infection_rate_per_capita").as("home_country_infection_rate_per_capita"))
 //    bcountries.show(10)
     //first.printSchema()
 
@@ -75,10 +76,10 @@ object orangeRunner {
     val res1 = bcountries.join(infection_rate, bcountries("country_border_name") === infection_rate("COUNTRY"), "inner")
       .select(bcountries("country_name"), bcountries("country_code"), bcountries("home_country_infection_rate_per_capita").as("home_country_infection_rate_per_capita(%)"),
         bcountries("country_border_name"), bcountries("country_border_code"),
-        infection_rate("INFECTION RATE PER CAPITA").as("country_border_infection_rate(%)"),
+        infection_rate("infection_rate_per_capita").as("country_border_infection_rate(%)"),
         //used to calculate the delta value. round() allows us to do a calculation and round the number of decimal places, making it easier to read
-//        round((bcountries("home_country_infection_rate_per_capita") - infection_rate("infection_rate_per_capita")), 2).as("delta"))
-        (bcountries("home_country_infection_rate_per_capita") - infection_rate("INFECTION RATE PER CAPITA")).as("delta"))
+       //round((bcountries("home_country_infection_rate_per_capita") - infection_rate("infection_rate_per_capita")), 2).as("delta"))
+        (bcountries("home_country_infection_rate_per_capita") - infection_rate("infection_rate_per_capita")).as("delta"))
         //res.show(10)
 
     /*
@@ -94,12 +95,12 @@ object orangeRunner {
     //combine landLocked dataframe with infection_rate to make a dataframe with the infection rate of land locked countries
     val landLockedInfRate = landLocked.join(infection_rate, landLocked("country_name") === infection_rate("COUNTRY"), "inner")
       .select(landLocked("country_name"), landLocked("country_code"),
-        infection_rate("INFECTION RATE PER CAPITA").as("infection_rate_per_capita(%)"))
+        infection_rate("infection_rate_per_capita").as("infection_rate_per_capita(%)"))
 
     //combine waterLocked dataframe with infection_rate to make a dataframe with the infection rate of water locked countries
     val waterLockedInfRate = waterLocked.join(infection_rate, waterLocked("country_name") === infection_rate("COUNTRY"), "inner")
       .select(waterLocked("country_name"), waterLocked("country_code"),
-        infection_rate("INFECTION RATE PER CAPITA").as("infection_rate_per_capita(%)"))
+        infection_rate("infection_rate_per_capita").as("infection_rate_per_capita(%)"))
 //    waterLockedInfRate.show(10)
 
 
