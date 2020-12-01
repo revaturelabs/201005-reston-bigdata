@@ -12,7 +12,7 @@ val regions_dictionary = Map[String, List[String]](
             "Central African Republic",
             "Chad",
             "Comoros",
-            "Cote d'Ivoire",
+            "Cote d'Ivoire", //correct spelling
             "Democratic Republic of the Congo",
             "Djibouti",
             "Egypt",
@@ -36,7 +36,7 @@ val regions_dictionary = Map[String, List[String]](
             "Morocco",
             "Mozambique",
             "Namibia",
-            "Niger",
+            "Niger", //correct spelling
             "Nigeria",
             "Republic of the Congo",
             "Reunion",
@@ -141,7 +141,7 @@ val regions_dictionary = Map[String, List[String]](
             "Saint Lucia",
             "Saint Vincent and the Grenadines",
             "Trinidad and Tobago",
-            "Turks and Caicos Islands",
+            "Turks and Caicos Islands", //correct spelling
             "U.S. Virgin Islands"
         )
     ),
@@ -236,14 +236,14 @@ val regions_dictionary = Map[String, List[String]](
             "Nauru",
             "New Caledonia",
             "New Zealand",
-            "Niue",
+            "Niue", //no data
             "Northern Mariana Islands",
-            "Palau",
+            "Palau", //no data
             "Papua New Guinea",
             "Pitcairn Islands",
             "Samoa",
             "Solomon Islands",
-            "Tokelau",
+            "Tokelau", //no data
             "Tonga",
             "Tuvalu",
             "Vanuatu",

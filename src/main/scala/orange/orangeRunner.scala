@@ -1,3 +1,4 @@
+
 import org.apache.spark
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.functions.{asc, desc, round}
@@ -16,7 +17,7 @@ object orangeRunner {
     val country_data = spark.read.option("multiline", "true").json("testData")
     //TODO:need to cross country_codes_a2 with itself to make a list of all potential countries that can border(many of them wont) this will work just like borders does, but using in house code
     val borders = spark.read.option("header", "true").csv("border_data.csv")
-    borders.show(10)
+    borders.show(100)
 
           //create "infection_rate" from covid data directory with daily covid data
         val infection_rate = country_data
@@ -120,14 +121,13 @@ object orangeRunner {
 
   }
 
-  //TODO: adapt to accept the landlocked_countries_list(only need val landlocked since we don't really care about doubly land locked, and they're already included in the landlocked list
-  //creates a dataframe of LandLocked countries from given the given landlocked.csv
-  def createLandLocked(spark:SparkSession): DataFrame ={
-    val landLocked =spark.read.options(Map("inferSchema"->"true","delimiter"->",","header"->"true")).csv("landlocked.csv")
-    landLocked
-  }
+//  //TODO: adapt to accept the landlocked_countries_list(only need val landlocked since we don't really care about doubly land locked, and they're already included in the landlocked list
+//  //creates a dataframe of LandLocked countries from given the given landlocked.csv
+//  def createLandLocked(spark:SparkSession): DataFrame ={
+//    val landLocked =spark.read.options(Map("inferSchema"->"true","delimiter"->",","header"->"true")).csv("landlocked.csv")
+//    landLocked
+//  }
 
-  //TODO: adapt to accept using country_codes_dictionary crossed with itself, then inner joined with landlocked_countries
   //uses the dataframe of our border countries and looks for there to be a NULL for border country. This means there is no land border, meaning the country is waterlocked
   def createWaterLocked(infectionFrame: DataFrame , spark:SparkSession): DataFrame ={
     import spark.implicits._

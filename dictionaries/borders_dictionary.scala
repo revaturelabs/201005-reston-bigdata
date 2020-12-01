@@ -10,11 +10,11 @@ val borders_dictionary = Map[String, List[String]](
         "Oman",
         "Saudi Arabia"
     ),
-    "Afgahnastan" -> List(
+    "Afghanistan" -> List(   //Afgahnastan
         "China",
         "Iran",
         "Pakistan",
-        "Tajikastan",
+        "Tajikistan",       //tajikastan
         "Turkmenistan",
         "Uzbekistan"
     ),
@@ -28,14 +28,14 @@ val borders_dictionary = Map[String, List[String]](
     ),
     "Armenia" -> List(
         "Azerbaijan",
-        "Gerogia",
+        "Georgia",    //gerogia
         "Iran",
         "Turkey"
     ),
     "Angola" -> List(
         "Congo",
-        "Democratic Repbulic of Congo",
-        "Nambia",
+        "Democratic Republic of Congo",   //repbulic
+        "Namibia", //nambia
         "Zambia"
     ),
     "Antarctica" -> List(),
@@ -52,7 +52,7 @@ val borders_dictionary = Map[String, List[String]](
         "Germany",
         "Hungary",
         "Italy",
-        "Lietchenstien",
+        "Liechtenstein",  //Lietchenstien
         "Slovakia",
         "Slovenia",
         "Switzerland"
@@ -85,10 +85,10 @@ val borders_dictionary = Map[String, List[String]](
     ),
     "Burkina Faso" -> List(
         "Benin",
-        "Cote d'Ivoire",
+        "Cote d'Ivoire", //correct spelling
         "Ghana",
         "Mali",
-        "Niger",
+        "Niger",  //correct spelling
         "Togo"
     ),
     "Bulgaria" -> List(
@@ -110,9 +110,9 @@ val borders_dictionary = Map[String, List[String]](
         "Nigeria",
         "Togo"
     ),
-    "Saint Bathelemy" -> List(),
+    "Saint Barthelemy" -> List(), //Saint Bathelemy
     "Bermuda" -> List(),
-    "Brunei Darussalam" -> List(
+    "Brunei" -> List(
         "Malaysia"
     ),
     "Bolivia" -> List(
@@ -122,7 +122,7 @@ val borders_dictionary = Map[String, List[String]](
         "Paraguay",
         "Peru"
     ),
-    "Bonaire, Sint Eustatius and Saba" -> List(),
+    "Bonaire Sint Eustatius and Saba" -> List(), //correct spelling
     "Brazil" -> List(
         "Argentina",
         "Bolivia",
@@ -140,7 +140,7 @@ val borders_dictionary = Map[String, List[String]](
         "China",
         "India"
     ),
-    "Bouvet Island" -> List(),
+    "Bouvet Island" -> List(), //dont have data on
     "Botswana" -> List(
         "Namibia",
         "South Africa",
@@ -195,7 +195,7 @@ val borders_dictionary = Map[String, List[String]](
         "Italy",
         "Liechtenstein"
     ),
-    "Cote d'Ivoire" -> List(
+    "Cote d'Ivoire" -> List( //correct spelling
         "Burkina Faso",
         "Ghana",
         "Guinea",
@@ -246,8 +246,8 @@ val borders_dictionary = Map[String, List[String]](
         "Panama"
     ),
     "Cuba" -> List(),
-    "Cabo Verde" -> List(),
-    "Curcacao" -> List(),
+    "Cabo Verde" -> List(), //dont have data on
+    "Curacao" -> List(), //Curcacao
     "Christmas Island" -> List(),
     "Czechia" -> List(
         "Austria",
@@ -283,7 +283,7 @@ val borders_dictionary = Map[String, List[String]](
         "Mali",
         "Mauritania",
         "Morocco",
-        "Niger",
+        "Niger",  //correct spelling
         "Tunisia",
         "Western Sahara"
     ),
@@ -334,7 +334,7 @@ val borders_dictionary = Map[String, List[String]](
     "Fiji" -> List(),
     "Falkland Islands" -> List(),
     "Federated States of Micronesia" -> List(),
-    "Faroe Island" -> List(),
+    "Faeroe Island" -> List(), //Faroe
     "France" -> List(
         "Andorra",
         "Belgium",
@@ -368,7 +368,7 @@ val borders_dictionary = Map[String, List[String]](
     "Guernsey" -> List(),
     "Ghana" -> List(
         "Burkina Faso",
-        "Cote d’Ivoire",
+        "Cote d’Ivoire",  //correct spelling
         "Togo"
     ),
     "Gibraltar" -> List(
@@ -379,7 +379,7 @@ val borders_dictionary = Map[String, List[String]](
         "Senegal"
     ),
     "Guinea" -> List(
-        "Cote d’Ivoire",
+        "Cote d’Ivoire", //correct spelling
         "Guinea-Bissau",
         "Liberia",
         "Mali",
@@ -520,7 +520,7 @@ val borders_dictionary = Map[String, List[String]](
         "Vietnam"
     ),
     "Kiribati" -> List(),
-    "Comorros" -> List(),
+    "Comoros" -> List(), //Comorros
     "Saint Kitts and Nevis" -> List(),
     "North Korea" -> List(
         "China",
@@ -554,13 +554,13 @@ val borders_dictionary = Map[String, List[String]](
         "Syria"
     ),
     "Saint Lucia" -> List(),
-    "Liechtenstien" -> List(
+    "Liechtenstein" -> List(  //liechtenstien
         "Austria",
         "Switzerland"
     ),
     "Sri Lanka" -> List(),
     "Liberia" -> List(
-        "Cote d’Ivoire",
+        "Cote d’Ivoire", //correct spelling
         "Guinea",
         "Sierra Leone"
     ),
@@ -589,7 +589,7 @@ val borders_dictionary = Map[String, List[String]](
         "Algeria",
         "Chad",
         "Egypt",
-        "Niger",
+        "Niger", //correct spelling
         "Sudan",
         "Tunisia"
     ),
@@ -622,10 +622,10 @@ val borders_dictionary = Map[String, List[String]](
     "Mali" -> List(
         "Algeria",
         "Burkina Faso",
-        "Cote d’Ivoire",
+        "Cote d’Ivoire", //correct spelling
         "Guinea",
         "Mauritania",
-        "Niger",
+        "Niger",   // correct spelling
         "Senegal"
     ),
     "Myanmar" -> List(
@@ -665,7 +665,7 @@ val borders_dictionary = Map[String, List[String]](
         "United States"
     ),
     "Malaysia" -> List(
-        "Brunei Darussalam",
+        "Brunei",
         "Indonesia",
         "Thailand"
     ),
@@ -683,8 +683,8 @@ val borders_dictionary = Map[String, List[String]](
         "South Africa",
         "Zambia"
     ),
-    "New Caldonia" -> List(),
-    "Niger" -> List(
+    "New Caledonia" -> List(), //New Caldonia
+    "Niger" -> List( //correct spelling
         "Algeria",
         "Benin",
         "Burkina Faso",
@@ -698,7 +698,7 @@ val borders_dictionary = Map[String, List[String]](
         "Benin",
         "Cameroon",
         "Chad",
-        "Niger"
+        "Niger" //correct spelling
     ),
     "Nicaragua" -> List(
         "Costa Rica",
@@ -718,7 +718,7 @@ val borders_dictionary = Map[String, List[String]](
         "India"
     ),
     "Nauru" -> List(),
-    "Niue" -> List(),
+    "Niue" -> List(), //dont have any data for
     "New Zealand" -> List(),
     "Oman" -> List(
         "United Arab Emirates",
@@ -767,7 +767,7 @@ val borders_dictionary = Map[String, List[String]](
     "Portugal" -> List(
         "Spain"
     ),
-    "Palau" -> List(),
+    "Palau" -> List(), //dont have any data for
     "Paraguay" -> List(
         "Argentina",
         "Bolivia",
@@ -847,7 +847,7 @@ val borders_dictionary = Map[String, List[String]](
         "Hungary",
         "Italy"
     ),
-    "Svalbard and Jan Mayen" -> List(),
+    "Svalbard and Jan Mayen" -> List(), //dont have any data for
     "Slovakia" -> List(
         "Austria",
         "Czechia",
@@ -892,7 +892,8 @@ val borders_dictionary = Map[String, List[String]](
         "Guatemala",
         "Honduras"
     ),
-    "Sint Maartin" -> List(),
+
+    "Sint Maarten (Dutch part)" -> List(), //Sint Maartin
     "Syria" -> List(
         "Iraq",
         "Israel",
@@ -904,12 +905,12 @@ val borders_dictionary = Map[String, List[String]](
         "Mozambique",
         "South Africa"
     ),
-    "Turks and Caicos Islands" -> List(),
+    "Turks and Caicos Islands" -> List(), //correct spelling
     "Chad" -> List(
         "Cameroon",
         "Central African Republic",
         "Libya",
-        "Niger",
+        "Niger",  //correct spelling
         "Nigeria",
         "Sudan"
     ),
@@ -930,7 +931,7 @@ val borders_dictionary = Map[String, List[String]](
         "Kyrgyzstan",
         "Uzbekistan"
     ),
-    "Tokelau" -> List(),
+    "Tokelau" -> List(), //dont have data for
     "Timor-Leste" -> List(),
     "Turkmenistan" -> List(
         "Indonesia",

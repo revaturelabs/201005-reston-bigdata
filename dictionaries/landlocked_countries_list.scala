@@ -31,7 +31,7 @@ val landlocked = List[String](
     "Moldova",
     "Mongolia",
     "Nepal",
-    "Niger",
+    "Niger", //correct spelling
     "Paraguay",
     "Rwanda",
     "San Marino",

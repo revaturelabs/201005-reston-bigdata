@@ -28,17 +28,17 @@ val country_codes_a2 = Map[String, String](
     "BM" -> 	"Bermuda",
     "BT" -> 	"Bhutan",
     "BO" -> 	"Bolivia",
-    "BQ" -> 	"Bonaire, Sint Eustatius and Saba",
+    "BQ" -> 	"Bonaire Sint Eustatius and Saba", //correct spelling
     "BA" -> 	"Bosnia and Herzegovina",
     "BW" -> 	"Botswana",
-    "BV" -> 	"Bouvet Island",
+    "BV" -> 	"Bouvet Island", //no data
     "BR" -> 	"Brazil",
     "IO" -> 	"British Indian Ocean Territory",
-    "BN" -> 	"Brunei Darussalam",
+    "BN" -> 	"Brunei",
     "BG" -> 	"Bulgaria",
     "BF" -> 	"Burkina Faso",
     "BI" -> 	"Burundi",
-    "CV" -> 	"Cabo Verde",
+    "CV" -> 	"Cabo Verde", //no data
     "KH" -> 	"Cambodia",
     "CM" -> 	"Cameroon",
     "CA" -> 	"Canada",
@@ -60,7 +60,7 @@ val country_codes_a2 = Map[String, String](
     "CW" -> 	"Curacao",
     "CY" -> 	"Cyprus",
     "CZ" -> 	"Czechia",
-    "CI" -> 	"Cote d'Ivoire",
+    "CI" -> 	"Cote d'Ivoire", //correct spelling
     "DK" -> 	"Denmark",
     "DJ" -> 	"Djibouti",
     "DM" -> 	"Dominica",
@@ -74,7 +74,7 @@ val country_codes_a2 = Map[String, String](
     "SZ" -> 	"Eswatini",
     "ET" -> 	"Ethiopia",
     "FK" -> 	"Falkland Islands",
-    "FO" -> 	"Faroe Islands",
+    "FO" -> 	"Faeroe Islands",
     "FJ" -> 	"Fiji",
     "FI" -> 	"Finland",
     "FR" -> 	"France",
@@ -143,7 +143,7 @@ val country_codes_a2 = Map[String, String](
     "MQ" -> 	"Martinique",
     "MR" -> 	"Mauritania",
     "MU" -> 	"Mauritius",
-    "YT" -> 	"Mayotte",
+    "YT" -> 	"Mayotte", //no data
     "MX" -> 	"Mexico",
     "FM" -> 	"Micronesia",
     "MD" -> 	"Moldova",
@@ -161,15 +161,15 @@ val country_codes_a2 = Map[String, String](
     "NC" -> 	"New Caledonia",
     "NZ" -> 	"New Zealand",
     "NI" -> 	"Nicaragua",
-    "NE" -> 	"Niger",
+    "NE" -> 	"Niger", //correct spelling
     "NG" -> 	"Nigeria",
-    "NU" -> 	"Niue",
+    "NU" -> 	"Niue", //no data
     "NF" -> 	"Norfolk Island",
     "MP" -> 	"Northern Mariana Islands",
     "NO" -> 	"Norway",
     "OM" -> 	"Oman",
     "PK" -> 	"Pakistan",
-    "PW" -> 	"Palau",
+    "PW" -> 	"Palau", //no data
     "PS" -> 	"Palestine",
     "PA" -> 	"Panama",
     "PG" -> 	"Papua New Guinea",
@@ -202,7 +202,7 @@ val country_codes_a2 = Map[String, String](
     "SC" -> 	"Seychelles",
     "SL" -> 	"Sierra Leone",
     "SG" -> 	"Singapore",
-    "SX" -> 	"Sint Maarten (Dutch part)",
+    "SX" -> 	"Sint Maarten (Dutch part)", //correct spelling
     "SK" -> 	"Slovakia",
     "SI" -> 	"Slovenia",
     "SB" -> 	"Solomon Islands",
@@ -214,7 +214,7 @@ val country_codes_a2 = Map[String, String](
     "LK" -> 	"Sri Lanka",
     "SD" -> 	"Sudan",
     "SR" -> 	"Suriname",
-    "SJ" -> 	"Svalbard and Jan Mayen",
+    "SJ" -> 	"Svalbard and Jan Mayen", //no data
     "SE" -> 	"Sweden",
     "CH" -> 	"Switzerland",
     "SY" -> 	"Syria",
@@ -224,13 +224,13 @@ val country_codes_a2 = Map[String, String](
     "TH" -> 	"Thailand",
     "TL" -> 	"Timor-Leste",
     "TG" -> 	"Togo",
-    "TK" -> 	"Tokelau",
+    "TK" -> 	"Tokelau", //no data
     "TO" -> 	"Tonga",
     "TT" -> 	"Trinidad and Tobago",
     "TN" -> 	"Tunisia",
     "TR" -> 	"Turkey",
     "TM" -> 	"Turkmenistan",
-    "TC" -> 	"Turks and Caicos Islands",
+    "TC" -> 	"Turks and Caicos Islands", //correct spelling
     "TV" -> 	"Tuvalu",
     "UG" -> 	"Uganda",
     "UA" -> 	"Ukraine",
@@ -245,7 +245,7 @@ val country_codes_a2 = Map[String, String](
     "VN" -> 	"Vietnam",
     "VG" -> 	"Virgin Islands (British)",
     "VI" -> 	"Virgin Islands",
-    "WF" -> 	"Wallis and Futuna",
+    "WF" -> 	"Wallis and Futuna", //correct spelling
     "EH" -> 	"Western Sahara",
     "YE" -> 	"Yemen",
     "ZM" -> 	"Zambia",
