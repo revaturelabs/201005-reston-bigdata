@@ -9,7 +9,7 @@ object DataFrameManipulator {
 
     val regionDict = regionDF
       .select($"name", explode($"countries") as "country")
-      .select($"name" as "region", $"agg_population", $"country.name" as "country")
+      .select($"name", $"agg_population", $"country.name" as "country")
 
     caseDF
       .select( $"date", $"country", $"total_cases", $"new_cases")
