@@ -7,18 +7,33 @@ import org.apache.spark.sql.{DataFrame, SparkSession, functions}
 import scala.collection.mutable.ArrayBuffer
 
 object RankRegions {
-  def latestRankByMetric(spark: SparkSession, fullDS: DataFrame, metric: String, normalizer: String, numNormalizer: Double, newName: String): DataFrame ={
+  def rankByMetric(spark: SparkSession, fullDS: DataFrame, metric: String, op: String = "avg"): DataFrame ={
     import spark.implicits._
-    val importantData = calculateMetric(spark, fullDS, metric, normalizer, numNormalizer, newName)
+    var oneTimeMetric: DataFrame = null
+    op match {
 
-    val latestDate = importantData.select(functions.max("date")).collect().map(_.getString(0))
+      case "avg" => {
+        oneTimeMetric = fullDS
+          .groupBy("name")
+          .agg(functions.avg(s"$metric") as s"$metric")
+          .sort(functions.col(s"$metric") desc)
+      }
+      case "latest" => {
+        val latestDate = fullDS.select(functions.max("date")).collect().map(_.getString(0))
+        oneTimeMetric = fullDS
+          .select("name", metric)
+          .where($"date" === latestDate(0))
+          .sort(functions.col(s"$metric") desc)
+      }
+      case _ => {
+        oneTimeMetric = fullDS
+          .groupBy("name")
+          .agg(functions.avg(s"$metric") as s"$metric")
+          .sort(functions.col(s"$metric") desc)
+      }
+    }
 
-    val latestMetric = importantData
-      .select("name", newName)
-      .where($"date" === latestDate(0))
-      .sort(functions.col(s"$newName") desc)
-
-    latestMetric
+    oneTimeMetric
   }
 
   def calculateMetric(spark: SparkSession, fullDS: DataFrame, metric: String, normalizer: String, numNormalizer: Double, newName: String): DataFrame ={
@@ -42,12 +57,14 @@ object RankRegions {
   def plotMetrics(spark: SparkSession, data: DataFrame, metric: String, filename: String): Unit ={
     import spark.implicits._
     val regionList = data.select("name").distinct().collect().map(_.getString(0))
-    val dates: Array[String] = data
+    val dates: DenseVector[Double] = DenseVector(
+      data
       .select("date")
-      .where($"name" === regionList(0))
-      .collect
-      .map(_.getString(0))
-    val days: DenseVector[Double] = linspace(0, dates.length, dates.length)
+      .distinct()
+      .rdd
+      .map(date => DateFunc.dayInYear(date(0)).toDouble)
+      .collect()
+    )
     val metricPlottable: ArrayBuffer[DenseVector[Double]] = ArrayBuffer()
     for (region <- regionList) {
       metricPlottable.append(DenseVector(data
@@ -60,7 +77,7 @@ object RankRegions {
     val f = Figure()
     val p = f.subplot(0)
     for (ii <- 0 to regionList.length-1) {
-      p += plot(days, metricPlottable(ii), name = regionList(ii))
+      p += plot(dates, metricPlottable(ii), name = regionList(ii))
     }
     p.legend = true
     p.xlabel = "Days since 1st of January, 2020"
@@ -68,4 +85,6 @@ object RankRegions {
     f.refresh()
     f.saveas(s"${filename}.png")
   }
+
+
 }
