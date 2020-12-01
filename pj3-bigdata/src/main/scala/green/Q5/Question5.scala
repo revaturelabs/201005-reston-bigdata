@@ -5,11 +5,18 @@ import org.apache.spark.sql.functions.{col, count, desc, substring}
 
 object Question5 {
 
-  def getMostDiscussion(spark: SparkSession)= {
+  /**
+   * Program breaks down large COVID-19 related tweets into partitioned parquets. Perform three different
+   * queries to answer the question (5) of when was COVID-19 being discussed the most by months, days, and hours
+   * of the day that has the highest discussion count.
+   *
+   * @param spark The SparkSession for SparkSQL
+   * @param path The path of the full_dataset.tsv file
+   */
+  def getMostDiscussion(spark: SparkSession, path: String)= {
 
     // Reading tsv and turning it into a DataFrame
-    // TODO: Need to update path for S3
-    val df = spark.read.option("header", true).option("sep", "\t").csv("full_dataset.tsv")
+    val df = spark.read.option("header", true).option("sep", "\t").csv(path)
 
     // Partition parquet into multiple files based on dates
     df.write.partitionBy("date").parquet("tweet-partitioned.parquet")
