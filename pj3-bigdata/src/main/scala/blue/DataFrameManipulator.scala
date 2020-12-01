@@ -25,8 +25,8 @@ object DataFrameManipulator {
       .select($"name" as "region", $"agg_population", $"country.name" as "country")
 
     econDF
-      .select()
-      .join()
+      //.select()
+      //.join()
   }
 
   def joinCaseEcon(spark: SparkSession, caseDF: DataFrame, econDF: DataFrame): DataFrame = {
