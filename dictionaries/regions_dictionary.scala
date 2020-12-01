@@ -247,7 +247,7 @@ val regions_dictionary = Map[String, List[String]](
             "Tonga",
             "Tuvalu",
             "Vanuatu",
-            "Wallis and Futuna Islands"
+            "Wallis and Futuna"
         )
     ),
 

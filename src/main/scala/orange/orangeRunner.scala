@@ -122,11 +122,11 @@ object orangeRunner {
   }
 
 //  //TODO: adapt to accept the landlocked_countries_list(only need val landlocked since we don't really care about doubly land locked, and they're already included in the landlocked list
-//  //creates a dataframe of LandLocked countries from given the given landlocked.csv
-//  def createLandLocked(spark:SparkSession): DataFrame ={
-//    val landLocked =spark.read.options(Map("inferSchema"->"true","delimiter"->",","header"->"true")).csv("landlocked.csv")
-//    landLocked
-//  }
+  //creates a dataframe of LandLocked countries from given the given landlocked.csv
+  def createLandLocked(spark:SparkSession): DataFrame ={
+    val landLocked =spark.read.options(Map("inferSchema"->"true","delimiter"->",","header"->"true")).csv("landlocked.csv")
+    landLocked
+  }
 
   //uses the dataframe of our border countries and looks for there to be a NULL for border country. This means there is no land border, meaning the country is waterlocked
   def createWaterLocked(infectionFrame: DataFrame , spark:SparkSession): DataFrame ={
