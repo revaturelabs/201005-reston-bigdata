@@ -86,5 +86,19 @@ object RankRegions {
     f.saveas(s"${filename}.png")
   }
 
+  def calculateChange(spark: SparkSession, fullDS: DataFrame, metric: String): DataFrame = {
+    import spark.implicits._
+//    var importantData = spark.emptyDataFrame
+    val preCovid =fullDS
+      .select($"name", $"country", functions.col(metric) as "pre")
+      .where($"year" === "2019")
 
+    val midCovid =fullDS
+      .select($"name", $"country", functions.col(metric) as "mid")
+      .where($"year" === "2020")
+
+    midCovid
+      .join(preCovid, Seq("name", "country"))
+      .select($"name", $"country", (($"mid"-$"pre")/$"pre")*100 as s"d_percent_$metric")
+  }
 }
