@@ -1,3 +1,4 @@
+package orange
 
 import org.apache.spark
 import org.apache.spark.SparkConf
