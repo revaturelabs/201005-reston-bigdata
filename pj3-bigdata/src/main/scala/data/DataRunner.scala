@@ -4,7 +4,7 @@ import org.apache.spark.sql.types.{DoubleType, IntegerType, StructType}
 import org.apache.spark.sql.{Column, DataFrame, Dataset, SparkSession, functions}
 
 object DataRunner {
-  def main(args: Array[String]) ={
+ /* def main(args: Array[String]) ={
     val spark: SparkSession = SparkSession.builder()
       .appName("Data Initializer")
       .master("local[*]")
@@ -81,5 +81,5 @@ object DataRunner {
       true
     else
       false
-  }
+  }*/
 }

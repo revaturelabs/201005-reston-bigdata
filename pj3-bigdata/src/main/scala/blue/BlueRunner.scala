@@ -7,9 +7,11 @@ object BlueRunner extends App {
     .master("local[4]")
     .getOrCreate()
 
-  val econRawDF = spark.read.load()
-  val caseRawDF = spark.read.load()
+  val econRawDF = spark.read.option("delimiter","\t").option("header",true).csv("C:/Users/river/IdeaProjects/201005-reston-bigdata/WorldEconomicData_AllCountries_Test.tsv")
+  val caseRawDF = spark.read.csv("C")
 
+  econRawDF.show()
+  caseRawDF.show()
 
 println("Hello World")
 }
