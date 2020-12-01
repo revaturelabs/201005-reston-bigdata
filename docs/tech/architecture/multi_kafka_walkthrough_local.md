@@ -92,4 +92,3 @@ Topic: testTopicReplicated      PartitionCount: 1       ReplicationFactor: 3    
 ```
 
 
-
