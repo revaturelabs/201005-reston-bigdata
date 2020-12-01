@@ -17,17 +17,20 @@ object DataFrameManipulator {
 
   }
 
-  def econJoin(spark: SparkSession, regionDF: DataFrame, econDF: DataFrame): DataFrame ={
+   def econJoin(spark: SparkSession, regionDF: DataFrame, econDF: DataFrame): DataFrame ={
     import spark.implicits._
 
     val regionDict = regionDF
       .select($"name", explode($"countries") as "country")
       .select($"name" as "region", $"agg_population", $"country.name" as "country")
 
+
+
     econDF
-      .select()
-      .join()
+      .select($"year",$"region", $"country", $"GDP")
+      .join(regionDict, $"country")
   }
+  
 
   def joinCaseEcon(spark: SparkSession, caseDF: DataFrame, econDF: DataFrame): DataFrame = {
     econDF.createOrReplaceTempView("econDFTemp")
