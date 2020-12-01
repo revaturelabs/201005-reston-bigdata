@@ -17,7 +17,18 @@ object DataFrameManipulator {
 
   }
 
-  def econData(spark: SparkSession, regionDF: DataFrame, caseDF: DataFrame): DataFrame ={}
+  def econJoin(spark: SparkSession, regionDF: DataFrame, econDF: DataFrame): DataFrame ={
+    import spark.implicits._
+
+    val regionDict = regionDF
+      .select($"name", explode($"countries") as "country")
+      .select($"name" as "region", $"agg_population", $"country.name" as "country")
+
+    econDF
+      .select()
+      .join()
+
+  }
 
 
 }
