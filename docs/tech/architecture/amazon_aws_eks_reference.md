@@ -4,33 +4,47 @@ Amazon Elastic Kubernetes Service (Amazon EKS) gives you the flexibility to star
 
 ## Identity related commands
 // show who you are at the moment
-`aws sts get-caller-identity`
+```
+aws sts get-caller-identity
+```
 
 // show configuration for a specific profile
-`aws configure list --profile p3`
+```
+aws configure list --profile p3
+```
 
 // if you have other AWS accounts on your computer
 // change 'p3' to your different profiles.
-`export AWS_PROFILE=p3`
+```
+export AWS_PROFILE=p3
+```
 
 // see the different profiles on your computer
 // show the config files in your ~ dir
-`cat ~/.aws/credentials`
-`cat ~/.aws/config`
+```
+cat ~/.aws/credentials
+cat ~/.aws/config
+```
 
 
 ## AWS CLI commands
 Reference: [AWS CLI: Official command reference](https://docs.aws.amazon.com/cli/latest/index.html)
 
 // show your aws-cli version
-`aws --version`
+```
+aws --version
+```
 
 // This command doesnt work for me - error 'NoneType' object is not iterable
 // update: solved.  moved ~/.kube/config to ~/.kube/config.old.
-`aws eks --region us-east-1 update-kubeconfig --name adam-king-848`
+```
+aws eks --region us-east-1 update-kubeconfig --name adam-king-848
+```
  
 // show cluster metadata (`--name` references cluster, not user)
-`aws eks describe-cluster --name adam-king-848`
+```
+aws eks describe-cluster --name adam-king-848
+```
 
 
 
@@ -39,16 +53,24 @@ Reference: [AWS kubectl: Official command reference](https://kubernetes.io/docs/
 - [Another list, nicely organized into one page.](https://www.tutorialspoint.com/kubernetes/kubernetes_kubectl_commands.htm)
 
 // show client version
-`kubectl version --short --client`
+```
+kubectl version --short --client
+```
 
 // shows urls of cluster master, coreDNS and metrics-server
-`kubectl cluster-info`
+```
+kubectl cluster-info
+```
 
 // debugging info dump
-`kubectl cluster-info dump`
+```
+kubectl cluster-info dump
+```
 
 // Shows yaml file with config info
-`kubectl config view`
+```
+kubectl config view
+```
 
 ## EKS commands
 Reference: [AWS EKS: Official command reference](https://docs.aws.amazon.com/cli/latest/reference/eks/index.html)
@@ -83,8 +105,9 @@ help
 | rm| delete s3 object
 
 // list files in s3 
+```
 aws s3 --profile p3 ls s3://adam-king-848
-
+```
 
 
 
