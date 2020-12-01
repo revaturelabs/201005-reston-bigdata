@@ -7,7 +7,7 @@ import org.apache.spark.sql.{DataFrame, SparkSession, functions}
 import scala.collection.mutable.ArrayBuffer
 
 object RankRegions {
-  def latestRankByMetric(spark: SparkSession, fullDS: DataFrame, metric: String, op: String = "avg"): DataFrame ={
+  def rankByMetric(spark: SparkSession, fullDS: DataFrame, metric: String, op: String = "avg"): DataFrame ={
     import spark.implicits._
     var oneTimeMetric: DataFrame = null
     op match {
@@ -85,4 +85,6 @@ object RankRegions {
     f.refresh()
     f.saveas(s"${filename}.png")
   }
+
+
 }

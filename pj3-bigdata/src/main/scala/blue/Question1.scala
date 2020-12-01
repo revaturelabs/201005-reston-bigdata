@@ -8,7 +8,7 @@ object Question1 {
     val regionByInfectionRateFull = RankRegions.calculateMetric(spark, data, "new_cases", "agg_population",
       100000, "infections_per_pop_100k")
 
-    val regionByInfectionRate = RankRegions.latestRankByMetric(spark, regionByInfectionRateFull, "infections_per_pop_100k")
+    val regionByInfectionRate = RankRegions.rankByMetric(spark, regionByInfectionRateFull, "infections_per_pop_100k")
     regionByInfectionRate.show()
 
     RankRegions.plotMetrics(spark, regionByInfectionRateFull, "infections_per_pop_100k", "infections")
