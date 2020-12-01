@@ -14,7 +14,9 @@ object orangeRunner {
 
     //import the covid data from testData file as well as the border data from the provided border data
     val country_data = spark.read.option("multiline", "true").json("testData")
+    //TODO:need to cross country_codes_a2 with itself to make a list of all potential countries that can border(many of them wont) this will work just like borders does, but using in house code
     val borders = spark.read.option("header", "true").csv("border_data.csv")
+    borders.show(10)
 
           //create "infection_rate" from covid data directory with daily covid data
         val infection_rate = country_data
@@ -31,7 +33,7 @@ object orangeRunner {
 //          .withColumn("population", 'population.cast("Decimal(10,0)"))
 //          .withColumn("total_cases", 'total_cases.cast("Decimal(12,0)"))
 
-
+//TODO: once we have updated borders with inhouse code, need to adapt bcountries to use borders_dictionary as opposed to border_data.csv
     /*
     bcountries for border countries, joins the border_data.csv from https://github.com/geodatasource/country-borders with infection_rate
     to give us all the countries that border a country(home country) and the infection rate of the home country. The infection rate of the bordering country
@@ -40,7 +42,7 @@ object orangeRunner {
     val bcountries = borders.join(infection_rate, borders("country_name") === infection_rate("location"), "inner")
       .select(borders("country_name"), borders("country_code"), borders("country_border_name"),
         borders("country_border_code"), infection_rate("infection_rate_per_capita").as("home_country_infection_rate_per_capita"))
-    //bcountries.show(10)
+//    bcountries.show(10)
     //first.printSchema()
 
 
@@ -118,12 +120,14 @@ object orangeRunner {
 
   }
 
+  //TODO: adapt to accept the landlocked_countries_list(only need val landlocked since we don't really care about doubly land locked, and they're already included in the landlocked list
   //creates a dataframe of LandLocked countries from given the given landlocked.csv
   def createLandLocked(spark:SparkSession): DataFrame ={
     val landLocked =spark.read.options(Map("inferSchema"->"true","delimiter"->",","header"->"true")).csv("landlocked.csv")
     landLocked
   }
 
+  //TODO: adapt to accept using country_codes_dictionary crossed with itself, then inner joined with landlocked_countries
   //uses the dataframe of our border countries and looks for there to be a NULL for border country. This means there is no land border, meaning the country is waterlocked
   def createWaterLocked(infectionFrame: DataFrame , spark:SparkSession): DataFrame ={
     import spark.implicits._

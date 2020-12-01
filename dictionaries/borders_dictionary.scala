@@ -1,6 +1,7 @@
 // This dictionary takes a country name and gives back a list of the countries which border it.
 
-borders_dictionary = Map[String, List[String]](
+
+val borders_dictionary = Map[String, List[String]](
     "Andorra" -> List(
         "France",
         "Spain"
