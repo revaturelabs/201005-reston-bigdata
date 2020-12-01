@@ -268,7 +268,8 @@ object CovidLiveUpdates {
     while (true) {
       val milliseconds = System.currentTimeMillis();
       x = LocalDateTime.now().format(formatter)
-      println(s"Batch: ${x}")
+      println(s"Last Updated: ${x}")
+      println("==================================")
       dataProcessing
       Thread.sleep(600000 - milliseconds % 1000)
 
