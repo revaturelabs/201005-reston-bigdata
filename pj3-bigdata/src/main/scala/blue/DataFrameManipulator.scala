@@ -16,7 +16,19 @@ object DataFrameManipulator {
 
   }
 
-  def econData(spark: SparkSession, regionDF: DataFrame, caseDF: DataFrame): DataFrame ={}
+  def econData(spark: SparkSession, regionDF: DataFrame, caseDF: DataFrame): DataFrame ={
+
+  }
+
+  def joinCaseEcon(spark: SparkSession, caseDF: DataFrame, econDF: DataFrame): DataFrame ={
+    econDF.createOrReplaceTempView("econDFTemp")
+    caseDF.createOrReplaceTempView("caseDFTemp")
+    val caseEconDF = spark.sql(
+      "SELECT region, country, gdp, total_cases" +
+        " FROM econDFTemp JOIN caseDFTemp" +
+        "ON econDFTemp.country = caseDFTemp.country")
+    caseEconDF
+  }
 
 
 }
