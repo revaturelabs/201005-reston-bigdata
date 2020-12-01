@@ -52,6 +52,8 @@ aws eks describe-cluster --name adam-king-848
 Reference: [AWS kubectl: Official command reference](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands)
 - [Another list, nicely organized into one page.](https://www.tutorialspoint.com/kubernetes/kubernetes_kubectl_commands.htm)
 
+[AWS Install guide](https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html)
+
 // show client version
 ```
 kubectl version --short --client
