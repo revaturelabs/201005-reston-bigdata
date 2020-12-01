@@ -5,16 +5,15 @@ import scala.collection.convert.ImplicitConversions.`collection AsScalaIterable`
 
 object HashtagsByRegion {
 
-  def getHashtagsByRegion {
+  def getHashtagsByRegion(): Unit = {
     //What are the hashtags used to describe COVID-19 by Region (e.g. #covid, #COVID-19, #Coronavirus, #NovelCoronavirus)?
 
+    //for local testing purposes (pass spark session from runner in prod)
     val appName = "hashtagRegions"
-
     val spark = SparkSession.builder()
       .appName(appName)
       .master("local[8]")
       .getOrCreate()
-
     spark.sparkContext.setLogLevel("WARN")
 
     val staticDf = spark.read.format("csv")
@@ -22,7 +21,7 @@ object HashtagsByRegion {
       .option("delimiter", "\t")
       .load("src/main/scala/purple/Q1/temp.tsv")
 
-    println("QUESTION 1")
+    println("QUESTION 1 (With Sample Data)")
     question1(spark, staticDf)
   }
 
