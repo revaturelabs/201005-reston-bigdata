@@ -128,121 +128,135 @@ object CovidLiveUpdates {
       //Spark SQL to select proper columns from each DF and save as new DF
 
       //Creates final Africa DF
-      val africa = africaTemp.select(from_unixtime(first(col("updated")) / 1000, "MM-dd-yyyy") as "Date",
+      val africa = africaTemp.select(
         lit("Africa").as("Region"),
         sum("cases") as "Total Cases",
-        sum("todayCases") as "Today Cases",
+        sum("todayCases") as "Today's Cases",
         bround(sum("todayCases") / sum("cases") * 100, 2) as "Cases Percent Change",
         sum("deaths") as "Total Deaths",
-        sum("todayDeaths") as "Current Day Deaths",
+        sum("todayDeaths") as "Today's Deaths",
         bround(sum("todayDeaths") / sum("deaths") * 100, 2) as "Death Percent Change",
         sum("recovered") as "Total Recoveries",
-        sum("todayRecovered") as "Current Day Recoveries",
+        sum("todayRecovered") as "Today's Recoveries",
         bround(sum("todayRecovered") / sum("recovered") * 100, 2) as "Recoveries Percent Change")
 
       //Creates final Asia DF
-      val asia = asiaTemp.select(from_unixtime(first(col("updated")) / 1000, "MM-dd-yyyy") as "Date",
+      val asia = asiaTemp.select(
         lit("Asia").as("Region"),
         sum("cases") as "Total Cases",
-        sum("todayCases") as "Today Cases",
+        sum("todayCases") as "Today's Cases",
         bround(sum("todayCases") / sum("cases") * 100, 2) as "Cases Percent Change",
         sum("deaths") as "Total Deaths",
-        sum("todayDeaths") as "Current Day Deaths",
+        sum("todayDeaths") as "Today's Deaths",
         bround(sum("todayDeaths") / sum("deaths") * 100, 2) as "Death Percent Change",
         sum("recovered") as "Total Recoveries",
-        sum("todayRecovered") as "Current Day Recoveries",
+        sum("todayRecovered") as "Today's Recoveries",
         bround(sum("todayRecovered") / sum("recovered") * 100, 2) as "Recoveries Percent Change")
 
       //Creates final Carribean DF
-      val caribbean = caribbeanTemp.select(from_unixtime(first(col("updated")) / 1000, "MM-dd-yyyy") as "Date",
+      val caribbean = caribbeanTemp.select(
         lit("Caribbean").as("Region"),
         sum("cases") as "Total Cases",
-        sum("todayCases") as "Today Cases",
+        sum("todayCases") as "Today's Cases",
         bround(sum("todayCases") / sum("cases") * 100, 2) as "Cases Percent Change",
         sum("deaths") as "Total Deaths",
-        sum("todayDeaths") as "Current Day Deaths",
+        sum("todayDeaths") as "Today's Deaths",
         bround(sum("todayDeaths") / sum("deaths") * 100, 2) as "Death Percent Change",
         sum("recovered") as "Total Recoveries",
-        sum("todayRecovered") as "Current Day Recoveries",
+        sum("todayRecovered") as "Today's Recoveries",
         bround(sum("todayRecovered") / sum("recovered") * 100, 2) as "Recoveries Percent Change")
 
       //Creates final Central America DF
-      val centralAmerica = centralAmericaTemp.select(from_unixtime(first(col("updated")) / 1000, "MM-dd-yyyy") as "Date",
+      val centralAmerica = centralAmericaTemp.select(
         lit("Central America").as("Region"),
         sum("cases") as "Total Cases",
-        sum("todayCases") as "Today Cases",
+        sum("todayCases") as "Today's Cases",
         bround(sum("todayCases") / sum("cases") * 100, 2) as "Cases Percent Change",
         sum("deaths") as "Total Deaths",
-        sum("todayDeaths") as "Current Day Deaths",
+        sum("todayDeaths") as "Today's Deaths",
         bround(sum("todayDeaths") / sum("deaths") * 100, 2) as "Death Percent Change",
         sum("recovered") as "Total Recoveries",
-        sum("todayRecovered") as "Current Day Recoveries",
+        sum("todayRecovered") as "Today's Recoveries",
         bround(sum("todayRecovered") / sum("recovered") * 100, 2) as "Recoveries Percent Change")
 
       //Creates final Europe DF
-      val europe = europeTemp.select(from_unixtime(first(col("updated")) / 1000, "MM-dd-yyyy") as "Date",
+      val europe = europeTemp.select(
         lit("Europe").as("Region"),
         sum("cases") as "Total Cases",
-        sum("todayCases") as "Today Cases",
+        sum("todayCases") as "Today's Cases",
         bround(sum("todayCases") / sum("cases") * 100, 2) as "Cases Percent Change",
         sum("deaths") as "Total Deaths",
-        sum("todayDeaths") as "Current Day Deaths",
+        sum("todayDeaths") as "Today's Deaths",
         bround(sum("todayDeaths") / sum("deaths") * 100, 2) as "Death Percent Change",
         sum("recovered") as "Total Recoveries",
-        sum("todayRecovered") as "Current Day Recoveries",
+        sum("todayRecovered") as "Today's Recoveries",
         bround(sum("todayRecovered") / sum("recovered") * 100, 2) as "Recoveries Percent Change")
 
       //Creates final North America DF
-      val northAmerica = northAmericaTemp.select(from_unixtime(first(col("updated")) / 1000, "MM-dd-yyyy") as "Date",
+      val northAmerica = northAmericaTemp.select(
         lit("North America").as("Region"),
         sum("cases") as "Total Cases",
-        sum("todayCases") as "Today Cases",
+        sum("todayCases") as "Today's Cases",
         bround(sum("todayCases") / sum("cases") * 100, 2) as "Cases Percent Change",
         sum("deaths") as "Total Deaths",
-        sum("todayDeaths") as "Current Day Deaths",
+        sum("todayDeaths") as "Today's Deaths",
         bround(sum("todayDeaths") / sum("deaths") * 100, 2) as "Death Percent Change",
         sum("recovered") as "Total Recoveries",
-        sum("todayRecovered") as "Current Day Recoveries",
+        sum("todayRecovered") as "Today's Recoveries",
         bround(sum("todayRecovered") / sum("recovered") * 100, 2) as "Recoveries Percent Change")
 
       //Creates final Oceania DF
-      val oceania = oceaniaTemp.select(from_unixtime(first(col("updated")) / 1000, "MM-dd-yyyy") as "Date",
+      val oceania = oceaniaTemp.select(
         lit("Oceania").as("Region"),
         sum("cases") as "Total Cases",
-        sum("todayCases") as "Today Cases",
+        sum("todayCases") as "Today's Cases",
         bround(sum("todayCases") / sum("cases") * 100, 2) as "Cases Percent Change",
         sum("deaths") as "Total Deaths",
-        sum("todayDeaths") as "Current Day Deaths",
+        sum("todayDeaths") as "Today's Deaths",
         bround(sum("todayDeaths") / sum("deaths") * 100, 2) as "Death Percent Change",
         sum("recovered") as "Total Recoveries",
-        sum("todayRecovered") as "Current Day Recoveries",
+        sum("todayRecovered") as "Today's Recoveries",
         bround(sum("todayRecovered") / sum("recovered") * 100, 2) as "Recoveries Percent Change")
 
       //Creates final South America DF
-      val southAmerica = southAmericaTemp.select(from_unixtime(first(col("updated")) / 1000, "MM-dd-yyyy") as "Date",
+      val southAmerica = southAmericaTemp.select(
         lit("South America").as("Region"),
         sum("cases") as "Total Cases",
-        sum("todayCases") as "Today Cases",
+        sum("todayCases") as "Today's Cases",
         bround(sum("todayCases") / sum("cases") * 100, 2) as "Cases Percent Change",
         sum("deaths") as "Total Deaths",
-        sum("todayDeaths") as "Current Day Deaths",
+        sum("todayDeaths") as "Today's Deaths",
         bround(sum("todayDeaths") / sum("deaths") * 100, 2) as "Death Percent Change",
         sum("recovered") as "Total Recoveries",
-        sum("todayRecovered") as "Current Day Recoveries",
+        sum("todayRecovered") as "Today's Recoveries",
         bround(sum("todayRecovered") / sum("recovered") * 100, 2) as "Recoveries Percent Change")
 
       //Union to combine all regional DataFrames into global DataFrame
-      val regions = africa.union(asia)
+      val regionsTemp = africa.union(asia)
         .union(caribbean)
         .union(centralAmerica)
         .union(europe)
         .union(northAmerica)
         .union(oceania)
         .union(southAmerica)
+        .sort(desc("Cases Percent Change"))
+
+      val totals = regionsTemp.select(
+        lit("Total").as("Region"),
+        sum("Total Cases"),
+        sum("Today's Cases"),
+        bround(avg("Cases Percent Change"), 2),
+        sum("Total Deaths"),
+        sum("Today's Deaths"),
+        bround(avg("Death Percent Change"), 2),
+        sum("Total Recoveries"),
+        sum("Today's Recoveries"),
+        bround(avg("Recoveries Percent Change"), 2))
+
+      val regions = regionsTemp.union(totals)
 
       //Displays table of regions global DataFrame in order of largest to smallest percent cases change
       regions
-        .sort(desc("Cases Percent Change"))
         .show()
 
     }
@@ -254,7 +268,8 @@ object CovidLiveUpdates {
     while (true) {
       val milliseconds = System.currentTimeMillis();
       x = LocalDateTime.now().format(formatter)
-      println(s"Batch: ${x}")
+      println(s"Last Updated: ${x}")
+      println("==================================")
       dataProcessing
       Thread.sleep(600000 - milliseconds % 1000)
 
