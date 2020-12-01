@@ -8,6 +8,7 @@ import scala.collection.mutable.ArrayBuffer
 
 object Question8 {
 
+  //TODO change this to GDP vs Value of First Infection Rate Spike
   def regionCorrelation(spark: SparkSession, df: DataFrame): Unit={
     import spark.implicits._
 
@@ -18,7 +19,7 @@ object Question8 {
     var casesDataRegions = ArrayBuffer[Array[Double]]()
 
     for(region <- 0 to regionNames.length-1){
-      //sort DataFrame according to GDP and filter by each region
+      //Sort DataFrame according to GDP and filter by each region
       val regionArray = df.select("name", "agg_gdp", "agg_cases").
         filter($"name" === regionNames(region))
         .withColumn("agg_gdp", $"agg_gdp".cast(DoubleType))
@@ -31,11 +32,11 @@ object Question8 {
         gdpData += regionArray(i).get(1).toString.toDouble
         casesData += regionArray(i).get(2).toString.toDouble
       }
-      //get the regions correlation
+      //Get the regions correlation
       gdpDataRegions += gdpData.toArray
       casesDataRegions += casesData.toArray
       val correlation = StatFunc.correlation(gdpData.toArray, casesData.toArray)
-      println(s"Region ${regionNames(region)}'s GDP-Infection rate correlation: ${correlation}'")
+      println(s"Region ${regionNames(region)}'s GDP-Infection rate correlation: ${correlation}")
     }
     GraphFunc.graphSeries(gdpDataRegions.toArray,casesDataRegions.toArray,name = regionNames, style='-', legend=true)
   }
