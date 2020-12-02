@@ -9,11 +9,11 @@ import dictionaries._
 object orangeRunner {
   def borderAnalysis(spark: SparkSession){
 //  def main(args: Array[String]): Unit={
-    val appName = "Orange"
-    val spark = SparkSession.builder()
-      .appName(appName)
-      .master("local[4]")
-      .getOrCreate()
+//  val appName = "Orange"
+//  val spark = SparkSession.builder()
+//    .appName(appName)
+//    .master("local[4]")
+//    .getOrCreate()
     import spark.implicits._
     spark.sparkContext.setLogLevel("WARN")
 
