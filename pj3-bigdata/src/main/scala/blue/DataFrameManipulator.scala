@@ -18,6 +18,8 @@ object DataFrameManipulator {
       .drop($"country2")
       .withColumn("new_cases", when($"new_cases"==="NULL", 0).otherwise($"new_cases"))
       .withColumn("total_cases", when($"total_cases"==="NULL", 0).otherwise($"total_cases"))
+      .filter($"date" =!= "null")
+      .sort($"date" desc_nulls_first)
   }
 
    def econJoin(spark: SparkSession, regionDF: DataFrame, econDF: DataFrame): DataFrame ={

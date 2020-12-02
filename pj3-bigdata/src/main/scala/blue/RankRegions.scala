@@ -101,31 +101,40 @@ object RankRegions {
     import spark.implicits._
 
     val regionList = data.select("region").distinct().collect().map(_.getString(0))
-    val dates: DenseVector[Double] = DenseVector(
-      data
-        .select("date")
-        .where($"date" =!= null)
-        .distinct()
-        .rdd
-        .map(date => DateFunc.dayInYear(date(0).asInstanceOf[String]).toDouble)
-        .collect()
+    val dates: Array[Double] = data
+      .select("date")
+      .where($"region" === regionList(0))
+      .distinct()
+      .sort($"date")
+      .rdd
+      .collect()
+      .map(date => DateFunc.dayInYear(date(0).asInstanceOf[String]).toDouble)
 
-    )
-    val metricPlottable: ArrayBuffer[DenseVector[Double]] = ArrayBuffer()
+
+    val metricPlottable: ArrayBuffer[Array[Double]] = ArrayBuffer()
     for (region <- regionList) {
-      metricPlottable.append(DenseVector(data
+      metricPlottable.append(data
         .select(metric)
         .where($"date" =!= null)
         .where($"region" === region)
         .sort($"date")
+        .rdd
         .collect
-        .map(_.getDouble(0))))
+        .map(_.get(0).asInstanceOf[Double])
+      )
     }
+    val test1 = data
+      .select(metric)
+      .where($"date" =!= null)
+      .where($"region" === regionList(0))
+      .sort($"date")
+      .rdd
+      .collect
 
     val f = Figure()
     val p = f.subplot(0)
     for (ii <- 0 to regionList.length-1) {
-      p += plot(dates, metricPlottable(ii), name = regionList(ii))
+      p += plot(DenseVector(dates), DenseVector(metricPlottable(ii)), name = regionList(ii))
     }
     p.legend = true
     p.xlabel = "Days since 1st of January, 2020"
