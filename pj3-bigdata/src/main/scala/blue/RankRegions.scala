@@ -126,7 +126,6 @@ object RankRegions {
     }
     val test1 = data
       .select(metric)
-      .where($"date" =!= null)
       .where($"region" === regionList(0))
       .sort($"date")
       .rdd
