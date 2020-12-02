@@ -8,7 +8,7 @@ import org.apache.spark.sql.functions._
 import org.jsoup.Jsoup
 
 object CovidLiveUpdates {
-  def redQ6(spark: SparkSession): Unit = {
+  def redQ3(spark: SparkSession): Unit = {
     
     //Set log level for sbt shell
     spark.sparkContext.setLogLevel("ERROR")
