@@ -59,41 +59,41 @@ object RankRegions {
   }
 
   def plotMetrics(spark: SparkSession, data: DataFrame, metric: String, filename: String): Unit ={
-    import spark.implicits._
-    val dateFormat = new SimpleDateFormat("yyyy-MM-dd")
-    val regionList = data.select("name").distinct().collect().map(_.getString(0))
-    val dates: DenseVector[Double] = DenseVector(
-      data
-        .select("date")
-        .where($"date" =!= null)
-        .distinct()
-        .rdd
-//      .map(date => DateFunc.dayInYear(date(0).asInstanceOf[Date]).toDouble)
-        .map(date => DateFunc.dayInYear(dateFormat.parse(s"${date(0)}")).toDouble)
-        .collect()
-
-    )
-    val metricPlottable: ArrayBuffer[DenseVector[Double]] = ArrayBuffer()
-    for (region <- regionList) {
-      metricPlottable.append(DenseVector(data
-        .select(metric)
-        .where($"date" =!= null)
-        .where($"name" === region)
-        .sort($"date")
-        .collect
-        .map(_.getDouble(0))))
-    }
-
-    val f = Figure()
-    val p = f.subplot(0)
-    for (ii <- 0 to regionList.length-1) {
-      p += plot(dates, metricPlottable(ii), name = regionList(ii))
-    }
-    p.legend = true
-    p.xlabel = "Days since 1st of January, 2020"
-    p.ylabel = metric
-    f.refresh()
-    f.saveas(s"${filename}.png")
+//    import spark.implicits._
+//    val dateFormat = new SimpleDateFormat("yyyy-MM-dd")
+//    val regionList = data.select("name").distinct().collect().map(_.getString(0))
+//    val dates: DenseVector[Double] = DenseVector(
+//      data
+//        .select("date")
+//        .where($"date" =!= null)
+//        .distinct()
+//        .rdd
+////      .map(date => DateFunc.dayInYear(date(0).asInstanceOf[Date]).toDouble)
+//        .map(date => DateFunc.dayInYear(dateFormat.parse(s"${date(0)}")).toDouble)
+//        .collect()
+//
+//    )
+//    val metricPlottable: ArrayBuffer[DenseVector[Double]] = ArrayBuffer()
+//    for (region <- regionList) {
+//      metricPlottable.append(DenseVector(data
+//        .select(metric)
+//        .where($"date" =!= null)
+//        .where($"name" === region)
+//        .sort($"date")
+//        .collect
+//        .map(_.getDouble(0))))
+//    }
+//
+//    val f = Figure()
+//    val p = f.subplot(0)
+//    for (ii <- 0 to regionList.length-1) {
+//      p += plot(dates, metricPlottable(ii), name = regionList(ii))
+//    }
+//    p.legend = true
+//    p.xlabel = "Days since 1st of January, 2020"
+//    p.ylabel = metric
+//    f.refresh()
+//    f.saveas(s"${filename}.png")
   }
 
   def calculateChange(spark: SparkSession, fullDS: DataFrame, metric: String): DataFrame = {

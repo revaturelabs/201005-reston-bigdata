@@ -2,7 +2,7 @@ package blue
 
 import org.apache.spark.sql.functions.{avg, explode}
 import org.apache.spark.sql.types.DoubleType
-import org.apache.spark.sql.{DataFrame, Row, SparkSession}
+import org.apache.spark.sql.{DataFrame, Row, SaveMode, SparkSession}
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -20,52 +20,27 @@ object Question8 {
     for(region <- (0 to regionNames.length)){
       var gdp = ArrayBuffer[Double]()
       var peak = ArrayBuffer[Double]()
+      val specificRegion = regionNames(region)
       val regionCountries = df.select("country").filter($"region" === regionNames(region)).distinct().rdd.map(_.get(0).toString).collect()
       // Get the first peak for each country in region and gdp
       for(country <- (0 to regionCountries.length-1)){
-        val countryDF = df.where($"country" === regionCountries(country)).sort("date")
+        val countryDF = df.where($"country" === regionCountries(country)).sort("date").filter($"date" =!= "NULL").filter($"2020_GDP" =!= "NULL")
         val tempCases = countryDF.select($"new_cases").collect().map(_.get(0).toString.toDouble)
-        val tempDates = countryDF.select($"date").collect().map(_.get(0).toString.toDouble)
+        val tempDates = countryDF.select($"date").collect().map(_.get(0).toString).map(DateFunc.dayInYear(_).toDouble)
         peak += (StatFunc.firstPeak(tempDates, tempCases, 7, 1)._1)
 
         val tempGDP = countryDF.select(avg($"2020_GDP")).collect().map(_.getDouble(0))
         gdp += tempGDP(0)
       }
       // Give correlation for each region
-      println(s"Region ${regionNames(region)}'s GDP - First New Cases Peak Potency Correlation: ${StatFunc.correlation(gdp.toArray,peak.toArray)}'")
+      println(s"Region ${regionNames(region)}'s GDP - First New Cases Peak Potency Correlation: ${StatFunc.correlation(gdp.toArray,peak.toArray)}")
       // Append arrays to use for graphing
       regionGDP += gdp
       regionPeaks += peak
     }
 
     //Graph here
-
-    //Grab all available region names
-   /* val regionNames = df.select("name").sort("name").distinct().rdd.map(_.get(0).toString).collect()
-
-    var gdpDataRegions = ArrayBuffer[Array[Double]]()
-    var casesDataRegions = ArrayBuffer[Array[Double]]()
-
-    for(region <- 0 to regionNames.length-1){
-      //Sort DataFrame according to GDP and filter by each region
-      val regionArray = df.select("name", "agg_gdp", "agg_cases").
-        filter($"name" === regionNames(region))
-        .withColumn("agg_gdp", $"agg_gdp".cast(DoubleType))
-        .withColumn("agg_cases", $"agg_cases".cast(DoubleType))
-        .orderBy($"agg_gdp").rdd.collect()
-      //Collect the x and y data from region and prepare it for graph/stats
-      var gdpData = ArrayBuffer[Double]()
-      var casesData = ArrayBuffer[Double]()
-      for(i <- 0 to regionArray.length-1){
-        gdpData += regionArray(i).get(1).toString.toDouble
-        casesData += regionArray(i).get(2).toString.toDouble
-      }
-      //Get the regions correlation
-      gdpDataRegions += gdpData.toArray
-      casesDataRegions += casesData.toArray
-      val correlation = StatFunc.correlation(gdpData.toArray, casesData.toArray)
-      println(s"Region ${regionNames(region)}'s GDP-Infection rate correlation: ${correlation}")
-    }
+    /*
     GraphFunc.graphSeries(gdpDataRegions.toArray,casesDataRegions.toArray,name = regionNames, style='-', legend=true)*/
   }
 
