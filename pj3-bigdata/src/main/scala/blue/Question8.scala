@@ -24,11 +24,11 @@ object Question8 {
       // Get the first peak for each country in region and gdp
       for(country <- (0 to regionCountries.length-1)){
         val countryDF = df.where($"country" === regionCountries(country)).sort("date")
-        val tempCases = countryDF.select($"new_cases").collect().map(_.getDouble(0))
-        val tempDates = countryDF.select($"dates").collect().map(_.getDouble(0))
+        val tempCases = countryDF.select($"new_cases").collect().map(_.get(0).toString.toDouble)
+        val tempDates = countryDF.select($"date").collect().map(_.get(0).toString.toDouble)
         peak += (StatFunc.firstPeak(tempDates, tempCases, 7, 1)._1)
 
-        val tempGDP = countryDF.select(avg($"gdp")).collect().map(_.getDouble(0))
+        val tempGDP = countryDF.select(avg($"2020_GDP")).collect().map(_.getDouble(0))
         gdp += tempGDP(0)
       }
       // Give correlation for each region
