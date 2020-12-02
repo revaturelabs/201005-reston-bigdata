@@ -111,6 +111,14 @@ help
 aws s3 --profile p3 ls s3://adam-king-848
 ```
 
+run your proxy (if you change your proxy port from the default, make sure to change the port in step 2.)
+2. navigate to http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
+3. get your access token (you must have updated your kubeconfig, and got verification your context was updated):
+```
+kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | sls admin-user | ForEach-Object { $_ -Split '\s+' } | Select -First 1)
+```
 
+Screenshot:
+![k8 dashboard screenshot](k8-dashboard.jpg)
 
 
