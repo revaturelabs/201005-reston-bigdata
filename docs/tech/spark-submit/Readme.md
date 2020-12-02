@@ -16,10 +16,11 @@ aws configure --profile p3
 - (Optional) I chose JSON output
 
 #### Check to see if configuration succeeded:
+```
 aws eks --region us-east-1 --profile p3 update-kubeconfig --name adam-king-848
 
 kubectl get svc
-
+```
 troubleshooting: 
 
 If your not able to update your configuration, you may have a previous AWS identity on your system.
