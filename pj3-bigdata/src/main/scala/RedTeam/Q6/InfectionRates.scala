@@ -7,16 +7,13 @@ import org.jsoup.Jsoup
 import java.io.File
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-
-import org.apache.spark
-import org.apache.spark.sql.expressions.Window
-import org.apache.spark.sql.functions.{bround, count, desc, from_unixtime, lag, when}
+import org.apache.spark.sql.functions.{bround, count, desc, when}
 
 object InfectionRates {
 
   def main(args: Array[String]): Unit = {
     val spark = SparkSession.builder()
-      .appName("CovidTestStream")
+      .appName("InfectionRates")
       .master("local[4]")
       .getOrCreate()
     spark.sparkContext.setLogLevel("ERROR")
@@ -109,18 +106,18 @@ object InfectionRates {
       val json = Jsoup.connect("https://disease.sh/v3/covid-19/countries?yesterday=false&allowNull=false")
         .ignoreContentType(true).execute.body
       // Write the JSON to a file in the same directory.
-      val pw = new PrintWriter(new File("data/today.json"))
+      val pw = new PrintWriter(new File("s3://adam-king-848/data/today.json"))
       pw.write(json)
       // println("The json was written to a file.")
       pw.close()
 
       val json2 = Jsoup.connect("https://disease.sh/v3/covid-19/countries?yesterday=true&allowNull=false")
         .ignoreContentType(true).execute.body
-      val pw2 = new PrintWriter(new File("data/yesterday.json"))
+      val pw2 = new PrintWriter(new File("s3://adam-king-848/data/yesterday.json"))
       pw2.write(json2)
       pw2.close()
 
-      val todayTemp = spark.read.option("true", "multiline").json("data/today.json")
+      val todayTemp = spark.read.option("true", "multiline").json("s3://adam-king-848/data/today.json")
       val today = todayTemp.withColumn("Region",when($"country".isin(Africa: _*), "Africa")
         .when($"country".isin(Asia: _*), "Asia")
         .when($"country".isin(Europe: _*), "Europe")
@@ -131,7 +128,7 @@ object InfectionRates {
         .when($"country".isin(Oceania: _*), "Oceania"))
       today.createOrReplaceTempView("today")
 
-      val yesterdayTemp = spark.read.option("true", "multiline").json("data/yesterday.json")
+      val yesterdayTemp = spark.read.option("true", "multiline").json("s3://adam-king-848/data/yesterday.json")
       val yesterday = yesterdayTemp.withColumn("Region",when($"country".isin(Africa: _*), "Africa")
         .when($"country".isin(Asia: _*), "Asia")
         .when($"country".isin(Europe: _*), "Europe")
