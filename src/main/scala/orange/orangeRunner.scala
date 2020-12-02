@@ -4,6 +4,8 @@ import org.apache.spark
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.functions.{asc, desc, round}
 import org.apache.spark.sql.{DataFrame, SparkSession, functions}
+import dictionaries._
+
 object orangeRunner {
   def main(args: Array[String]): Unit={
     val appName = "Orange"
@@ -17,6 +19,7 @@ object orangeRunner {
     //import the covid data from testData file as well as the border data from the provided border data
     val country_stats = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("countries_general_stats.tsv")
     val country_data = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("daily_stats.tsv")
+//    val country_data = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("s3://adam-king-848/data/daily_stats.tsv")
 
     val country_pop = country_stats.select($"COUNTRY", $"POPULATION".cast("Int"))
 
@@ -32,6 +35,7 @@ object orangeRunner {
     val borders = joinCodesAndBorders(spark)
 //    borders.show(100)
 
+
     //create "infection_rate" from covid data directory with daily covid data
     val infection_rate = country_cases
       .join(country_pop, country_cases("COUNTRY") === country_pop("COUNTRY"))
@@ -45,7 +49,7 @@ object orangeRunner {
   bcountries have land borders
      */
     val bcountries = borders.join(infection_rate, borders("country_name") === infection_rate("COUNTRY"), "right")
-      .select(infection_rate("COUNTRY").as("country_name"),  borders("border_country"), borders("border_country_code"),
+      .select(infection_rate("COUNTRY").as("country_name"),  borders("border_country"),
         infection_rate("infection_rate_per_capita").as("country_infection_rate"))
 //        bcountries.show(1000)
     //first.printSchema()
@@ -56,8 +60,7 @@ object orangeRunner {
     bordering countries and their infection rate, and a delta value, which is the difference between these 2 rates.
      */
     val res1 = bcountries.join(infection_rate, bcountries("border_country") === infection_rate("COUNTRY"), "inner")
-      .select(bcountries("country_name"), bcountries("border_country"), bcountries("border_country_code"),
-        bcountries("country_infection_rate"),
+      .select(bcountries("country_name"), bcountries("country_infection_rate"), bcountries("border_country"),
         infection_rate("infection_rate_per_capita").as("country_border_infection_rate_per_capita"),
         //round(bcountries("country_infection_rate") - infection_rate("infection_rate_per_capita"), 2).as("delta"))
         (bcountries("country_infection_rate") - infection_rate("infection_rate_per_capita")).as("delta"))
@@ -122,6 +125,8 @@ object orangeRunner {
 
   }
 
+
+
   //  //TODO: adapt to accept the landlocked_countries_list(only need val landlocked since we don't really care about doubly land locked, and they're already included in the landlocked list
   //creates a dataframe of LandLocked countries from given the given landlocked.csv
   def createLandLocked(spark:SparkSession): DataFrame ={
@@ -154,7 +159,7 @@ object orangeRunner {
     spark.sparkContext.setLogLevel("WARN")
 
     //creates a dataframe from the border dictionary in the dictionaries class
-
+  //val bdict = new
     val borders_dictionary = dictionaries.getBorders()
 
     val borders = borders_dictionary.toSeq.toDF("country", "borders")
