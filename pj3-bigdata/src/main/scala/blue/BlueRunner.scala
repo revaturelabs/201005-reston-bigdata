@@ -8,7 +8,7 @@ object BlueRunner extends App {
     .getOrCreate()
 
 
-  val regionDF = spark.read.option("header", "true").json("regionDict")
+  val regionDF = spark.read.json("regionDict")
   regionDF.show()
 //  val econRawDF = spark.read.option("delimiter","\t").option("header",true).csv("C:/Users/liamh/Project_3/201005-reston-bigdata/WorldEconomicData_AllCountries_Test.tsv")
 ////  val econRawDF = spark.read.option("delimiter","\t").option("header",true).csv("C:/Users/river/IdeaProjects/201005-reston-bigdata/WorldEconomicData_AllCountries_Test.tsv")
