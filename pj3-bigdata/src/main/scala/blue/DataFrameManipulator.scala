@@ -1,20 +1,23 @@
 package blue
 
 import org.apache.spark.sql.{DataFrame, SparkSession}
-import org.apache.spark.sql.functions.explode
+import org.apache.spark.sql.functions.{explode, when}
 
 object DataFrameManipulator {
   def caseJoin(spark: SparkSession, regionDF: DataFrame, caseDF: DataFrame): DataFrame ={
     import spark.implicits._
 
     val regionDict = regionDF
-      .select($"name", explode($"countries") as "country")
-      .select($"name", $"agg_population", $"country.name" as "country")
+      .select($"name", explode($"countries") as "country2")
+//      .select($"name", $"agg_population", $"country")
 
     caseDF
       .select( $"date", $"country", $"total_cases", $"new_cases")
-      .join(regionDict, $"country")
-
+      .join(regionDict, $"country" === $"country2")
+//      .where($"date" =!= null)
+      .drop($"country2")
+      .withColumn("new_cases", when($"new_cases"==="NULL", 0).otherwise($"new_cases"))
+      .withColumn("total_cases", when($"total_cases"==="NULL", 0).otherwise($"total_cases"))
   }
 
    def econJoin(spark: SparkSession, regionDF: DataFrame, econDF: DataFrame): DataFrame ={
@@ -22,24 +25,27 @@ object DataFrameManipulator {
 
     val regionDict = regionDF
       .select($"name", explode($"countries") as "country")
-      .select($"name" as "region", $"agg_population", $"country.name" as "country")
-
-
+//      .select($"name" as "region", $"agg_population", $"country" as "country2")
+      .select($"name" as "region", $"country" as "country2")
 
     econDF
-      .select($"year",$"region", $"country", $"GDP")
-      .join(regionDict, $"country")
+      .join(regionDict, $"country" === $"country2")
+      .select($"2020" as "2020_GDP", $"2019" as "2019_GDP", $"region", $"country")
+      .where($"WEO Subject Code" === "PPPGDP")
+      .drop($"country2")
   }
   
 
   def joinCaseEcon(spark: SparkSession, caseDF: DataFrame, econDF: DataFrame): DataFrame = {
+    import spark.implicits._
     econDF.createOrReplaceTempView("econDFTemp")
     caseDF.createOrReplaceTempView("caseDFTemp")
     val caseEconDF = spark.sql(
-      "SELECT c.region, c.country, e.gdp, c.new_cases" +
-        " FROM econDFTemp e JOIN caseDFTemp c" +
-        "ON e.country = c.country" +
-        "ORDER BY region, gdp")
+      "SELECT e.region, c.country, e.2020_GDP, e.2019_GDP, c.total_cases, c.new_cases, c.date " +
+        " FROM econDFTemp e JOIN caseDFTemp c " +
+        "ON e.country == c.country " +
+        "ORDER BY region, 2020_GDP")
+
     caseEconDF
   }
 }
