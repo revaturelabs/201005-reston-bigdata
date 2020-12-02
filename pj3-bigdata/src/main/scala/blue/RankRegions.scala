@@ -6,6 +6,8 @@ import org.apache.spark.sql.{DataFrame, SparkSession, functions}
 
 import scala.collection.mutable.ArrayBuffer
 
+import java.util.Date
+
 object RankRegions {
   def rankByMetric(spark: SparkSession, fullDS: DataFrame, metric: String, op: String = "avg"): DataFrame ={
     import spark.implicits._
@@ -62,7 +64,7 @@ object RankRegions {
       .select("date")
       .distinct()
       .rdd
-      .map(date => DateFunc.dayInYear(date(0)).toDouble)
+      .map(date => DateFunc.dayInYear(date(0).asInstanceOf[Date]).toDouble)
       .collect()
     )
     val metricPlottable: ArrayBuffer[DenseVector[Double]] = ArrayBuffer()
