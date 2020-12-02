@@ -1,6 +1,6 @@
 package blue
 
-import org.apache.spark.sql.functions.explode
+import org.apache.spark.sql.functions.{avg, explode}
 import org.apache.spark.sql.types.DoubleType
 import org.apache.spark.sql.{DataFrame, Row, SparkSession}
 
@@ -12,8 +12,36 @@ object Question8 {
   def regionCorrelation(spark: SparkSession, df: DataFrame): Unit={
     import spark.implicits._
 
+    val regionNames = df.select("region").sort("region").distinct().rdd.map(_.get(0).toString).collect()
+    var regionGDP = ArrayBuffer[ArrayBuffer[Double]]()
+    var regionPeaks = ArrayBuffer[ArrayBuffer[Double]]()
+
+
+    for(region <- (0 to regionNames.length)){
+      var gdp = ArrayBuffer[Double]()
+      var peak = ArrayBuffer[Double]()
+      val regionCountries = df.select("country").filter($"region" === regionNames(region)).distinct().rdd.map(_.get(0).toString).collect()
+      // Get the first peak for each country in region and gdp
+      for(country <- (0 to regionCountries.length-1)){
+        val countryDF = df.where($"country" === regionCountries(country)).sort("date")
+        val tempCases = countryDF.select($"new_cases").collect().map(_.getDouble(0))
+        val tempDates = countryDF.select($"dates").collect().map(_.getDouble(0))
+        peak += (StatFunc.firstPeak(tempDates, tempCases, 7, 1)._1)
+
+        val tempGDP = countryDF.select(avg($"gdp")).collect().map(_.getDouble(0))
+        gdp += tempGDP(0)
+      }
+      // Give correlation for each region
+      println(s"Region ${regionNames(region)}'s GDP - First New Cases Peak Potency Correlation: ${StatFunc.correlation(gdp.toArray,peak.toArray)}'")
+      // Append arrays to use for graphing
+      regionGDP += gdp
+      regionPeaks += peak
+    }
+
+    //Graph here
+
     //Grab all available region names
-    val regionNames = df.select("name").sort("name").distinct().rdd.map(_.get(0).toString).collect()
+   /* val regionNames = df.select("name").sort("name").distinct().rdd.map(_.get(0).toString).collect()
 
     var gdpDataRegions = ArrayBuffer[Array[Double]]()
     var casesDataRegions = ArrayBuffer[Array[Double]]()
@@ -38,7 +66,7 @@ object Question8 {
       val correlation = StatFunc.correlation(gdpData.toArray, casesData.toArray)
       println(s"Region ${regionNames(region)}'s GDP-Infection rate correlation: ${correlation}")
     }
-    GraphFunc.graphSeries(gdpDataRegions.toArray,casesDataRegions.toArray,name = regionNames, style='-', legend=true)
+    GraphFunc.graphSeries(gdpDataRegions.toArray,casesDataRegions.toArray,name = regionNames, style='-', legend=true)*/
   }
 
   def regionFirstPeak(spark: SparkSession, df: DataFrame): Unit= {

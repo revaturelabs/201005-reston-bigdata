@@ -11,13 +11,8 @@ object Runner {
       .master("local[4]")
       .getOrCreate()
 
-    spark.sparkContext.setLogLevel("ERROR")
-
-    val df = spark.read.option("header",true).csv("example.csv")
-    df.show()
-
     args match {
-      case _ => Question8.regionCorrelation(spark, df)//println("Hello World")
+      case _ => println("Hello World")
     }
   }
 }

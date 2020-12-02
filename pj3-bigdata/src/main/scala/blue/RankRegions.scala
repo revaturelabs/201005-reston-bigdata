@@ -3,6 +3,7 @@ package blue
 import breeze.linalg.{DenseVector, linspace}
 import breeze.plot.{Figure, plot}
 import org.apache.spark.sql.{DataFrame, SparkSession, functions}
+import java.util.Date
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -62,7 +63,7 @@ object RankRegions {
       .select("date")
       .distinct()
       .rdd
-      .map(date => DateFunc.dayInYear(date(0)).toDouble)
+      .map(date => DateFunc.dayInYear(date(0).asInstanceOf[Date]).toDouble)
       .collect()
     )
     val metricPlottable: ArrayBuffer[DenseVector[Double]] = ArrayBuffer()
