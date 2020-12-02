@@ -16,7 +16,7 @@ object Question5 {
   def getMostDiscussion(spark: SparkSession)= {
 
     // Location of full dataset tsv file on S3
-    val fullDataLocation = "s3://adam-king-848/data/q4_a_full.tsv"
+    val fullDataLocation = "s3a://adam-king-848/data/q4_a_full.tsv"
 
     // Reading tsv and turning it into a DataFrame
     val df = spark.read.option("header", true).option("sep", "\t").csv(fullDataLocation)
@@ -45,6 +45,7 @@ object Question5 {
 
     // Finding the day that has highest COVID-19 related tweets
     val maxDay = df.groupBy(col("date").as("days")).count()
+    maxDay.rdd.take(2).last
     maxDay.orderBy(desc("count")).limit(1).createOrReplaceTempView("viewMax")
 
     // Finding count of COVID-19 related tweets per hour of the day that has the highest tweets count
