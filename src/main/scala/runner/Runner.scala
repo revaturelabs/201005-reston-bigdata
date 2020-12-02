@@ -1,3 +1,4 @@
+
 package runner
 //import your package here like so:
 import orange.orangeRunner
@@ -24,7 +25,6 @@ object Runner {
   def printMenu(): Unit ={
     // Add your input format in the help menu below:
     println("___________________________________Menu___________________________________")
-    println("Q8 <Param 1> <Param 2> | GDP-Peak correlation and avg first peak")
-    println("Q2 | Highest discrepincy between bordering countries, and highest land-locked and water-locked infection rates per capita")
+    println("Q2 | Highest Discrepancies between bordering countries, highest infecction rate per capita among landlocked/water locked countries, highest infection per capita based on HDI")
   }
 }

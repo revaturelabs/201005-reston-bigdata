@@ -8,7 +8,7 @@ import dictionaries._
 
 object orangeRunner {
   def borderAnalysis(spark: SparkSession){
-//  def main(args: Array[String]): Unit={
+//  def main(args: Array[String]): Unit={ //comment and uncomment based on if using runner.Runner or not.
 //  val appName = "Orange"
 //  val spark = SparkSession.builder()
 //    .appName(appName)
@@ -18,10 +18,10 @@ object orangeRunner {
     spark.sparkContext.setLogLevel("WARN")
 
     //import the covid data from testData file as well as the border data from the provided border data
-    val country_stats = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("countries_general_stats.tsv")
-//    val country_data = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("s3://adam-king-848/data/countries_general_stats.tsv")
-    val country_data = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("daily_stats.tsv")
-//    val country_data = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("s3://adam-king-848/data/daily_stats.tsv")
+//    val country_stats = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("countries_general_stats.tsv")
+      val country_stats = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("s3://adam-king-848/data/countries_general_stats.tsv")
+//    val country_data = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("daily_stats.tsv")
+      val country_data = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("s3://adam-king-848/data/daily_stats.tsv")
 
     val country_pop = country_stats.select($"COUNTRY", $"POPULATION".cast("Int"))
     val country_cases = country_data
@@ -34,8 +34,6 @@ object orangeRunner {
 
 
     val borders = joinCodesAndBorders(spark)
-//    borders.show(100)
-
 
     //create "infection_rate" from covid data directory with daily covid data
     val infection_rate = country_cases
@@ -52,9 +50,6 @@ object orangeRunner {
     val bcountries = borders.join(infection_rate, borders("country_name") === infection_rate("COUNTRY"), "right")
       .select(infection_rate("COUNTRY").as("country_name"),  borders("border_country"),
         infection_rate("infection_rate_per_capita").as("country_infection_rate"))
-//        bcountries.show(1000)
-    //first.printSchema()
-
 
     /*
     the result of joining our border countries with our infection data. This gives us information about the home country, its infection rate,
@@ -63,9 +58,7 @@ object orangeRunner {
     val res1 = bcountries.join(infection_rate, bcountries("border_country") === infection_rate("COUNTRY"), "inner")
       .select(bcountries("country_name"), bcountries("country_infection_rate"), bcountries("border_country"),
         infection_rate("infection_rate_per_capita").as("country_border_infection_rate_per_capita"),
-        //round(bcountries("country_infection_rate") - infection_rate("infection_rate_per_capita"), 2).as("delta"))
         (bcountries("country_infection_rate") - infection_rate("infection_rate_per_capita")).as("delta"))
-        //res.show(10)
 
 
     /*
@@ -73,10 +66,8 @@ object orangeRunner {
     and combine them
      */
     val landLocked = getLandLocked().toDF("country_name")
-    //    landLocked.show(10)
 
     val waterLocked = createWaterLocked(bcountries, spark)
-//        waterLocked.show(10)
 
     //combine landLocked dataframe with infection_rate to make a dataframe with the infection rate of land locked countries
     val landLockedInfRate = landLocked.join(infection_rate, landLocked("country_name") === infection_rate("COUNTRY"), "inner")
@@ -87,7 +78,7 @@ object orangeRunner {
     val waterLockedInfRate = waterLocked.join(infection_rate, waterLocked("country_name") === infection_rate("COUNTRY"), "inner")
       .select(waterLocked("country_name"),
         infection_rate("infection_rate_per_capita").as("infection_rate_per_capita(%)"))
-       //waterLockedInfRate.show(10)
+
        //creates a dataframe using the development rankings dictionary with two columns, ranking (first, second, third)
        //  and country_name (the name of the country)
        val rankings = dictionaries.getDevelopmentRankings().toSeq.toDF("ranking", "country")
@@ -113,10 +104,6 @@ object orangeRunner {
     /* Queries to give us the answer to the second part of our question. Using the Dataframes for land and water locked countries, we can do simple
     queries to give the required answers
      */
-    //       landLockedInfRate.select("*")
-    //       .orderBy(asc("infection_rate_per_capita(%)"))
-    //         .show(10)
-
     println("Highest Infection Rate in Land Locked Countries\n")
     landLockedInfRate.select("*")
       .orderBy(desc("infection_rate_per_capita(%)"))
@@ -138,21 +125,17 @@ object orangeRunner {
       .orderBy(desc("infection_rate_per_capita"))
       .show(5)
 
-    println("Highest infection rate with first world countries by HDI (Human Development Index)")
+    println("Highest infection rate with second world countries by HDI (Human Development Index)")
     rankingsWithRate.select("country_name", "infection_rate_per_capita")
       .where(rankingsWithRate("ranking") === "Second")
       .orderBy(desc("infection_rate_per_capita"))
       .show(5)
 
-    println("Highest infection rate with first world countries by HDI (Human Development Index)")
+    println("Highest infection rate with third world countries by HDI (Human Development Index)")
     rankingsWithRate.select("country_name", "infection_rate_per_capita")
       .where(rankingsWithRate("ranking") === "Third")
       .orderBy(desc("infection_rate_per_capita"))
       .show(5)
-
-    // second.printSchema()
-
-    //second.show(50)
 
   }
 
