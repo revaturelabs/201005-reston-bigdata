@@ -7,22 +7,22 @@ import org.apache.spark.sql.{DataFrame, SparkSession, functions}
 import dictionaries._
 
 object orangeRunner {
-  def main(args: Array[String]): Unit={
-    val appName = "Orange"
-    val spark = SparkSession.builder()
-      .appName(appName)
-      .master("local[4]")
-      .getOrCreate()
+  def borderAnalysis(spark: SparkSession): Unit={
+//    val appName = "Orange"
+//    val spark = SparkSession.builder()
+//      .appName(appName)
+//      .master("local[4]")
+//      .getOrCreate()
     import spark.implicits._
     spark.sparkContext.setLogLevel("WARN")
 
     //import the covid data from testData file as well as the border data from the provided border data
     val country_stats = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("countries_general_stats.tsv")
+//    val country_data = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("s3://adam-king-848/data/countries_general_stats.tsv")
     val country_data = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("daily_stats.tsv")
 //    val country_data = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("s3://adam-king-848/data/daily_stats.tsv")
 
     val country_pop = country_stats.select($"COUNTRY", $"POPULATION".cast("Int"))
-
     val country_cases = country_data
       .filter($"TOTAL_CASES" =!= "NULL")
       .withColumn("Cases", $"TOTAL_CASES".cast("Int"))
