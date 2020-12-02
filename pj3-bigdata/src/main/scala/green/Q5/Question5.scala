@@ -45,7 +45,6 @@ object Question5 {
 
     // Finding the day that has highest COVID-19 related tweets
     val maxDay = df.groupBy(col("date").as("days")).count()
-    maxDay.rdd.take(2).last
     maxDay.orderBy(desc("count")).limit(1).createOrReplaceTempView("viewMax")
 
     // Finding count of COVID-19 related tweets per hour of the day that has the highest tweets count
