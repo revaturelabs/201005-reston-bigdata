@@ -7,12 +7,13 @@ import org.apache.spark.sql.{DataFrame, SparkSession, functions}
 import dictionaries._
 
 object orangeRunner {
-  def borderAnalysis(spark: SparkSession): Unit={
-//    val appName = "Orange"
-//    val spark = SparkSession.builder()
-//      .appName(appName)
-//      .master("local[4]")
-//      .getOrCreate()
+  def borderAnalysis(spark: SparkSession){
+//  def main(args: Array[String]): Unit={
+    val appName = "Orange"
+    val spark = SparkSession.builder()
+      .appName(appName)
+      .master("local[4]")
+      .getOrCreate()
     import spark.implicits._
     spark.sparkContext.setLogLevel("WARN")
 
@@ -87,6 +88,13 @@ object orangeRunner {
       .select(waterLocked("country_name"),
         infection_rate("infection_rate_per_capita").as("infection_rate_per_capita(%)"))
        //waterLockedInfRate.show(10)
+       //creates a dataframe using the development rankings dictionary with two columns, ranking (first, second, third)
+       //  and country_name (the name of the country)
+       val rankings = dictionaries.getDevelopmentRankings().toSeq.toDF("ranking", "country")
+         .select($"ranking", functions.explode($"country").as("country_name"))
+
+    //joins the rankings dataframe with the infection_rate dataframe on the country name field in both dataframes
+    val rankingsWithRate = rankings.join(infection_rate, rankings("country_name") === infection_rate("COUNTRY"), "inner")
 
 
 
@@ -100,7 +108,7 @@ object orangeRunner {
     res1.select("*")
       .where($"delta" > 0)
       .orderBy(desc("delta")) //using desc here allows us to get the largest differences at the top, and smaller differences at the end
-      .show(10)
+      .show(5)
 
     /* Queries to give us the answer to the second part of our question. Using the Dataframes for land and water locked countries, we can do simple
     queries to give the required answers
@@ -112,12 +120,35 @@ object orangeRunner {
     println("Highest Infection Rate in Land Locked Countries\n")
     landLockedInfRate.select("*")
       .orderBy(desc("infection_rate_per_capita(%)"))
-      .show(10)
+      .show(5)
 
     println("Highest Infection Rate in Water Locked Countries\n")
     waterLockedInfRate.select("*")
       .orderBy(desc("infection_rate_per_capita(%)"))
-      .show(10)
+      .show(5)
+
+    /*
+    query to find the countries with the highest infection rate per capita in each development category,
+    i.e. First, Second, or Third.
+    Shows the country name, the country's development, and the infection rate per capita for the country.
+ */
+    println("Highest infection rate with first world countries by HDI (Human Development Index)")
+    rankingsWithRate.select("country_name", "infection_rate_per_capita")
+      .where(rankingsWithRate("ranking") === "First")
+      .orderBy(desc("infection_rate_per_capita"))
+      .show(5)
+
+    println("Highest infection rate with first world countries by HDI (Human Development Index)")
+    rankingsWithRate.select("country_name", "infection_rate_per_capita")
+      .where(rankingsWithRate("ranking") === "Second")
+      .orderBy(desc("infection_rate_per_capita"))
+      .show(5)
+
+    println("Highest infection rate with first world countries by HDI (Human Development Index)")
+    rankingsWithRate.select("country_name", "infection_rate_per_capita")
+      .where(rankingsWithRate("ranking") === "Third")
+      .orderBy(desc("infection_rate_per_capita"))
+      .show(5)
 
     // second.printSchema()
 
