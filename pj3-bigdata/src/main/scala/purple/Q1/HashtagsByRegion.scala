@@ -1,6 +1,8 @@
 package purple.Q1
 
 import org.apache.spark.sql.{DataFrame, SparkSession, functions}
+import purple.FileUtil.FileWriter.writeDataFrameToFile
+
 import scala.collection.convert.ImplicitConversions.`collection AsScalaIterable`
 
 object HashtagsByRegion {
@@ -24,6 +26,9 @@ object HashtagsByRegion {
 
   private def question1(spark: SparkSession, df: DataFrame, region: String): Unit = {
     import spark.implicits._
+    val startTime = System.currentTimeMillis()
+    var outputFilename: String = null
+
     val newdf = df
       .filter(!functions.isnull($"place"))
       .select($"full_text", $"place.country")
@@ -42,7 +47,7 @@ object HashtagsByRegion {
     // If we are passed a region, we need to filter by it
     // Otherwise we present all of the information
     if (region != null) {
-      newdf
+      val sorteddf = newdf
         .filter($"region" === region)
         //explode List(Hashtags),Region to own rows resulting in Row(Hashtag,Region)
         .select(functions.explode($"Hashtags").as("Hashtag"), $"Region")
@@ -51,9 +56,13 @@ object HashtagsByRegion {
         //count total of each Region/Hashtag appearance
         .count()
         .orderBy(functions.desc("Count"))
-        .show()
+
+        sorteddf.show(100)
+
+      outputFilename = s"hbr-${region.replaceAll("\\s+","")}-$startTime"
+      writeDataFrameToFile(sorteddf, outputFilename)
     } else {
-      newdf
+      val sorteddf = newdf
         //explode List(Hashtags),Region to own rows resulting in Row(Hashtag,Region)
         .select(functions.explode($"Hashtags").as("Hashtag"), $"Region")
         //group by the same Region and Hashtag
@@ -61,8 +70,14 @@ object HashtagsByRegion {
         //count total of each Region/Hashtag appearance
         .count()
         .orderBy(functions.desc("Count"))
-        .show()
+
+        sorteddf.show(100)
+
+      outputFilename = s"hbr-AllRegions-$startTime"
+      writeDataFrameToFile(sorteddf, outputFilename)
     }
+
+
   }
 
   private def getHashtags(text: String): List[String] = {
