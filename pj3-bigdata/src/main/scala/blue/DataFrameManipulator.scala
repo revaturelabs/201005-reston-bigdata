@@ -12,7 +12,7 @@ object DataFrameManipulator {
 //      .select($"name", $"agg_population", $"country")
 
     caseDF
-      .select( $"date", $"country", $"total_cases", $"new_cases")
+      .select( $"date", $"country", $"total_cases", $"new_cases", $"new_cases_per_million")
       .join(regionDict, $"country" === $"country2")
 //      .where($"date" =!= null)
       .drop($"country2")
@@ -25,7 +25,6 @@ object DataFrameManipulator {
 
     val regionDict = regionDF
       .select($"name", explode($"countries") as "country")
-//      .select($"name" as "region", $"agg_population", $"country" as "country2")
       .select($"name" as "region", $"country" as "country2")
 
     econDF
@@ -41,7 +40,7 @@ object DataFrameManipulator {
     econDF.createOrReplaceTempView("econDFTemp")
     caseDF.createOrReplaceTempView("caseDFTemp")
     val caseEconDF = spark.sql(
-      "SELECT e.region, c.country, e.2020_GDP, e.2019_GDP, c.total_cases, c.new_cases, c.date " +
+      "SELECT e.region, c.country, e.2020_GDP, e.2019_GDP, c.total_cases, c.new_cases, c.new_cases_per_million, c.date " +
         " FROM econDFTemp e JOIN caseDFTemp c " +
         "ON e.country == c.country " +
         "ORDER BY region, 2020_GDP")

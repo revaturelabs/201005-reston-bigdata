@@ -10,33 +10,72 @@ import java.util.Date
 import scala.collection.mutable.ArrayBuffer
 import java.util.Date
 
+import breeze.numerics.round
+
 object RankRegions {
   def rankByMetric(spark: SparkSession, fullDS: DataFrame, metric: String, op: String = "avg"): DataFrame ={
     import spark.implicits._
-    var oneTimeMetric: DataFrame = null
+    var oneTimeMetric: DataFrame = spark.emptyDataFrame
     op match {
-
       case "avg" => {
         oneTimeMetric = fullDS
-          .groupBy("name")
+          .groupBy("region")
           .agg(functions.avg(s"$metric") as s"$metric")
           .sort(functions.col(s"$metric") desc)
       }
       case "latest" => {
         val latestDate = fullDS.select(functions.max("date")).collect().map(_.getString(0))
         oneTimeMetric = fullDS
-          .select("name", metric)
+          .select("region", metric)
           .where($"date" === latestDate(0))
+          .sort(functions.col(s"$metric") desc)
+      }
+      case "max" => {
+        oneTimeMetric = fullDS
+          .groupBy("region")
+          .agg(functions.max(s"$metric") as s"$metric")
           .sort(functions.col(s"$metric") desc)
       }
       case _ => {
         oneTimeMetric = fullDS
-          .groupBy("name")
+          .groupBy("region")
           .agg(functions.avg(s"$metric") as s"$metric")
           .sort(functions.col(s"$metric") desc)
       }
     }
+    oneTimeMetric
+  }
 
+  def rankByMetricLow(spark: SparkSession, fullDS: DataFrame, metric: String, op: String = "avg"): DataFrame ={
+    import spark.implicits._
+    var oneTimeMetric: DataFrame = spark.emptyDataFrame
+    op match {
+      case "avg" => {
+        oneTimeMetric = fullDS
+          .groupBy("region")
+          .agg(functions.round(functions.avg(s"$metric"), 2) as s"$metric")
+          .sort(functions.col(s"$metric"))
+      }
+      case "latest" => {
+        val latestDate = fullDS.select(functions.max("date")).collect().map(_.getString(0))
+        oneTimeMetric = fullDS
+          .select("region", metric)
+          .where($"date" === latestDate(0))
+          .sort(functions.round(functions.col(s"$metric"), 2))
+      }
+      case "max" => {
+        oneTimeMetric = fullDS
+          .groupBy("region")
+          .agg(functions.round(functions.max(s"$metric") as s"$metric", 2))
+          .sort(functions.col(s"$metric"))
+      }
+      case _ => {
+        oneTimeMetric = fullDS
+          .groupBy("region")
+          .agg(functions.round(functions.avg(s"$metric") as s"$metric", 2))
+          .sort(functions.col(s"$metric"))
+      }
+    }
     oneTimeMetric
   }
 
@@ -44,14 +83,14 @@ object RankRegions {
     var importantData = spark.emptyDataFrame
     if (normalizer != "none"){
       importantData = fullDS
-        .select("name", "date", s"$metric", s"$normalizer")
-        .groupBy("name", "date")
+        .select("region", "date", s"$metric", s"$normalizer")
+        .groupBy("region", "date")
         .agg(functions.round(functions.sum(functions.col(s"$metric")/(functions.col(s"$normalizer")/numNormalizer)), 2) as newName)
         .sort(newName)
     } else {
       importantData = fullDS
-        .select("name", "date", s"$metric")
-        .groupBy("name", "date")
+        .select("region", "date", s"$metric")
+        .groupBy("region", "date")
         .agg(functions.round(functions.sum(functions.col(s"$metric")/numNormalizer), 2) as newName)
         .sort(newName)
     }
@@ -60,16 +99,15 @@ object RankRegions {
 
   def plotMetrics(spark: SparkSession, data: DataFrame, metric: String, filename: String): Unit ={
     import spark.implicits._
-    val dateFormat = new SimpleDateFormat("yyyy-MM-dd")
-    val regionList = data.select("name").distinct().collect().map(_.getString(0))
+
+    val regionList = data.select("region").distinct().collect().map(_.getString(0))
     val dates: DenseVector[Double] = DenseVector(
       data
         .select("date")
         .where($"date" =!= null)
         .distinct()
         .rdd
-//      .map(date => DateFunc.dayInYear(date(0).asInstanceOf[Date]).toDouble)
-        .map(date => DateFunc.dayInYear(dateFormat.parse(s"${date(0)}")).toDouble)
+        .map(date => DateFunc.dayInYear(date(0).asInstanceOf[String]).toDouble)
         .collect()
 
     )
@@ -78,7 +116,7 @@ object RankRegions {
       metricPlottable.append(DenseVector(data
         .select(metric)
         .where($"date" =!= null)
-        .where($"name" === region)
+        .where($"region" === region)
         .sort($"date")
         .collect
         .map(_.getDouble(0))))
@@ -96,19 +134,12 @@ object RankRegions {
     f.saveas(s"${filename}.png")
   }
 
-  def calculateChange(spark: SparkSession, fullDS: DataFrame, metric: String): DataFrame = {
+  def changeGDP(spark: SparkSession, fullDS: DataFrame): DataFrame = {
     import spark.implicits._
-//    var importantData = spark.emptyDataFrame
-    val preCovid =fullDS
-      .select($"name", $"country", functions.col(metric) as "pre")
-      .where($"year" === "2019")
 
-    val midCovid =fullDS
-      .select($"name", $"country", functions.col(metric) as "mid")
-      .where($"year" === "2020")
+    val temp = fullDS
+      .withColumn("delta_gdp", (($"2020_GDP"-$"2019_GDP")/$"2019_GDP")*100)
 
-    midCovid
-      .join(preCovid, Seq("name", "country"))
-      .select($"name", $"country", (($"mid"-$"pre")/$"pre")*100 as s"d_percent_$metric")
+    rankByMetric(spark, temp, "delta_gdp", "avg")
   }
 }

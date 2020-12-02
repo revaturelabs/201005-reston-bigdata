@@ -30,14 +30,10 @@ object BlueRunner extends App {
 //  econRegionDF.printSchema()
 //  econRegionDF.show()
   val fullDF = DataFrameManipulator.joinCaseEcon(spark, caseRegionDF, econRegionDF)
-  fullDF.printSchema()
-  fullDF.show()
+//  fullDF.printSchema()
+//  fullDF.show()
 
-//  val regionByInfectionRateFull = RankRegions.calculateMetric(spark, caseModDF, "new_cases_per_million", "none",
-//    1, "infections_rate")
-//  val regionByInfectionRate = RankRegions.rankByMetric(spark, regionByInfectionRateFull, "infections_rate")
-//  regionByInfectionRate.show()
-//  RankRegions.plotMetrics(spark, regionByInfectionRateFull, "infections_rate", "infections")
+  Question1.initialSolution(spark, fullDF)
 
 
 
