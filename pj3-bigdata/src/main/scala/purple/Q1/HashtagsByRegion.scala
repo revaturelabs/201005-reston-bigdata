@@ -5,7 +5,7 @@ import scala.collection.convert.ImplicitConversions.`collection AsScalaIterable`
 
 object HashtagsByRegion {
 
-  def getHashtagsByRegion(): Unit = {
+  def getHashtagsByRegion(region: String = null): Unit = {
     //What are the hashtags used to describe COVID-19 by Region (e.g. #covid, #COVID-19, #Coronavirus, #NovelCoronavirus)?
 
     //for local testing purposes (pass spark session from runner in prod)
@@ -19,12 +19,12 @@ object HashtagsByRegion {
     val staticDf = spark.read.json("src/main/scala/purple/exampleTwitterData.jsonl")
 
     println("QUESTION 1 (With Sample Data)")
-    question1(spark, staticDf)
+    question1(spark, staticDf, region)
   }
 
-  private def question1(spark: SparkSession, df: DataFrame): Unit = {
+  private def question1(spark: SparkSession, df: DataFrame, region: String): Unit = {
     import spark.implicits._
-    df
+    val newdf = df
       .filter(!functions.isnull($"place"))
       .select($"full_text", $"place.country")
       //map to Row(List(Hashtags),Country)
@@ -37,14 +37,35 @@ object HashtagsByRegion {
       })
       .withColumnRenamed("_1", "Hashtags")
       .withColumnRenamed("_2", "Region")
-      //explode List(Hashtags),Region to own rows resulting in Row(Hashtag,Region)
-      .select(functions.explode($"Hashtags").as("Hashtag"), $"Region")
-      //group by the same Region and Hashtag
-      .groupBy("Region", "Hashtag")
-      //count total of each Region/Hashtag appearance
-      .count()
-      .orderBy(functions.desc("Count"))
-      .show()
+
+
+
+
+    // If we are passed a region, then we filter by that
+    // Otherwise we just continue on as normal
+    if (region != null) {
+      newdf
+        .filter($"Region" === region)  // DIFFERENCE IS IN THIS LINE ONLY
+        //explode List(Hashtags),Region to own rows resulting in Row(Hashtag,Region)
+        .select(functions.explode($"Hashtags").as("Hashtag"), $"Region")
+        //group by the same Region and Hashtag
+        .groupBy("Region", "Hashtag")
+        //count total of each Region/Hashtag appearance
+        .count()
+        .orderBy(functions.desc("Count"))
+        .show()
+    } else {
+      newdf
+        //explode List(Hashtags),Region to own rows resulting in Row(Hashtag,Region)
+        .select(functions.explode($"Hashtags").as("Hashtag"), $"Region")
+        //group by the same Region and Hashtag
+        .groupBy("Region", "Hashtag")
+        //count total of each Region/Hashtag appearance
+        .count()
+        .orderBy(functions.desc("Count"))
+        .show()
+    }
+
   }
 
   private def getHashtags(text: String): List[String] = {
