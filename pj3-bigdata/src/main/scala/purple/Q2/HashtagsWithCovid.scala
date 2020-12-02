@@ -17,7 +17,7 @@ object HashtagsWithCovid {
       .getOrCreate()
     spark.sparkContext.setLogLevel("WARN")
 
-    val sampleStaticDf = spark.read.parquet("src/main/scala/purple/Q2/wednesday.parquet")
+    val sampleStaticDf = spark.read.json("src/main/scala/purple/exampleTwitterData.jsonl")
     println("QUESTION 2 (with Sample Data)")
     question2(spark, sampleStaticDf)
   }
@@ -26,7 +26,7 @@ object HashtagsWithCovid {
     import spark.implicits._
     val covidRelatedWordsList = CovidTermsList.getTermsList
     df
-      .select($"data.text")
+      .select($"full_text")
       //map to Row(List(Hashtags))
       .map(tweet => {
         getHashtags(tweet.getString(0))

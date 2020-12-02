@@ -16,10 +16,7 @@ object HashtagsByRegion {
       .getOrCreate()
     spark.sparkContext.setLogLevel("WARN")
 
-    val staticDf = spark.read.format("csv")
-      .option("header", "true")
-      .option("delimiter", "\t")
-      .load("src/main/scala/purple/Q1/temp.tsv")
+    val staticDf = spark.read.json("src/main/scala/purple/exampleTwitterData.jsonl")
 
     println("QUESTION 1 (With Sample Data)")
     question1(spark, staticDf)
@@ -28,7 +25,8 @@ object HashtagsByRegion {
   private def question1(spark: SparkSession, df: DataFrame): Unit = {
     import spark.implicits._
     df
-      .select($"Text", $"Country")
+      .filter(!functions.isnull($"place"))
+      .select($"full_text", $"place.country")
       //map to Row(List(Hashtags),Country)
       .map(tweet => {
         (getHashtags(tweet.getString(0)), tweet.getString(1))
@@ -45,7 +43,7 @@ object HashtagsByRegion {
       .groupBy("Region", "Hashtag")
       //count total of each Region/Hashtag appearance
       .count()
-      .orderBy(functions.desc("Region"))
+      .orderBy(functions.desc("Count"))
       .show()
   }
 
