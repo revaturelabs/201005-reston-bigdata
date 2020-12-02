@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter
 import org.apache.spark.sql.functions.{bround, count, desc, when}
 
 object InfectionRates {
-  def redQ3(spark: SparkSession): Unit = {
+  def redQ6(spark: SparkSession): Unit = {
 
     import spark.implicits._
     //Prints batch time for each batch that runs
