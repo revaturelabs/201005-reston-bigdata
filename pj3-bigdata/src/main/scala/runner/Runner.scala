@@ -10,7 +10,6 @@ object Runner {
     args match {
         //purple team's questions
       case Array("hbr") => HashtagsByRegion.getHashtagsByRegion()
-      case Array("hbr", region) => HashtagsByRegion.getHashtagsByRegion(region)
       case Array("hwc") => HashtagsWithCovid.getHashtagsWithCovid()
       case _ => println("Hello World")
     }
