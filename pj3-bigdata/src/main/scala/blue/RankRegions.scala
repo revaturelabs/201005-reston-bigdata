@@ -64,7 +64,6 @@ object RankRegions {
     val regionList = data.select("name").distinct().collect().map(_.getString(0))
     val dates: DenseVector[Double] = DenseVector(
       data
-
         .select("date")
         .where($"date" =!= null)
         .distinct()
