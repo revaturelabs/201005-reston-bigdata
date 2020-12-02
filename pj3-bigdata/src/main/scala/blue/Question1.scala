@@ -8,10 +8,12 @@ object Question1 {
     val regionByInfectionRate = RankRegions.rankByMetricLow(spark, data, "new_cases_per_million")
     regionByInfectionRate.show()
 
-    RankRegions.plotMetrics(spark, data, "new_cases_per_million", "infections")
+    RankRegions.plotMetrics(spark, data, "new_cases_per_million", "infections_per_million")
+    RankRegions.plotMetrics(spark, data, "new_cases", "infections")
 
-    val regionByGDPFull = RankRegions.changeGDP(spark, data)
-    regionByGDPFull.show()
-    regionByInfectionRate.show()
+
+//    val regionByGDPFull = RankRegions.changeGDP(spark, data)
+//    regionByGDPFull.show()
+//    regionByInfectionRate.show()
   }
 }

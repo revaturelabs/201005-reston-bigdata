@@ -110,30 +110,36 @@ object RankRegions {
       .collect()
       .map(date => DateFunc.dayInYear(date(0).asInstanceOf[String]).toDouble)
 
-
+    val datePlottable: ArrayBuffer[Array[Double]] = ArrayBuffer()
     val metricPlottable: ArrayBuffer[Array[Double]] = ArrayBuffer()
+    val dataGrouped = data
+      .select($"region", $"date", $"$metric")
+      .groupBy($"region", $"date")
+      .agg(functions.sum($"$metric") as metric)
+      .cache()
+
     for (region <- regionList) {
-      metricPlottable.append(data
+      metricPlottable.append(dataGrouped
         .select(metric)
-        .where($"date" =!= null)
         .where($"region" === region)
         .sort($"date")
         .rdd
         .collect
-        .map(_.get(0).asInstanceOf[Double])
+        .map(_.get(0).asInstanceOf[Double]))
+      datePlottable.append(dataGrouped
+        .select("date")
+        .where($"region" === region)
+        .sort($"date")
+        .rdd
+        .collect()
+        .map(date => DateFunc.dayInYear(date(0).asInstanceOf[String]).toDouble)
       )
     }
-    val test1 = data
-      .select(metric)
-      .where($"region" === regionList(0))
-      .sort($"date")
-      .rdd
-      .collect
 
     val f = Figure()
     val p = f.subplot(0)
     for (ii <- 0 to regionList.length-1) {
-      p += plot(DenseVector(dates), DenseVector(metricPlottable(ii)), name = regionList(ii))
+      p += plot(DenseVector(datePlottable(ii)), DenseVector(metricPlottable(ii)), name = regionList(ii))
     }
     p.legend = true
     p.xlabel = "Days since 1st of January, 2020"

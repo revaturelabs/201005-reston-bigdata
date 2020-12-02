@@ -47,7 +47,7 @@ object DataFrameManipulator {
       //        " FROM econDFTemp e JOIN caseDFTemp c " +
       //        "ON e.country == c.country " +
       //        "ORDER BY region, 2020_GDP")
-      "SELECT e.year, e.region, c.country,e.current_prices_gdp, e.gdp_per_capita, c.total_cases, c.new_cases, c.date " +
+      "SELECT e.year, e.region, c.country,e.current_prices_gdp, e.gdp_per_capita, c.total_cases, c.new_cases, c.new_cases_per_million, c.date " +
         " FROM econDFTemp e JOIN caseDFTemp c " +
         "ON e.country == c.country " +
         "ORDER BY region, gdp_per_capita")
