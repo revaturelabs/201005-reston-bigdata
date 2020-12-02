@@ -3,20 +3,13 @@ package RedTeam.Q3
 import java.io.{File, PrintWriter}
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions._
 import org.jsoup.Jsoup
 
 object CovidLiveUpdates {
-  def main(args: Array[String]): Unit = {
-
-    //Spark Session
-    val spark = SparkSession.builder()
-      .appName("CovidLiveUpdates")
-      .master("local[4]")
-      .getOrCreate()
-
+  def redQ6(spark: SparkSession): Unit = {
+    
     //Set log level for sbt shell
     spark.sparkContext.setLogLevel("ERROR")
 
