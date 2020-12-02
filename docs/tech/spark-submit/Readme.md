@@ -42,14 +42,16 @@ export AWS_PROFILE=p3
 
 ### Sample AWS S3 commands:
 // aws s3 - to list buckets
+```
 aws s3 --profile p3 ls s3://adam-king-848
-
+```
 // aws s3 - to list files in data bucket
+```
 aws s3 --profile p3 ls s3://adam-king-848/data --recursive --human-readable
-
+```
 // the s3 command reference
-https://docs.aws.amazon.com/cli/latest/reference/s3/index.html#cli-aws-s3  
 
+https://docs.aws.amazon.com/cli/latest/reference/s3/index.html#cli-aws-s3  
 
 ### Build a jar 
 
