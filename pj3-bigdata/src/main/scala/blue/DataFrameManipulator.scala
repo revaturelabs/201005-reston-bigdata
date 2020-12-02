@@ -27,23 +27,28 @@ object DataFrameManipulator {
       .select($"name", explode($"countries") as "country")
       .select($"name" as "region", $"country" as "country2")
 
-    econDF
-      .join(regionDict, $"country" === $"country2")
-      .select($"2020" as "2020_GDP", $"2019" as "2019_GDP", $"region", $"country")
-      .where($"WEO Subject Code" === "PPPGDP")
-      .drop($"country2")
-  }
-  
+     econDF
+       .join(regionDict, $"country" === $"country2")
+       //.select($"2020" as "2020_GDP", $"2019" as "2019_GDP", $"region", $"country")
+       .select($"year",$"region",$"name" as "country",$"gdp_currentPrices" as "current_prices_gdp" ,$"gdp_perCap_currentPrices" as "gdp_per_capita")
+       //.where($"WEO Subject Code" === "PPPGDP")
+       .drop($"country2")
+   }
+
 
   def joinCaseEcon(spark: SparkSession, caseDF: DataFrame, econDF: DataFrame): DataFrame = {
     import spark.implicits._
     econDF.createOrReplaceTempView("econDFTemp")
     caseDF.createOrReplaceTempView("caseDFTemp")
     val caseEconDF = spark.sql(
-      "SELECT e.region, c.country, e.2020_GDP, e.2019_GDP, c.total_cases, c.new_cases, c.new_cases_per_million, c.date " +
+      //      "SELECT e.region, c.country, e.2020_GDP, e.2019_GDP, c.total_cases, c.new_cases, c.date " +
+      //        " FROM econDFTemp e JOIN caseDFTemp c " +
+      //        "ON e.country == c.country " +
+      //        "ORDER BY region, 2020_GDP")
+      "SELECT e.year, e.region, c.country,e.current_prices_gdp, e.gdp_per_capita c.total_cases, c.new_cases, c.date " +
         " FROM econDFTemp e JOIN caseDFTemp c " +
         "ON e.country == c.country " +
-        "ORDER BY region, 2020_GDP")
+        "ORDER BY region, gdp_per_capita")
 
     caseEconDF
   }
