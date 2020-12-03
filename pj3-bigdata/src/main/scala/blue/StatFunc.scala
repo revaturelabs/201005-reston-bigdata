@@ -50,6 +50,23 @@ object StatFunc {
     (xArray(0),yArray(0))
   }
 
+  def firstPeakMod(xArray: Array[Double], yArray: Array[Double], neighbors: Int, minDifference: Double): (Double, Double) ={
+    var avgSum: Double = 0.0
+    var sum: Double = 0.0
+
+    for(i <- (0 to (xArray.length - neighbors - 1))){
+        sum = 0.0
+        for(neighbor <- (1 to neighbors)){
+          sum += yArray(i + neighbor)
+        }
+        avgSum = sum/neighbors
+        if(yArray(i) - avgSum > minDifference){
+          return (xArray(i),yArray(i))
+        }
+    }
+    (xArray(0), yArray(0))
+  }
+
   /**
    * The correlation between two series of data ~1 = positive correlation,
    * ~0 = no correlation, ~-1 = -negative correlation
