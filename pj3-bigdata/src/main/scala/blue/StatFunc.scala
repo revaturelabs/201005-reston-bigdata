@@ -50,6 +50,28 @@ object StatFunc {
     (xArray(0),yArray(0))
   }
 
+  def firstMajorPeak(xArray: Array[Double], yArray: Array[Double], neighbors: Int, percentDifference: Double, minCasePercent: Double): (Double, Double) ={
+    var avgSum: Double = 0.0
+    var sum: Double = 0.0
+    var minDifference: Double = 0.0
+    val minCase = minCasePercent*.01*yArray.max
+    val start = yArray.indexWhere(_ > minCase)
+    if (start != -1) {
+      for(i <- start to (xArray.length - neighbors - 1)){
+          sum = 0.0
+          for(neighbor <- (1 to neighbors)){
+            sum += yArray(i + neighbor)
+          }
+          avgSum = sum/neighbors
+          minDifference = .01*percentDifference*yArray(i)
+          if(yArray(i) - avgSum > minDifference){
+            return (xArray(i),yArray(i))
+          }
+      }
+    }
+    (-1, yArray(0))
+  }
+
   /**
    * The correlation between two series of data ~1 = positive correlation,
    * ~0 = no correlation, ~-1 = -negative correlation

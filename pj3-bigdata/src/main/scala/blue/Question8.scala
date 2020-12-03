@@ -34,8 +34,7 @@ object Question8 {
           val tempCases = countryDF.select($"new_cases").collect().map(_.get(0).toString.toDouble)
           val tempDates = countryDF.select($"date").collect().map(_.get(0).toString).map(DateFunc.dayInYear(_).toDouble)
           if(tempDates.length > 0 && tempCases.length > 0) {
-            peak += (StatFunc.firstPeak(tempDates, tempCases, 3, .5)._1)
-
+            peak += (StatFunc.firstMajorPeak(tempDates, tempCases, 3, 10, 5)._1)
             val tempGDP = countryDF.select($"current_prices_gdp")
             val avgGDP = tempGDP.select(avg($"current_prices_gdp")).collect().map(_.getDouble(0))
             gdp += avgGDP(0)
@@ -53,28 +52,37 @@ object Question8 {
 
   def regionFirstPeak(spark: SparkSession, df: DataFrame): Unit= {
     import spark.implicits._
+    df.write.partitionBy("region").bucketBy(40, "country").saveAsTable("dfOptimize")
 
-    val regionList = df.select("name").distinct().collect().map(_.getString(0))
-
+    val regionList = spark.sql("SELECT DISTINCT region FROM dfOptimize ORDER BY region").rdd.map(_.get(0).toString).collect()
     var tempDates: Array[Double] = null
     var tempCases: Array[Double] = null
     var tempFrame: DataFrame = null
 
     val firstPeakTimeAvg: ArrayBuffer[Double] = ArrayBuffer()
     val firstPeakForCountry: ArrayBuffer[Double] = ArrayBuffer()
-    var countryList: Array[Row] = Array()
+    var countryList: Array[String] = Array()
+    var peakTime: Double = 0
     for (region <- regionList) {
       countryList = df
-        .select($"countries")
-        .where($"name" === region)
+        .select($"country")
+        .where($"region" === region)
+        .distinct()
         .collect()
+        .map(_.get(0).asInstanceOf[String])
       for (country <- countryList){
-        tempFrame = df.where($"name" === country)
-        tempCases = tempFrame.select($"total_cases").collect().map(_.getDouble(0))
-        tempDates = tempFrame.select($"dates").collect().map(_.getDouble(0))
-        firstPeakForCountry.append(StatFunc.firstPeak(tempDates, tempCases, 7, 1)._1)
+//        tempFrame = df.select($"country", $"date", $"new_cases").where($"country" === country).filter($"date" =!= "NULL").distinct().sort("date").cache()
+        tempFrame = spark.sql(s"SELECT DISTINCT country, date, new_cases FROM dfOptimize WHERE country = '$country' AND date != 'NULL' ").sort($"date").cache()
+        tempCases = tempFrame.select($"new_cases").collect().map(_.get(0).toString.toDouble)
+        tempDates = tempFrame.select($"date").collect().map(_.get(0).toString).map(DateFunc.dayInYear(_).toDouble)
+        peakTime = StatFunc.firstMajorPeak(tempDates, tempCases, 7, 10, 5)._1
+        if (peakTime != -1) {
+          firstPeakForCountry.append(peakTime)
+          println(s"${country}: ${firstPeakForCountry.last}")
+        }
       }
       firstPeakTimeAvg.append(firstPeakForCountry.sum/firstPeakForCountry.length)
+      println(s"\t\t${region}: ${firstPeakTimeAvg.last}")
       firstPeakForCountry.clear()
     }
 
@@ -84,7 +92,8 @@ object Question8 {
     }
     println("")
     for (ii <- 0 to regionList.length-1){
-      println(s"${firstPeakTable(ii)._1},\t${firstPeakTable(ii)._2}}" )
+      println(s"${firstPeakTable(ii)._1}, ${firstPeakTable(ii)._2}}" )
     }
+    spark.sql("DROP TABLE IF EXISTS dfOptimize")
   }
 }

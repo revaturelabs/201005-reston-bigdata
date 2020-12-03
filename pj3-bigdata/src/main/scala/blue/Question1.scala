@@ -7,7 +7,6 @@ import org.apache.spark.sql.{DataFrame, SparkSession}
 
 object Question1 {
   def initialSolution(spark: SparkSession, data: DataFrame, resultpath: String): Unit ={
-    val resultpath = "results"
     val regionByInfectionRate = RankRegions.rankByMetricLow(spark, data, "new_cases_per_million")
     regionByInfectionRate.coalesce(1).write.csv(s"${resultpath}/csv_avg_infection_rate_per_million")
     RankRegions.rankByMetricLow(spark, data, "new_cases")
