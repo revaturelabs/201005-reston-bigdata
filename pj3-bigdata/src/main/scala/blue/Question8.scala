@@ -62,7 +62,7 @@ object Question8 {
 
   def regionFirstPeak(spark: SparkSession, df: DataFrame): Unit= {
     import spark.implicits._
-    df.write.partitionBy("region").bucketBy(15, "country").saveAsTable("dfOptimize")
+    df.write.partitionBy("region").bucketBy(30, "country").saveAsTable("dfOptimize")
 
     val regionList = spark.sql("SELECT DISTINCT region FROM dfOptimize ORDER BY region").rdd.map(_.get(0).toString).collect()
     var tempDates: Array[Double] = null
@@ -84,7 +84,7 @@ object Question8 {
         tempFrame = spark.sql(s"SELECT DISTINCT * FROM dfOptimize WHERE country = '$country' AND date != 'NULL' ORDER BY date ").cache()
         tempCases = tempFrame.select($"new_cases").collect().map(_.get(0).toString.toDouble)
         tempDates = tempFrame.select($"date").collect().map(_.get(0).toString).map(DateFunc.dayInYear(_).toDouble)
-        firstPeakForCountry.append(StatFunc.firstPeakMod(tempDates, tempCases, 7, .5)._1)
+        firstPeakForCountry.append(StatFunc.firstPeakMod(tempDates, tempCases, 7, 5)._1)
         println(s"${country}: ${firstPeakForCountry.last}")
       }
       firstPeakTimeAvg.append(firstPeakForCountry.sum/firstPeakForCountry.length)

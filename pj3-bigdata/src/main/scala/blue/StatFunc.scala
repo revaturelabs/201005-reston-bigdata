@@ -50,9 +50,10 @@ object StatFunc {
     (xArray(0),yArray(0))
   }
 
-  def firstPeakMod(xArray: Array[Double], yArray: Array[Double], neighbors: Int, minDifference: Double): (Double, Double) ={
+  def firstPeakMod(xArray: Array[Double], yArray: Array[Double], neighbors: Int, percentDifference: Double): (Double, Double) ={
     var avgSum: Double = 0.0
     var sum: Double = 0.0
+    var minDifference: Double = 0.0
 
     for(i <- (0 to (xArray.length - neighbors - 1))){
         sum = 0.0
@@ -60,7 +61,8 @@ object StatFunc {
           sum += yArray(i + neighbor)
         }
         avgSum = sum/neighbors
-        if(yArray(i) - avgSum > minDifference){
+        minDifference = .01*percentDifference*yArray(i)
+        if(yArray(i) - avgSum > minDifference && yArray(i) - avgSum > 10){
           return (xArray(i),yArray(i))
         }
     }
