@@ -34,7 +34,7 @@ object BlueRunner extends App {
 //  fullDF.printSchema()
 //  fullDF.show()
 
-  Question1.initialSolution(spark, fullDF)
+  Question1.initialSolution(spark, fullDF, "results")
 
 
 println("Hello World")

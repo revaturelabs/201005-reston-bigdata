@@ -36,6 +36,12 @@ object RankRegions {
           .agg(functions.max(s"$metric") as s"$metric")
           .sort(functions.col(s"$metric") desc)
       }
+      case "sum" => {
+        oneTimeMetric = fullDS
+          .groupBy("region")
+          .agg(functions.max(s"$metric") as s"$metric")
+          .sort(functions.col(s"$metric") desc)
+      }
       case _ => {
         oneTimeMetric = fullDS
           .groupBy("region")
@@ -66,7 +72,7 @@ object RankRegions {
       case "max" => {
         oneTimeMetric = fullDS
           .groupBy("region")
-          .agg(functions.round(functions.max(s"$metric") as s"$metric", 2))
+          .agg(functions.round(functions.sum(s"$metric") as s"$metric", 2))
           .sort(functions.col(s"$metric"))
       }
       case _ => {
@@ -146,14 +152,39 @@ object RankRegions {
     p.ylabel = metric
 //    f.refresh()
     f.saveas(s"${filename}.png")
+
   }
 
-  def changeGDP(spark: SparkSession, fullDS: DataFrame): DataFrame = {
+  def changeGDP(spark: SparkSession, fullDS: DataFrame, metric: String): DataFrame = {
     import spark.implicits._
 
-    val temp = fullDS
-      .withColumn("delta_gdp", (($"2020_GDP"-$"2019_GDP")/$"2019_GDP")*100)
+//    val temp = fullDS
+//      .withColumn("delta_gdp", (($"2020_GDP"-$"2019_GDP")/$"2019_GDP")*100)
+//    val gdp_tot = fullDS
+//      .select($"country", $"region", $"current_prices_gdp", $"year")
+    val gdp_temp = fullDS
+      .select($"country", $"region", $"$metric" as "gdp", $"year")
+    val gdp_2020 = gdp_temp
+      .where($"year" === "2020")
+      .where($"gdp" =!= "NULL")
+      .drop("year")
+      .groupBy($"region")
+      .agg(functions.sum($"gdp") as "gdp_20")
+    val gdp_2019 = gdp_temp
+      .where($"year" === "2019")
+      .where($"gdp" =!= "NULL")
+      .drop("year")
+      .groupBy($"region")
+      .agg(functions.sum($"gdp") as "gdp_19")
 
-    rankByMetric(spark, temp, "delta_gdp", "avg")
+    gdp_2019.show()
+    gdp_2020.show()
+    val gdp = gdp_2019
+      .join(gdp_2020, "region")
+      .withColumn("delta_gdp", (($"gdp_20" - $"gdp_19")/$"gdp_20")*100)
+      .drop("gdp_19", "gdp_20")
+    gdp.show()
+
+    rankByMetric(spark, gdp, "delta_gdp", "avg")
   }
 }
