@@ -40,8 +40,7 @@ object Question8 {
           val tempCases = countryDF.select($"new_cases").collect().map(_.get(0).toString.toDouble)
           val tempDates = countryDF.select($"date").collect().map(_.get(0).toString).map(DateFunc.dayInYear(_).toDouble)
           if(tempDates.length > 0 && tempCases.length > 0) {
-            peak += (StatFunc.firstPeak(tempDates, tempCases, 3, .5)._1)
-
+            peak += (StatFunc.firstMajorPeak(tempDates, tempCases, 3, 10, 5)._1)
             val tempGDP = countryDF.select($"current_prices_gdp")
             val avgGDP = tempGDP.select(avg($"current_prices_gdp")).collect().map(_.getDouble(0))
             gdp += avgGDP(0)
@@ -62,7 +61,7 @@ object Question8 {
 
   def regionFirstPeak(spark: SparkSession, df: DataFrame): Unit= {
     import spark.implicits._
-    df.write.partitionBy("region").bucketBy(30, "country").saveAsTable("dfOptimize")
+    df.write.partitionBy("region").bucketBy(40, "country").saveAsTable("dfOptimize")
 
     val regionList = spark.sql("SELECT DISTINCT region FROM dfOptimize ORDER BY region").rdd.map(_.get(0).toString).collect()
     var tempDates: Array[Double] = null
@@ -72,6 +71,7 @@ object Question8 {
     val firstPeakTimeAvg: ArrayBuffer[Double] = ArrayBuffer()
     val firstPeakForCountry: ArrayBuffer[Double] = ArrayBuffer()
     var countryList: Array[String] = Array()
+    var peakTime: Double = 0
     for (region <- regionList) {
       countryList = df
         .select($"country")
@@ -81,11 +81,14 @@ object Question8 {
         .map(_.get(0).asInstanceOf[String])
       for (country <- countryList){
 //        tempFrame = df.select($"country", $"date", $"new_cases").where($"country" === country).filter($"date" =!= "NULL").distinct().sort("date").cache()
-        tempFrame = spark.sql(s"SELECT DISTINCT * FROM dfOptimize WHERE country = '$country' AND date != 'NULL' ORDER BY date ").cache()
+        tempFrame = spark.sql(s"SELECT DISTINCT country, date, new_cases FROM dfOptimize WHERE country = '$country' AND date != 'NULL' ").sort($"date").cache()
         tempCases = tempFrame.select($"new_cases").collect().map(_.get(0).toString.toDouble)
         tempDates = tempFrame.select($"date").collect().map(_.get(0).toString).map(DateFunc.dayInYear(_).toDouble)
-        firstPeakForCountry.append(StatFunc.firstPeakMod(tempDates, tempCases, 7, 5)._1)
-        println(s"${country}: ${firstPeakForCountry.last}")
+        peakTime = StatFunc.firstMajorPeak(tempDates, tempCases, 7, 10, 5)._1
+        if (peakTime != -1) {
+          firstPeakForCountry.append(peakTime)
+          println(s"${country}: ${firstPeakForCountry.last}")
+        }
       }
       firstPeakTimeAvg.append(firstPeakForCountry.sum/firstPeakForCountry.length)
       println(s"\t\t${region}: ${firstPeakTimeAvg.last}")

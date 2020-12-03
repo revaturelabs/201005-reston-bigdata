@@ -50,23 +50,26 @@ object StatFunc {
     (xArray(0),yArray(0))
   }
 
-  def firstPeakMod(xArray: Array[Double], yArray: Array[Double], neighbors: Int, percentDifference: Double): (Double, Double) ={
+  def firstMajorPeak(xArray: Array[Double], yArray: Array[Double], neighbors: Int, percentDifference: Double, minCasePercent: Double): (Double, Double) ={
     var avgSum: Double = 0.0
     var sum: Double = 0.0
     var minDifference: Double = 0.0
-
-    for(i <- (0 to (xArray.length - neighbors - 1))){
-        sum = 0.0
-        for(neighbor <- (1 to neighbors)){
-          sum += yArray(i + neighbor)
-        }
-        avgSum = sum/neighbors
-        minDifference = .01*percentDifference*yArray(i)
-        if(yArray(i) - avgSum > minDifference && yArray(i) - avgSum > 10){
-          return (xArray(i),yArray(i))
-        }
+    val minCase = minCasePercent*.01*yArray.max
+    val start = yArray.indexWhere(_ > minCase)
+    if (start != -1) {
+      for(i <- start to (xArray.length - neighbors - 1)){
+          sum = 0.0
+          for(neighbor <- (1 to neighbors)){
+            sum += yArray(i + neighbor)
+          }
+          avgSum = sum/neighbors
+          minDifference = .01*percentDifference*yArray(i)
+          if(yArray(i) - avgSum > minDifference){
+            return (xArray(i),yArray(i))
+          }
+      }
     }
-    (xArray(0), yArray(0))
+    (-1, yArray(0))
   }
 
   /**
