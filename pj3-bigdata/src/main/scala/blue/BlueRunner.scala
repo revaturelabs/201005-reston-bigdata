@@ -14,6 +14,10 @@ object BlueRunner  {
   val casepath="path"
   val econpath="path"
 
+  //TODO delete this main method
+  def main(args: Array[String]): Unit = {
+    Q8_1(spark)
+  }
 
   def df(spark: SparkSession, econpath:String,casepath:String): DataFrame  ={
     val regionDF = spark.read.json("regionDict")
@@ -29,12 +33,11 @@ object BlueRunner  {
   def Q1(spark:SparkSession, fullDF: DataFrame=df(spark,econpath,casepath))= Question1.initialSolution(spark, fullDF,resultpath = "results")
 
 
-  def Q8(spark: SparkSession, fullDF: DataFrame=df(spark,econpath,casepath)): Unit = {
+  def Q8_1(spark: SparkSession, fullDF: DataFrame=df(spark,econpath,casepath)): Unit = {
     Question8.regionCorrelation(spark, fullDF)
-    Question8.regionFirstPeak(spark, fullDF)
   }
 
-
-
-
+  def Q8_2(spark: SparkSession, fullDF: DataFrame=df(spark,econpath,casepath)): Unit = {
+    Question8.regionFirstPeak(spark, fullDF, "results")
+  }
 }
