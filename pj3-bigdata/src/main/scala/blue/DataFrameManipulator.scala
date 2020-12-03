@@ -12,12 +12,14 @@ object DataFrameManipulator {
 //      .select($"name", $"agg_population", $"country")
 
     caseDF
-      .select( $"date", $"country", $"total_cases", $"new_cases", $"new_cases_per_million")
+      .select( $"date", $"country", $"total_cases", $"total_cases_per_million", $"new_cases", $"new_cases_per_million")
       .join(regionDict, $"country" === $"country2")
 //      .where($"date" =!= null)
       .drop($"country2")
       .withColumn("new_cases", when($"new_cases"==="NULL", 0).otherwise($"new_cases"))
       .withColumn("total_cases", when($"total_cases"==="NULL", 0).otherwise($"total_cases"))
+      .withColumn("new_cases_per_million", when($"new_cases_per_million"==="NULL", 0).otherwise($"new_cases_per_million"))
+      .withColumn("total_cases_per_million", when($"total_cases_per_million"==="NULL", 0).otherwise($"total_cases_per_million"))
       .filter($"date" =!= "null")
       .sort($"date" desc_nulls_first)
   }
@@ -31,9 +33,7 @@ object DataFrameManipulator {
 
      econDF
        .join(regionDict, $"name" === $"country2")
-       //.select($"2020" as "2020_GDP", $"2019" as "2019_GDP", $"region", $"country")
        .select($"year",$"region",$"name" as "country",$"gdp_currentPrices" as "current_prices_gdp" ,$"gdp_perCap_currentPrices" as "gdp_per_capita")
-       //.where($"WEO Subject Code" === "PPPGDP")
        .drop($"country2")
    }
 
@@ -43,11 +43,7 @@ object DataFrameManipulator {
     econDF.createOrReplaceTempView("econDFTemp")
     caseDF.createOrReplaceTempView("caseDFTemp")
     val caseEconDF = spark.sql(
-      //      "SELECT e.region, c.country, e.2020_GDP, e.2019_GDP, c.total_cases, c.new_cases, c.date " +
-      //        " FROM econDFTemp e JOIN caseDFTemp c " +
-      //        "ON e.country == c.country " +
-      //        "ORDER BY region, 2020_GDP")
-      "SELECT e.year, e.region, c.country,e.current_prices_gdp, e.gdp_per_capita, c.total_cases, c.new_cases, c.date, c.new_cases_per_million" +
+      "SELECT e.year, e.region, c.country, e.current_prices_gdp, e.gdp_per_capita, c.total_cases, c.new_cases, c.new_cases_per_million, c.total_cases_per_million,c.date " +
         " FROM econDFTemp e JOIN caseDFTemp c " +
         "ON e.country == c.country " +
         "ORDER BY region, gdp_per_capita")

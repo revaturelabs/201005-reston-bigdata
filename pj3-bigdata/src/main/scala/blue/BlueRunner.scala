@@ -33,7 +33,4 @@ object BlueRunner extends App {
 //  fullDF.show()
 
   Question8.regionCorrelation(spark, fullDF)
-
-
-println("Hello World")
 }
