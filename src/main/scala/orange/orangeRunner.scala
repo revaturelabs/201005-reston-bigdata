@@ -18,10 +18,10 @@ object orangeRunner {
     spark.sparkContext.setLogLevel("WARN")
 
     //import the covid data from testData file as well as the border data from the provided border data
-//    val country_stats = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("countries_general_stats.tsv")
-      val country_stats = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("s3://adam-king-848/data/countries_general_stats.tsv")
-//    val country_data = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("daily_stats.tsv")
-      val country_data = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("s3://adam-king-848/data/daily_stats.tsv")
+    val country_stats = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("countries_general_stats.tsv")
+//      val country_stats = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("s3://adam-king-848/data/countries_general_stats.tsv")
+    val country_data = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("daily_stats.tsv")
+//      val country_data = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("s3://adam-king-848/data/daily_stats.tsv")
 
     val country_pop = country_stats.select($"COUNTRY", $"POPULATION".cast("Int"))
     val country_cases = country_data
@@ -104,12 +104,12 @@ object orangeRunner {
     /* Queries to give us the answer to the second part of our question. Using the Dataframes for land and water locked countries, we can do simple
     queries to give the required answers
      */
-    println("Highest Infection Rate in Land Locked Countries\n")
+    println("Highest Infection Rate in Land Locked Countries")
     landLockedInfRate.select("*")
       .orderBy(desc("infection_rate_per_capita(%)"))
       .show(5)
 
-    println("Highest Infection Rate in Water Locked Countries\n")
+    println("Highest Infection Rate in Water Locked Countries")
     waterLockedInfRate.select("*")
       .orderBy(desc("infection_rate_per_capita(%)"))
       .show(5)
@@ -148,6 +148,7 @@ object orangeRunner {
     import spark.implicits._
     val waterLocked = infectionFrame.filter($"border_country".isNull)
       .select($"country_name")
+      .where($"country_name" =!= "Vatican")
     waterLocked
   }
 

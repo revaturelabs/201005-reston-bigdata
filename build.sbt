@@ -14,7 +14,7 @@ libraryDependencies  ++= Seq(
   // It depends on LGPL code.
   "org.scalanlp" %% "breeze-viz" % "1.1",
 
-  "org.apache.spark" %% "spark-sql" % "3.0.1",
+  "org.apache.spark" %% "spark-sql" % "3.0.0",
   "org.apache.bahir" %% "spark-streaming-twitter" % "2.4.0",
   "org.apache.httpcomponents" % "httpclient" % "4.5.12",
   "commons-io" % "commons-io" % "2.8.0",

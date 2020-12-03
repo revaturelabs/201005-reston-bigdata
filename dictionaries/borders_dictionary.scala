@@ -998,7 +998,7 @@
             "Tajikistan",
             "Turkmenistan"
         ),
-        "Holy See" -> List(
+        "Vatican" -> List(
             "Italy"
         ),
         "Venezuela" -> List(
