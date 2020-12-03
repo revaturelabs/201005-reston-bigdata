@@ -17,7 +17,7 @@ object Question1 {
     RankRegions.plotMetrics(spark, data, "total_cases", s"${resultpath}/plot_total_infections")
     RankRegions.plotMetrics(spark, data, "total_cases_per_million", s"${resultpath}/plot_total_infections_per_million")
 
-    e.current_prices_gdp, e.gdp_per_capita,
+
     val regionByGDPFull = RankRegions.changeGDP(spark, data, "current_prices_gdp")
     regionByGDPFull.coalesce(1).write.csv(s"${resultpath}/csv_regions_by_gdp")
     RankRegions.changeGDP(spark, data, "gdp_per_capita")
