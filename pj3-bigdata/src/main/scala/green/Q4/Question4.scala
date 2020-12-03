@@ -90,6 +90,81 @@ object Question4 {
 
     dataSpikes.show()
   }
+  
+    /**
+   * Shows How many times a day there are infections ordered by infection count in ages 0-9
+   * @param spark the Spark Session
+   */
+  def GetCasesByCount(spark: SparkSession): Unit = {
+    import spark.implicits._
+
+    //reads in the tsv
+    val df = spark.read
+      .option("header", "true")
+      .option("delimiter", "\t")
+      .csv("s3a://adam-king-848/data/CDC_Covid_archive.tsv")
+
+    //filters to only get ages 0 - 9, then groups by days and orders by amount of infections
+    val dataSpikes = df
+      .select($"cdc_report_dt", $"age_group")
+      .filter($"age_group" === "0 - 9 Years")
+      .groupBy("cdc_report_dt")
+      .count()
+      .withColumnRenamed("cdc_report_dt", "Date")
+      .orderBy(desc("Count"))
+
+    dataSpikes.show()
+  }
+  
+      /**
+   * Shows How many times a day there are infections ordered by infection count in ages 10-19
+   * @param spark the Spark Session
+   */
+  def GetCasesByCount(spark: SparkSession): Unit = {
+    import spark.implicits._
+
+    //reads in the tsv
+    val df = spark.read
+      .option("header", "true")
+      .option("delimiter", "\t")
+      .csv("s3a://adam-king-848/data/CDC_Covid_archive.tsv")
+
+    //filters to only get ages 10 - 19, then groups by days and orders by amount of infections
+    val dataSpikes = df
+      .select($"cdc_report_dt", $"age_group")
+      .filter($"age_group" === "10 - 19 Years")
+      .groupBy("cdc_report_dt")
+      .count()
+      .withColumnRenamed("cdc_report_dt", "Date")
+      .orderBy(desc("Count"))
+
+    dataSpikes.show()
+  }
+  
+      /**
+   * Shows How many times a day there are infections ordered by infection count in ages 20-29
+   * @param spark the Spark Session
+   */
+  def GetCasesByCount(spark: SparkSession): Unit = {
+    import spark.implicits._
+
+    //reads in the tsv
+    val df = spark.read
+      .option("header", "true")
+      .option("delimiter", "\t")
+      .csv("s3a://adam-king-848/data/CDC_Covid_archive.tsv")
+
+    //filters to only get ages 20 - 29, then groups by days and orders by amount of infections
+    val dataSpikes = df
+      .select($"cdc_report_dt", $"age_group")
+      .filter($"age_group" === "20 - 29 Years")
+      .groupBy("cdc_report_dt")
+      .count()
+      .withColumnRenamed("cdc_report_dt", "Date")
+      .orderBy(desc("Count"))
+
+    dataSpikes.show()
+  }
 
   def GetPeakTweetCount(spark : SparkSession, path : String) : Long = {
     import spark.implicits._
