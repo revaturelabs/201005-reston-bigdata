@@ -144,7 +144,7 @@ object RankRegions {
     p.legend = true
     p.xlabel = "Days since 1st of January, 2020"
     p.ylabel = metric
-    f.refresh()
+//    f.refresh()
     f.saveas(s"${filename}.png")
   }
 
