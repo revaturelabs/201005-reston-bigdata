@@ -57,7 +57,7 @@ package object dictionaries {
     "CU" -> 	"Cuba",
     "CW" -> 	"Curacao",
     "CY" -> 	"Cyprus",
-    "CZ" -> 	"Czechia",
+    "CZ" -> 	"Czech Republic",
     "CI" -> 	"Cote d'Ivoire", //correct spelling
     "DK" -> 	"Denmark",
     "DJ" -> 	"Djibouti",
@@ -97,7 +97,7 @@ package object dictionaries {
     "GY" -> 	"Guyana",
     "HT" -> 	"Haiti",
     "HM" -> 	"Heard Island and McDonald Islands",
-    "VA" -> 	"Holy See",
+    "VA" -> 	"Vatican",
     "HN" -> 	"Honduras",
     "HK" -> 	"Hong Kong",
     "HU" -> 	"Hungary",
@@ -297,7 +297,7 @@ package object dictionaries {
     ),
     "American Samoa" -> List(),
     "Austria" -> List(
-      "Czechia",
+      "Czech Republic",
       "Germany",
       "Hungary",
       "Italy",
@@ -498,7 +498,7 @@ package object dictionaries {
     "Cabo Verde" -> List(), //dont have data on
     "Curacao" -> List(), //Curcacao
     "Christmas Island" -> List(),
-    "Czechia" -> List(
+    "Czech Republic" -> List(
       "Austria",
       "Germany",
       "Poland",
@@ -507,7 +507,7 @@ package object dictionaries {
     "Germany" -> List(
       "Austria",
       "Belgium",
-      "Czechia",
+      "Czech Republic",
       "Denmark",
       "France",
       "Luxembourg",
@@ -738,7 +738,7 @@ package object dictionaries {
       "San Marino",
       "Slovenia",
       "Switzerland",
-      "Holy See"
+      "Vatican"
     ),
     "Jersey" -> List(),
     "Jamaica" -> List(),
@@ -998,7 +998,7 @@ package object dictionaries {
     ),
     "Poland" -> List(
       "Belarus",
-      "Czechia",
+      "Czech Republic",
       "Germany",
       "Lithuania",
       "Russia",
@@ -1099,7 +1099,7 @@ package object dictionaries {
     "Svalbard and Jan Mayen" -> List(), //dont have any data for
     "Slovakia" -> List(
       "Austria",
-      "Czechia",
+      "Czech Republic",
       "Hungary",
       "Poland",
       "Ukraine"
@@ -1248,7 +1248,7 @@ package object dictionaries {
       "Tajikistan",
       "Turkmenistan"
     ),
-    "Holy See" -> List(
+    "Vatican" -> List(
       "Italy"
     ),
     "Venezuela" -> List(
@@ -1472,7 +1472,7 @@ val regions =  Map[String, List[String]](
       "Germany",
       "Gibraltar",
       "Greece",
-      "Holy See",
+      "Vatican",
       "Hungary",
       "Iceland",
       "Ireland",
@@ -1609,7 +1609,7 @@ val regions =  Map[String, List[String]](
     "Turkmenistan",
     "Uganda",
     "Uzbekistan",
-    "Holy See",
+    "Vatican",
     "Zambia",
     "Zimbabwe"
   )
@@ -1641,7 +1641,7 @@ val regions =  Map[String, List[String]](
       "South Korea",
       "Slovenia",
       "Spain",
-      "Czechia",
+      "Czech Republic",
       "France",
       "Malta",
       "Italy",
