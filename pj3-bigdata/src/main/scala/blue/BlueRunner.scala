@@ -11,12 +11,13 @@ object BlueRunner  {
   spark.sparkContext.setLogLevel("ERROR")
 
   //Type path here
-  val casepath="path"
-  val econpath="path"
+  val casepath="daily_stats.tsv"
+  val econpath="C:/Users/liamh/Project_3/201005-reston-bigdata/economic_data_2018-2021.tsv"
 
   //TODO delete this main method
   def main(args: Array[String]): Unit = {
     Q8_1(spark)
+    Q8_2(spark)
   }
 
   def df(spark: SparkSession, econpath:String,casepath:String): DataFrame  ={
