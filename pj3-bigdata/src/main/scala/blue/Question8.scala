@@ -34,7 +34,7 @@ object Question8 {
           val tempCases = countryDF.select($"new_cases").collect().map(_.get(0).toString.toDouble)
           val tempDates = countryDF.select($"date").collect().map(_.get(0).toString).map(DateFunc.dayInYear(_).toDouble)
           if(tempDates.length > 0 && tempCases.length > 0) {
-            peak += (StatFunc.firstMajorPeak(tempDates, tempCases, 3, 10, 5)._1)
+            peak += (StatFunc.firstMajorPeak(tempDates, tempCases, 4, 10, 5)._1)
             val tempGDP = countryDF.select($"current_prices_gdp")
             val avgGDP = tempGDP.select(avg($"current_prices_gdp")).collect().map(_.getDouble(0))
             gdp += avgGDP(0)
@@ -50,7 +50,7 @@ object Question8 {
   }
 
 
-  def regionFirstPeak(spark: SparkSession, df: DataFrame): Unit= {
+  def regionFirstPeak(spark: SparkSession, df: DataFrame, resultpath: String): Unit= {
     import spark.implicits._
     df.write.partitionBy("region").bucketBy(40, "country").saveAsTable("dfOptimize")
 
