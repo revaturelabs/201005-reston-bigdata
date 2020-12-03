@@ -4,7 +4,7 @@ import org.apache.spark
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.functions.{asc, desc, round}
 import org.apache.spark.sql.{DataFrame, SparkSession, functions}
-import dictionaries._
+
 
 object orangeRunner {
   def borderAnalysis(spark: SparkSession){
@@ -65,7 +65,7 @@ object orangeRunner {
     Part 2 of question is asking about land and water locked countries, use dataframes defined below to create dataframes with land/water locked countries
     and combine them
      */
-    val landLocked = getLandLocked().toDF("country_name")
+    val landLocked = dictionaries.landLocked.toDF("country_name")
 
     val waterLocked = createWaterLocked(bcountries, spark)
 
@@ -81,7 +81,7 @@ object orangeRunner {
 
        //creates a dataframe using the development rankings dictionary with two columns, ranking (first, second, third)
        //  and country_name (the name of the country)
-       val rankings = dictionaries.getDevelopmentRankings().toSeq.toDF("ranking", "country")
+       val rankings = dictionaries.developmentRankings.toSeq.toDF("ranking", "country")
          .select($"ranking", functions.explode($"country").as("country_name"))
 
     //joins the rankings dataframe with the infection_rate dataframe on the country name field in both dataframes
@@ -104,12 +104,12 @@ object orangeRunner {
     /* Queries to give us the answer to the second part of our question. Using the Dataframes for land and water locked countries, we can do simple
     queries to give the required answers
      */
-    println("Highest Infection Rate in Land Locked Countries\n")
+    println("Highest Infection Rate in Land Locked Countries")
     landLockedInfRate.select("*")
       .orderBy(desc("infection_rate_per_capita(%)"))
       .show(5)
 
-    println("Highest Infection Rate in Water Locked Countries\n")
+    println("Highest Infection Rate in Water Locked Countries")
     waterLockedInfRate.select("*")
       .orderBy(desc("infection_rate_per_capita(%)"))
       .show(5)
@@ -141,10 +141,14 @@ object orangeRunner {
 
 
 
-
-
-  //uses the dataframe of our border countries and looks for there to be a NULL for border country. This means there is no land border, meaning the country is waterlocked
-  def createWaterLocked(infectionFrame: DataFrame , spark:SparkSession): DataFrame ={
+/**
+ * Uses the dataframe of our border countries and looks for there to be a NULL for border country. This means
+ * there is no land border, meaning the country is waterlocked.
+ *
+ * @param infectionFrame is the dataframe that has countries, their infection rate and a country they border
+ * @return dataframe that has all countries with no countries bordering them by land
+ */
+def createWaterLocked(infectionFrame: DataFrame , spark:SparkSession): DataFrame ={
     import spark.implicits._
     val waterLocked = infectionFrame.filter($"border_country".isNull)
       .select($"country_name")
@@ -168,19 +172,11 @@ object orangeRunner {
     spark.sparkContext.setLogLevel("WARN")
 
     //creates a dataframe from the border dictionary in the dictionaries class
-  //val bdict = new
-    val borders_dictionary = dictionaries.getBorders()
-
-    val borders = borders_dictionary.toSeq.toDF("country", "borders")
+    val borders = dictionaries.borders.toSeq.toDF("country", "borders")
       .select($"country", functions.explode($"borders").as("border"))
 
     //creates a dataframe from the country code dictionary in the dictionaries class
-    val country_codes_a2 = dictionaries.getCountryCodes()
-
-    val codes = country_codes_a2.toSeq.toDF("code", "country")
-
-    //borders.show()
-    //codes.show()
+    val codes = dictionaries.countryCodes.toSeq.toDF("code", "country")
 
     //joins the border dictionary with the country code dictionary on the name of the key in the borders dictionary
     // to create a dataframe that contains the following format:
