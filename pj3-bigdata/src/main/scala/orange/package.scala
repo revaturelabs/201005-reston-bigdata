@@ -1,5 +1,5 @@
 package object dictionaries {
-  val countryCodes = Map[String, String](
+ val countryCodes = Map[String, String](
     "AF" -> 	"Afghanistan",
     "AL" -> 	"Albania",
     "DZ" -> 	"Algeria",
@@ -250,6 +250,7 @@ package object dictionaries {
     "ZW" -> 	"Zimbabwe",
     "AX" -> 	"Aland Islands"
   )
+  
   val borders = Map[String, List[String]](
     "Andorra" -> List(
       "France",
@@ -1294,7 +1295,7 @@ package object dictionaries {
     )
   )
 
-val regions =  Map[String, List[String]](
+  val regions =  Map[String, List[String]](
   ("Africa" ->
     List(
       "Algeria",
@@ -1566,6 +1567,7 @@ val regions =  Map[String, List[String]](
     )
     )
 )
+  
   val landLocked = List[String](
     "Afghanistan",
     "Andorra",
@@ -1613,8 +1615,8 @@ val regions =  Map[String, List[String]](
     "Zambia",
     "Zimbabwe"
   )
-
- val developmentRankings =  Map( //rankings determined based on HDI, Human Development Index
+  
+  val developmentRankings =  Map( //rankings determined based on HDI, Human Development Index
     "First" -> List(
       "Norway",
       "Switzerland",
@@ -1812,17 +1814,4 @@ val regions =  Map[String, List[String]](
     )
   )
 
-  def getCountryCodes(): Map[String, String] = {countryCodes}
-
-  //Returns the dictionary containing a key-value pair every pair of countries that border each other
-  //  with the key being a certain country and the value being a list of every country that borders said
-  //  country
-
-  def getBorders(): Map[String, List[String]] = {borders}
-
-  def getRegions(): Map[String, List[String]] = {regions}
-
-  def getLandLocked(): List[String] = {landLocked}
-
-  def getDevelopmentRankings(): Map[String, List[String]] = {developmentRankings}
 }
