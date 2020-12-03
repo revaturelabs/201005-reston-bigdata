@@ -1,4 +1,4 @@
-  // Pulled from: https://www.geodatasource.com/addon/country-borders
+  // https://www.geodatasource.com/addon/country-borders
   val borders_dictionary: Map[String, List[String]] = Map(
     "Andorra" -> List(
       "France",
@@ -1041,9 +1041,9 @@
       "South Africa",
       "Zambia"
     )
-  )
+  ).withDefaultValue("Not found.")
 
-  // Pulled from: https://www.geographyrealm.com/landlocked-countries/
+  // https://www.geographyrealm.com/landlocked-countries/
   val landlocked: List[String] = List(
     "Afghanistan",
     "Andorra",
@@ -1092,13 +1092,266 @@
     "Zimbabwe"
   )
 
-  // Pulled from: https://www.geographyrealm.com/landlocked-countries/
+  // https://www.geographyrealm.com/landlocked-countries/
   val doubly_landlocked: List[String] = List(
     "Liechtenstein",
     "Uzbekistan"
   )
 
-  // Pulled from: https://www.iban.com/country-codes
+  // https://www.iban.com/country-codes
+  val country_codes: Map[String, (Int, String, String)] = Map(
+    "Afghanistan" -> (4, "AF", "AFG"),
+    "Albania" -> (8, "AL", "ALB"),
+    "Algeria" -> (12, "DZ", "DZA"),
+    "American Samoa" -> (16, "AS", "ASM"),
+    "Andorra" -> (20, "AD", "AND"),
+    "Angola" -> (24, "AO", "AGO"),
+    "Anguilla" -> (660, "AI", "AIA"),
+    "Antarctica" -> (10, "AQ", "ATA"),
+    "Antigua and Barbuda" -> (28, "AG", "ATG"),
+    "Argentina" -> (32, "AR", "ARG"),
+    "Armenia" -> (51, "AM", "ARM"),
+    "Aruba" -> (533, "AW", "ABW"),
+    "Australia" -> (36, "AU", "AUS"),
+    "Austria" -> (40, "AT", "AUT"),
+    "Azerbaijan" -> (31, "AZ", "AZE"),
+    "Bahamas" -> (44, "BS", "BHS"),
+    "Bahrain" -> (48, "BH", "BHR"),
+    "Bangladesh" -> (50, "BD", "BGD"),
+    "Barbados" -> (52, "BB", "BRB"),
+    "Belarus" -> (112, "BY", "BLR"),
+    "Belgium" -> (56, "BE", "BEL"),
+    "Belize" -> (84, "BZ", "BLZ"),
+    "Benin" -> (204, "BJ", "BEN"),
+    "Bermuda" -> (60, "BM", "BMU"),
+    "Bhutan" -> (64, "BT", "BTN"),
+    "Bolivia" -> (68, "BO", "BOL"),
+    "Bonaire, Sint Eustatius and Saba" -> (535, "BQ", "BES"),
+    "Bosnia and Herzegovina" -> (70, "BA", "BIH"),
+    "Botswana" -> (72, "BW", "BWA"),
+    "Bouvet Island" -> (74, "BV", "BVT"),
+    "Brazil" -> (76, "BR", "BRA"),
+    "British Indian Ocean Territory" -> (86, "IO", "IOT"),
+    "Brunei Darussalam" -> (96, "BN", "BRN"),
+    "Bulgaria" -> (100, "BG", "BGR"),
+    "Burkina Faso" -> (854, "BF", "BFA"),
+    "Burundi" -> (108, "BI", "BDI"),
+    "Cabo Verde" -> (132, "CV", "CPV"),
+    "Cambodia" -> (116, "KH", "KHM"),
+    "Cameroon" -> (120, "CM", "CMR"),
+    "Canada" -> (124, "CA", "CAN"),
+    "Cayman Islands" -> (136, "KY", "CYM"),
+    "Central African Republic" -> (140, "CF", "CAF"),
+    "Chad" -> (148, "TD", "TCD"),
+    "Chile" -> (152, "CL", "CHL"),
+    "China" -> (156, "CN", "CHN"),
+    "Christmas Island" -> (162, "CX", "CXR"),
+    "Cocos (Keeling) Islands" -> (166, "CC", "CCK"),
+    "Colombia" -> (170, "CO", "COL"),
+    "Comoros" -> (174, "KM", "COM"),
+    "Democratic Republic of Congo" -> (180, "CD", "COD"),
+    "Congo" -> (178, "CG", "COG"),
+    "Cook Islands" -> (184, "CK", "COK"),
+    "Costa Rica" -> (188, "CR", "CRI"),
+    "Croatia" -> (191, "HR", "HRV"),
+    "Cuba" -> (192, "CU", "CUB"),
+    "Curacao" -> (531, "CW", "CUW"),
+    "Cyprus" -> (196, "CY", "CYP"),
+    "Czech Republic" -> (203, "CZ", "CZE"),
+    "Cote d'Ivoire" -> (384, "CI", "CIV"),
+    "Denmark" -> (208, "DK", "DNK"),
+    "Djibouti" -> (262, "DJ", "DJI"),
+    "Dominica" -> (212, "DM", "DMA"),
+    "Dominican Republic" -> (214, "DO", "DOM"),
+    "Ecuador" -> (218, "EC", "ECU"),
+    "Egypt" -> (818, "EG", "EGY"),
+    "El Salvador" -> (222, "SV", "SLV"),
+    "Equatorial Guinea" -> (226, "GQ", "GNQ"),
+    "Eritrea" -> (232, "ER", "ERI"),
+    "Estonia" -> (233, "EE", "EST"),
+    "Eswatini" -> (748, "SZ", "SWZ"),
+    "Ethiopia" -> (231, "ET", "ETH"),
+    "Falkland Islands" -> (238, "FK", "FLK"),
+    "Faeroe Islands" -> (234, "FO", "FRO"),
+    "Fiji" -> (242, "FJ", "FJI"),
+    "Finland" -> (246, "FI", "FIN"),
+    "France" -> (250, "FR", "FRA"),
+    "French Guiana" -> (254, "GF", "GUF"),
+    "French Polynesia" -> (258, "PF", "PYF"),
+    "French Southern Territories" -> (260, "TF", "ATF"),
+    "Gabon" -> (266, "GA", "GAB"),
+    "Gambia" -> (270, "GM", "GMB"),
+    "Georgia" -> (268, "GE", "GEO"),
+    "Germany" -> (276, "DE", "DEU"),
+    "Ghana" -> (288, "GH", "GHA"),
+    "Gibraltar" -> (292, "GI", "GIB"),
+    "Greece" -> (300, "GR", "GRC"),
+    "Greenland" -> (304, "GL", "GRL"),
+    "Grenada" -> (308, "GD", "GRD"),
+    "Guadeloupe" -> (312, "GP", "GLP"),
+    "Guam" -> (316, "GU", "GUM"),
+    "Guatemala" -> (320, "GT", "GTM"),
+    "Guernsey" -> (831, "GG", "GGY"),
+    "Guinea" -> (324, "GN", "GIN"),
+    "Guinea-Bissau" -> (624, "GW", "GNB"),
+    "Guyana" -> (328, "GY", "GUY"),
+    "Haiti" -> (332, "HT", "HTI"),
+    "Heard Island and McDonald Islands" -> (334, "HM", "HMD"),
+    "Vatican" -> (336, "VA", "VAT"),
+    "Honduras" -> (340, "HN", "HND"),
+    "Hong Kong" -> (344, "HK", "HKG"),
+    "Hungary" -> (348, "HU", "HUN"),
+    "Iceland" -> (352, "IS", "ISL"),
+    "India" -> (356, "IN", "IND"),
+    "Indonesia" -> (360, "ID", "IDN"),
+    "Iran" -> (364, "IR", "IRN"),
+    "Iraq" -> (368, "IQ", "IRQ"),
+    "Ireland" -> (372, "IE", "IRL"),
+    "Isle of Man" -> (833, "IM", "IMN"),
+    "Israel" -> (376, "IL", "ISR"),
+    "Italy" -> (380, "IT", "ITA"),
+    "Jamaica" -> (388, "JM", "JAM"),
+    "Japan" -> (392, "JP", "JPN"),
+    "Jersey" -> (832, "JE", "JEY"),
+    "Jordan" -> (400, "JO", "JOR"),
+    "Kazakhstan" -> (398, "KZ", "KAZ"),
+    "Kenya" -> (404, "KE", "KEN"),
+    "Kiribati" -> (296, "KI", "KIR"),
+    "North Korea" -> (408, "KP", "PRK"),
+    "South Korea" -> (410, "KR", "KOR"),
+    "Kuwait" -> (414, "KW", "KWT"),
+    "Kyrgyzstan" -> (417, "KG", "KGZ"),
+    "Laos" -> (418, "LA", "LAO"),
+    "Latvia" -> (428, "LV", "LVA"),
+    "Lebanon" -> (422, "LB", "LBN"),
+    "Lesotho" -> (426, "LS", "LSO"),
+    "Liberia" -> (430, "LR", "LBR"),
+    "Libya" -> (434, "LY", "LBY"),
+    "Liechtenstein" -> (438, "LI", "LIE"),
+    "Lithuania" -> (440, "LT", "LTU"),
+    "Luxembourg" -> (442, "LU", "LUX"),
+    "Macao" -> (446, "MO", "MAC"),
+    "Madagascar" -> (450, "MG", "MDG"),
+    "Malawi" -> (454, "MW", "MWI"),
+    "Malaysia" -> (458, "MY", "MYS"),
+    "Maldives" -> (462, "MV", "MDV"),
+    "Mali" -> (466, "ML", "MLI"),
+    "Malta" -> (470, "MT", "MLT"),
+    "Marshall Islands" -> (584, "MH", "MHL"),
+    "Martinique" -> (474, "MQ", "MTQ"),
+    "Mauritania" -> (478, "MR", "MRT"),
+    "Mauritius" -> (480, "MU", "MUS"),
+    "Mayotte" -> (175, "YT", "MYT"),
+    "Mexico" -> (484, "MX", "MEX"),
+    "Micronesia" -> (583, "FM", "FSM"),
+    "Moldova" -> (498, "MD", "MDA"),
+    "Monaco" -> (492, "MC", "MCO"),
+    "Mongolia" -> (496, "MN", "MNG"),
+    "Montenegro" -> (499, "ME", "MNE"),
+    "Montserrat" -> (500, "MS", "MSR"),
+    "Morocco" -> (504, "MA", "MAR"),
+    "Mozambique" -> (508, "MZ", "MOZ"),
+    "Myanmar" -> (104, "MM", "MMR"),
+    "Namibia" -> (516, "NA", "NAM"),
+    "Nauru" -> (520, "NR", "NRU"),
+    "Nepal" -> (524, "NP", "NPL"),
+    "Netherlands" -> (528, "NL", "NLD"),
+    "New Caledonia" -> (540, "NC", "NCL"),
+    "New Zealand" -> (554, "NZ", "NZL"),
+    "Nicaragua" -> (558, "NI", "NIC"),
+    "Niger" -> (562, "NE", "NER"),
+    "Nigeria" -> (566, "NG", "NGA"),
+    "Niue" -> (570, "NU", "NIU"),
+    "Norfolk Island" -> (574, "NF", "NFK"),
+    "Northern Mariana Islands" -> (580, "MP", "MNP"),
+    "Norway" -> (578, "NO", "NOR"),
+    "Oman" -> (512, "OM", "OMN"),
+    "Pakistan" -> (586, "PK", "PAK"),
+    "Palau" -> (585, "PW", "PLW"),
+    "Palestine" -> (275, "PS", "PSE"),
+    "Panama" -> (591, "PA", "PAN"),
+    "Papua New Guinea" -> (598, "PG", "PNG"),
+    "Paraguay" -> (600, "PY", "PRY"),
+    "Peru" -> (604, "PE", "PER"),
+    "Philippines" -> (608, "PH", "PHL"),
+    "Pitcairn" -> (612, "PN", "PCN"),
+    "Poland" -> (616, "PL", "POL"),
+    "Portugal" -> (620, "PT", "PRT"),
+    "Puerto Rico" -> (630, "PR", "PRI"),
+    "Qatar" -> (634, "QA", "QAT"),
+    "Macedonia" -> (807, "MK", "MKD"),
+    "Romania" -> (642, "RO", "ROU"),
+    "Russia" -> (643, "RU", "RUS"),
+    "Rwanda" -> (646, "RW", "RWA"),
+    "Reunion" -> (638, "RE", "REU"),
+    "Saint Barthelemy" -> (652, "BL", "BLM"),
+    "Saint Helena" -> (654, "SH", "SHN"),
+    "Saint Kitts and Nevis" -> (659, "KN", "KNA"),
+    "Saint Lucia" -> (662, "LC", "LCA"),
+    "Saint Martin" -> (663, "MF", "MAF"),
+    "Saint Pierre and Miquelon" -> (666, "PM", "SPM"),
+    "Saint Vincent and the Grenadines" -> (670, "VC", "VCT"),
+    "Samoa" -> (882, "WS", "WSM"),
+    "San Marino" -> (674, "SM", "SMR"),
+    "Sao Tome and Principe" -> (678, "ST", "STP"),
+    "Saudi Arabia" -> (682, "SA", "SAU"),
+    "Senegal" -> (686, "SN", "SEN"),
+    "Serbia" -> (688, "RS", "SRB"),
+    "Seychelles" -> (690, "SC", "SYC"),
+    "Sierra Leone" -> (694, "SL", "SLE"),
+    "Singapore" -> (702, "SG", "SGP"),
+    "Sint Maarten" -> (534, "SX", "SXM"),
+    "Slovakia" -> (703, "SK", "SVK"),
+    "Slovenia" -> (705, "SI", "SVN"),
+    "Solomon Islands" -> (90, "SB", "SLB"),
+    "Somalia" -> (706, "SO", "SOM"),
+    "South Africa" -> (710, "ZA", "ZAF"),
+    "South Georgia and the South Sandwich Islands" -> (239, "GS", "SGS"),
+    "South Sudan" -> (728, "SS", "SSD"),
+    "Spain" -> (724, "ES", "ESP"),
+    "Sri Lanka" -> (144, "LK", "LKA"),
+    "Sudan" -> (729, "SD", "SDN"),
+    "Suriname" -> (740, "SR", "SUR"),
+    "Svalbard and Jan Mayen" -> (744, "SJ", "SJM"),
+    "Sweden" -> (752, "SE", "SWE"),
+    "Switzerland" -> (756, "CH", "CHE"),
+    "Syria" -> (760, "SY", "SYR"),
+    "Taiwan" -> (158, "TW", "TWN"),
+    "Tajikistan" -> (762, "TJ", "TJK"),
+    "Tanzania" -> (834, "TZ", "TZA"),
+    "Thailand" -> (764, "TH", "THA"),
+    "Timor-Leste" -> (626, "TL", "TLS"),
+    "Togo" -> (768, "TG", "TGO"),
+    "Tokelau" -> (772, "TK", "TKL"),
+    "Tonga" -> (776, "TO", "TON"),
+    "Trinidad and Tobago" -> (780, "TT", "TTO"),
+    "Tunisia" -> (788, "TN", "TUN"),
+    "Turkey" -> (792, "TR", "TUR"),
+    "Turkmenistan" -> (795, "TM", "TKM"),
+    "Turks and Caicos Islands" -> (796, "TC", "TCA"),
+    "Tuvalu" -> (798, "TV", "TUV"),
+    "Uganda" -> (800, "UG", "UGA"),
+    "Ukraine" -> (804, "UA", "UKR"),
+    "United Arab Emirates" -> (784, "AE", "ARE"),
+    "United Kingdom" -> (826, "GB", "GBR"),
+    "United States Minor Outlying Islands" -> (581, "UM", "UMI"),
+    "United States" -> (840, "US", "USA"),
+    "Uruguay" -> (858, "UY", "URY"),
+    "Uzbekistan" -> (860, "UZ", "UZB"),
+    "Vanuatu" -> (548, "VU", "VUT"),
+    "Venezuela" -> (862, "VE", "VEN"),
+    "Vietnam" -> (704, "VN", "VNM"),
+    "British Virgin Islands" -> (92, "VG", "VGB"),
+    "U.S. Virgin Islands" -> (850, "VI", "VIR"),
+    "Wallis and Futuna" -> (876, "WF", "WLF"),
+    "Western Sahara" -> (732, "EH", "ESH"),
+    "Yemen" -> (887, "YE", "YEM"),
+    "Zambia" -> (894, "ZM", "ZMB"),
+    "Zimbabwe" -> (716, "ZW", "ZWE"),
+    "Aland Islands" -> (248, "AX", "ALA")
+  ).withDefaultValue("Not Found.")
+
+  // https://www.iban.com/country-codes
   val country_codes_a2: Map[String, String] = Map(
     "AF" -> 	"Afghanistan",
     "AL" -> 	"Albania",
@@ -1349,9 +1602,9 @@
     "ZM" -> 	"Zambia",
     "ZW" -> 	"Zimbabwe",
     "AX" -> 	"Aland Islands"
-  )
+  ).withDefaultValue("Not found.")
 
-  // Pulled from: https://www.iban.com/country-codes
+  // https://www.iban.com/country-codes
   val country_codes_a3: Map[String, String] = Map(
     "AFG" ->	"Afghanistan",
     "ALB" ->	"Albania",
@@ -1602,9 +1855,9 @@
     "ZMB" ->	"Zambia",
     "ZWE" ->	"Zimbabwe",
     "ALA" ->	"Aland Islands"
-  )
+  ).withDefaultValue("Not found.")
 
-  // Pulled from: https://www.iban.com/country-codes
+  // https://www.iban.com/country-codes
   val country_codes_num: Map[Int, String] = Map(
     4	 -> "Afghanistan",
     8	 -> "Albania",
@@ -1855,7 +2108,7 @@
     894  -> "Zambia",
     716  -> "Zimbabwe",
     248  -> "Aland Islands"
-  )
+  ).withDefaultValue("Not found.")
 
   // Based on the list from: https://www.dhs.gov/geographic-regions
   val regions_dictionary: Map[String, List[String]] = Map(
@@ -2130,7 +2383,7 @@
         "Uruguay",
         "Venezuela"
       )
-  )
+  ).withDefaultValue("Not found.")
 
   // Rankings pulled from: http://hdr.undp.org/en/content/2019-human-development-index-ranking
   val development_ranking: Map[String, List[String]] = Map(
@@ -2329,9 +2582,22 @@
       "Central African Republic",
       "Niger"
     )
-  )
+  ).withDefaultValue("Not found.")
 
-  def countryCodeLookup(str: String): String = {
+  def countryCodeLookup(country: String, n: Int): String = {
+    if (n == 2)
+      country_codes(country)._2
+    else if (n == 3)
+      country_codes(country)._3
+    else
+      "Please enter a 2 or 3 for the selector."
+  }
+
+  def countryCodeLookup(country: String): Int = {
+    country_codes(country)._1
+  }
+
+  def reverseCountryCodeLookup(str: String): String = {
     if (str.length == 2)
       country_codes_a2(str)
     else if (str.length == 3)
@@ -2340,7 +2606,7 @@
       "Error"
   }
 
-  def countryCodeLookup(n: Int): String = {
+  def reverseCountryCodeLookup(n: Int): String = {
     country_codes_num(n)
   }
 
@@ -2363,5 +2629,3 @@
   def isInRegion(country: String, region: String): Boolean = {
     regions_dictionary(region).contains(country)
   }
-
-}
