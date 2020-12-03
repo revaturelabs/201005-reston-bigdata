@@ -208,48 +208,48 @@ object Question4 {
     val peak = GetPeakTweetCount(spark, path).toDouble
     val currentTweetCount = GetCurrentDayTweetCount(spark, path).toDouble
 
-    var test : String = s"up ${(((peak - currentTweetCount).abs / peak) * 100).round}%"
+    var trendingPercentage : String = s"up ${(((peak - currentTweetCount).abs / peak) * 100).round}%"
     if (peak > currentTweetCount) {
-      test = s"down ${(((peak - currentTweetCount) / peak) * 100).round}%"
+      trendingPercentage = s"down ${(((peak - currentTweetCount) / peak) * 100).round}%"
     }
 
-    test
+    trendingPercentage
   }
 
   def GetTrendingPercentageOverMonth(spark : SparkSession, path : String) : String = {
     val avgTweetCountLastMonth = GetAVGTweetCountForMonth(spark, path).toDouble
     val currentTweetCount = GetCurrentDayTweetCount(spark, path).toDouble
 
-    var test : String = s"up ${(((avgTweetCountLastMonth - currentTweetCount).abs / avgTweetCountLastMonth) * 100).round}%"
+    var trendingPercentage : String = s"up ${(((avgTweetCountLastMonth - currentTweetCount).abs / avgTweetCountLastMonth) * 100).round}%"
     if (avgTweetCountLastMonth > currentTweetCount) {
-      test = s"down ${(((avgTweetCountLastMonth - currentTweetCount) / avgTweetCountLastMonth) * 100).round}%"
+      trendingPercentage = s"down ${(((avgTweetCountLastMonth - currentTweetCount) / avgTweetCountLastMonth) * 100).round}%"
     }
 
-    test
+    trendingPercentage
   }
 
   def GetTrendingPercentageOverWeek(spark : SparkSession, path : String) : String = {
     val avgTweetCountLastWeek = GetAVGTweetCountForWeek(spark, path).toDouble
     val currentTweetCount = GetCurrentDayTweetCount(spark, path).toDouble
 
-    var test : String = s"up ${(((avgTweetCountLastWeek - currentTweetCount).abs / avgTweetCountLastWeek) * 100).round}%"
+    var trendingPercentage : String = s"up ${(((avgTweetCountLastWeek - currentTweetCount).abs / avgTweetCountLastWeek) * 100).round}%"
     if (avgTweetCountLastWeek > currentTweetCount) {
-      test = s"down ${(((avgTweetCountLastWeek - currentTweetCount) / avgTweetCountLastWeek) * 100).round}%"
+      trendingPercentage = s"down ${(((avgTweetCountLastWeek - currentTweetCount) / avgTweetCountLastWeek) * 100).round}%"
     }
 
-    test
+    trendingPercentage
   }
 
   def GetTrendingPercentageSinceYesterday(spark : SparkSession, path : String) : String = {
     val avgTweetCountSinceYesterday = GetYesterdayTweetCount(spark, path).toDouble
     val currentTweetCount = GetCurrentDayTweetCount(spark, path).toDouble
 
-    var test : String = s"up ${(((avgTweetCountSinceYesterday - currentTweetCount).abs / avgTweetCountSinceYesterday) * 100).round}%"
+    var trendingPercentage : String = s"up ${(((avgTweetCountSinceYesterday - currentTweetCount).abs / avgTweetCountSinceYesterday) * 100).round}%"
     if (avgTweetCountSinceYesterday > currentTweetCount) {
-      test = s"down ${(((avgTweetCountSinceYesterday - currentTweetCount) / avgTweetCountSinceYesterday) * 100).round}%"
+      trendingPercentage = s"down ${(((avgTweetCountSinceYesterday - currentTweetCount) / avgTweetCountSinceYesterday) * 100).round}%"
     }
 
-    test
+    trendingPercentage
   }
 
   def PrintTrendingStatus(spark: SparkSession): Unit = {
