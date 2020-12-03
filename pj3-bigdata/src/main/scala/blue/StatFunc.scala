@@ -47,7 +47,7 @@ object StatFunc {
         }
       }
     }
-    null
+    (xArray(0),yArray(0))
   }
 
   /**
