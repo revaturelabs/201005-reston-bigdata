@@ -5,23 +5,16 @@ import org.apache.spark.sql.types.DoubleType
 import org.apache.spark.sql.{DataFrame, Row, SaveMode, SparkSession}
 
 import scala.collection.mutable.ArrayBuffer
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.duration.DurationInt
-import scala.concurrent.{Await, Future}
-
 object Question8 {
 
   //TODO change this to GDP vs Value of First Infection Rate Spike
   def regionCorrelation(spark: SparkSession, df: DataFrame): Unit={
     import spark.implicits._
-    df.write.partitionBy("region").bucketBy(15, "country").saveAsTable("dfOptimize")
+    df.write.partitionBy("region").bucketBy(40, "country").saveAsTable("dfOptimize")
 
     val regionNames = spark.sql("SELECT DISTINCT region FROM dfOptimize ORDER BY region").rdd.map(_.get(0).toString).collect()
 
     //val regionNames = df.select("region").sort("region").distinct().rdd.map(_.get(0).toString).collect()
-    var regionGDP = ArrayBuffer[Array[Double]]()
-    var regionPeaks = ArrayBuffer[Array[Double]]()
-
 
     for(region <- (0 to regionNames.length-1)){
       var gdp = ArrayBuffer[Double]()
@@ -35,7 +28,8 @@ object Question8 {
           val countryDF = spark.sql(s"SELECT DISTINCT * FROM dfOptimize WHERE country = '$regionCountry'" +
             s" AND date != 'NULL' " +
             s" AND year = '2020'" +
-            s" AND current_prices_gdp != 'NULL'")
+            s" AND current_prices_gdp != 'NULL'" +
+            s" ORDER BY date").cache()
           //val countryDF = df.where($"country" === regionCountries(country)).sort("date").filter($"date" =!= "NULL" && $"year" === "2020" && $"current_prices_gdp" =!= "NULL")
           val tempCases = countryDF.select($"new_cases").collect().map(_.get(0).toString.toDouble)
           val tempDates = countryDF.select($"date").collect().map(_.get(0).toString).map(DateFunc.dayInYear(_).toDouble)
@@ -50,9 +44,6 @@ object Question8 {
 
       // Give correlation for each region
       println(s"Region ${regionNames(region)}'s GDP - First New Cases Peak Potency Correlation: ${StatFunc.correlation(gdp.toArray,peak.toArray)}")
-      // Append arrays to use for graphing
-      regionGDP += gdp.toArray
-      regionPeaks += peak.toArray
     }
     spark.sql("DROP TABLE IF EXISTS dfOptimize")
     //Graph here
