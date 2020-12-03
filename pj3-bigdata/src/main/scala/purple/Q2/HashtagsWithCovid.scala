@@ -26,10 +26,10 @@ object HashtagsWithCovid {
     import spark.implicits._
     val covidRelatedWordsList = CovidTermsList.getTermsList
     df
-      .select($"full_text")
+      .select($"entities.hashtags.text")
       //map to Row(List(Hashtags))
       .map(tweet => {
-        getHashtags(tweet.getString(0))
+        tweet.getList[String](0).toList
       })
       .withColumnRenamed("value", "Hashtags")
       //filter to only lists with greater than 1 hashtags (2+)
@@ -58,10 +58,4 @@ object HashtagsWithCovid {
       .orderBy(functions.desc("Count"))
       .show(10)
   }
-
-  private def getHashtags(text: String): List[String] = {
-    val re = """(#\S+)""".r
-    re.findAllIn(text).toList
-  }
-
 }

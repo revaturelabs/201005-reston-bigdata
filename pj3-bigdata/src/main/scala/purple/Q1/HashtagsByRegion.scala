@@ -31,18 +31,13 @@ object HashtagsByRegion {
 
     val newdf = df
       .filter(!functions.isnull($"place"))
-      .select($"full_text", $"place.country")
-      //map to Row(List(Hashtags),Country)
-      .map(tweet => {
-        (getHashtags(tweet.getString(0)), tweet.getString(1))
-      })
+      .select($"entities.hashtags.text", $"place.country")
       //map to Row(List(Hashtags),Region)
       .map(tweet => {
-        (tweet._1, RegionDictionary.reverseMapSearch(tweet._2))
+        (tweet.getList[String](0).toList, RegionDictionary.reverseMapSearch(tweet.getString(1)))
       })
       .withColumnRenamed("_1", "Hashtags")
       .withColumnRenamed("_2", "Region")
-
 
     // If we are passed a region, we need to filter by it
     // Otherwise we present all of the information
@@ -76,12 +71,5 @@ object HashtagsByRegion {
       outputFilename = s"hbr-AllRegions-$startTime"
       writeDataFrameToFile(sorteddf, outputFilename)
     }
-
-
-  }
-
-  private def getHashtags(text: String): List[String] = {
-    val re = """(#\S+)""".r
-    re.findAllIn(text).toList
   }
 }
