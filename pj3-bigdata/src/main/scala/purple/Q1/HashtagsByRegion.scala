@@ -7,18 +7,11 @@ import scala.collection.convert.ImplicitConversions.`collection AsScalaIterable`
 
 object HashtagsByRegion {
 
-  def getHashtagsByRegion(region: String = null): Unit = {
+  def getHashtagsByRegion(spark: SparkSession, region: String = null): Unit = {
     //What are the hashtags used to describe COVID-19 by Region (e.g. #covid, #COVID-19, #Coronavirus, #NovelCoronavirus)?
 
-    //for local testing purposes (pass spark session from runner in prod)
-    val appName = "hashtagRegions"
-    val spark = SparkSession.builder()
-      .appName(appName)
-      .master("local[8]")
-      .getOrCreate()
-    spark.sparkContext.setLogLevel("WARN")
-
-    val staticDf = spark.read.json("src/main/scala/purple/exampleTwitterData.jsonl")
+    //val staticDf = spark.read.json("s3://adam-king-848/data/twitter_data_testing.json")
+    val staticDf = spark.read.json("src/main/scala/purple/twitter_data_testing.json")
 
     println("QUESTION 1 (With Sample Data)")
     question1(spark, staticDf, region)
@@ -34,7 +27,7 @@ object HashtagsByRegion {
       .select($"entities.hashtags.text", $"place.country")
       //map to Row(List(Hashtags),Region)
       .map(tweet => {
-        (tweet.getList[String](0).toList, RegionDictionary.reverseMapSearch(tweet.getString(1)))
+        (tweet.getList[String](0).toList.map(_.toLowerCase()), RegionDictionary.reverseMapSearch(tweet.getString(1)))
       })
       .withColumnRenamed("_1", "Hashtags")
       .withColumnRenamed("_2", "Region")
@@ -52,7 +45,7 @@ object HashtagsByRegion {
         .count()
         .orderBy(functions.desc("Count"))
 
-        sorteddf.show(100)
+      sorteddf.show(100)
 
       outputFilename = s"hbr-${region.replaceAll("\\s+","")}-$startTime"
       writeDataFrameToFile(sorteddf, outputFilename)
@@ -66,7 +59,7 @@ object HashtagsByRegion {
         .count()
         .orderBy(functions.desc("Count"))
 
-        sorteddf.show(100)
+      sorteddf.show(100)
 
       outputFilename = s"hbr-AllRegions-$startTime"
       writeDataFrameToFile(sorteddf, outputFilename)

@@ -1,35 +1,31 @@
 package purple.Q2
 
 import org.apache.spark.sql.{DataFrame, SparkSession, functions}
+import purple.FileUtil.FileWriter.writeDataFrameToFile
 
 import scala.collection.convert.ImplicitConversions.`collection AsScalaIterable`
 
 object HashtagsWithCovid {
 
-  def getHashtagsWithCovid(): Unit = {
+  def getHashtagsWithCovid(spark: SparkSession): Unit = {
     //What are the top 10 commonly used hashtags used alongside COVID hashtags?
 
-    //for local testing purposes (pass spark session from runner in prod)
-    val appName = "hashtagWithCovid"
-    val spark = SparkSession.builder()
-      .appName(appName)
-      .master("local[8]")
-      .getOrCreate()
-    spark.sparkContext.setLogLevel("WARN")
+    //val staticDf = spark.read.json("s3://adam-king-848/data/twitter_data_testing.json")
+    val sampleStaticDf = spark.read.json("src/main/scala/purple/twitter_data_testing.json")
 
-    val sampleStaticDf = spark.read.json("src/main/scala/purple/exampleTwitterData.jsonl")
     println("QUESTION 2 (with Sample Data)")
     question2(spark, sampleStaticDf)
   }
 
   private def question2(spark: SparkSession, df: DataFrame): Unit = {
     import spark.implicits._
+    val startTime = System.currentTimeMillis()
     val covidRelatedWordsList = CovidTermsList.getTermsList
-    df
+    val newDf = df
       .select($"entities.hashtags.text")
       //map to Row(List(Hashtags))
       .map(tweet => {
-        tweet.getList[String](0).toList
+        tweet.getList[String](0).toList.map(_.toLowerCase())
       })
       .withColumnRenamed("value", "Hashtags")
       //filter to only lists with greater than 1 hashtags (2+)
@@ -40,7 +36,7 @@ object HashtagsWithCovid {
         //this filter statement seems inefficient
         hashtagList.exists(
           hashtag => covidRelatedWordsList.exists(
-            covidHashtag => hashtag.toLowerCase().contains(covidHashtag.toLowerCase())
+            covidHashtag => hashtag.contains(covidHashtag.toLowerCase())
           )
         )
       })
@@ -56,6 +52,10 @@ object HashtagsWithCovid {
       .groupBy($"Hashtag")
       .count()
       .orderBy(functions.desc("Count"))
-      .show(10)
+
+    newDf.show(10)
+
+    val outputFilename: String = s"hwc-$startTime"
+    writeDataFrameToFile(newDf, outputFilename, 10)
   }
 }
