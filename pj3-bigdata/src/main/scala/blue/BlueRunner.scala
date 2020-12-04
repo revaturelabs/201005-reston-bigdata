@@ -26,8 +26,8 @@ object BlueRunner  {
 
   //TODO delete this main method
   def main(args: Array[String]): Unit = {
-//    Q1(spark)
-    Q8_1(spark)
+    Q1(spark)
+//    Q8_1(spark)
 //    Q8_2(spark)
   }
 
