@@ -5,6 +5,8 @@ import java.util.Properties
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
 import com.typesafe.config.{ConfigFactory, Config}
 
+// https://sparkbyexamples.com/kafka/apache-kafka-consumer-producer-in-scala/
+
 object Producer {
   def main(args: Array[String]) {
 
