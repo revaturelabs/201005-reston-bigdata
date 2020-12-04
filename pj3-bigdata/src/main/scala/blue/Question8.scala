@@ -10,9 +10,10 @@ object Question8 {
   //TODO change this to GDP vs Value of First Infection Rate Spike
   def regionCorrelation(spark: SparkSession, df: DataFrame): Unit={
     import spark.implicits._
-    df.write.partitionBy("region").bucketBy(40, "country").saveAsTable("dfOptimize")
+    val tableName = "dfOptimize"
+    //df.write.mode("overwrite").partitionBy("region").bucketBy(40, "country")saveAsTable(tableName)
 
-    val regionNames = spark.sql("SELECT DISTINCT region FROM dfOptimize ORDER BY region").rdd.map(_.get(0).toString).collect()
+    val regionNames = spark.sql(s"SELECT DISTINCT region FROM $tableName ORDER BY region").rdd.map(_.get(0).toString).collect()
 
     //val regionNames = df.select("region").sort("region").distinct().rdd.map(_.get(0).toString).collect()
 
@@ -20,12 +21,12 @@ object Question8 {
       var gdp = ArrayBuffer[Double]()
       var peak = ArrayBuffer[Double]()
       val specificRegion = regionNames(region)
-      val regionCountries = spark.sql(s"SELECT DISTINCT country, region FROM dfOptimize WHERE region = '$specificRegion' ").rdd.map(_.get(0).toString).collect()
+      val regionCountries = spark.sql(s"SELECT DISTINCT country, region FROM $tableName WHERE region = '$specificRegion' ").rdd.map(_.get(0).toString).collect()
      // val regionCountries = df.select("country").filter($"region" === regionNames(region)).distinct().rdd.map(_.get(0).toString).collect()
       // Get the first peak for each country in region and gdp
       for (country <- (0 to regionCountries.length-1)) {
           val regionCountry = regionCountries(country)
-          val countryDF = spark.sql(s"SELECT DISTINCT * FROM dfOptimize WHERE country = '$regionCountry'" +
+          val countryDF = spark.sql(s"SELECT DISTINCT * FROM $tableName WHERE country = '$regionCountry'" +
             s" AND date != 'NULL' " +
             s" AND year = '2020'" +
             s" AND current_prices_gdp != 'NULL'" +
@@ -34,7 +35,7 @@ object Question8 {
           val tempCases = countryDF.select($"new_cases").collect().map(_.get(0).toString.toDouble)
           val tempDates = countryDF.select($"date").collect().map(_.get(0).toString).map(DateFunc.dayInYear(_).toDouble)
           if(tempDates.length > 0 && tempCases.length > 0) {
-            peak += (StatFunc.firstMajorPeak(tempDates, tempCases, 4, 10, 5)._2)
+            peak += (StatFunc.firstMajorPeak(tempDates, tempCases, 7, 10, 5)._2)
             val tempGDP = countryDF.select($"current_prices_gdp")
             val avgGDP = tempGDP.select(avg($"current_prices_gdp")).collect().map(_.getDouble(0))
             gdp += avgGDP(0)
@@ -42,9 +43,9 @@ object Question8 {
       }
 
       // Give correlation for each region
-      println(s"Region ${regionNames(region)}'s GDP - First New Cases Peak Potency Correlation: ${StatFunc.correlation(gdp.toArray,peak.toArray)}")
+      println(s"Region ${regionNames(region)}'s GDP - First Major Peak New Cases Value Correlation: ${StatFunc.correlation(gdp.toArray,peak.toArray)}")
     }
-    spark.sql("DROP TABLE IF EXISTS dfOptimize")
+    spark.sql(s"DROP TABLE IF EXISTS $tableName")
     //Graph here
     //GraphFunc.graphSeries(regionGDP.toArray,regionPeaks.toArray, style='-', name = regionNames, legend=true)
   }

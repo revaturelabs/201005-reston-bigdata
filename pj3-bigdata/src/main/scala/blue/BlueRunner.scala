@@ -1,7 +1,7 @@
 package blue
 
 
-import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.apache.spark.sql.{AnalysisException, DataFrame, SparkSession}
 
 object BlueRunner  {
 
@@ -11,8 +11,8 @@ object BlueRunner  {
   spark.sparkContext.setLogLevel("ERROR")
 
   //Type path here
-  val casepath="path"
-  val econpath="path"
+  val casepath="C:\\Users\\river\\IdeaProjects\\201005-reston-bigdata\\pj3-bigdata\\daily_stats.tsv"
+  val econpath="C:\\Users\\river\\IdeaProjects\\201005-reston-bigdata\\economic_data_2018-2021.tsv"
 
   //TODO delete this main method
   def main(args: Array[String]): Unit = {
@@ -34,7 +34,10 @@ object BlueRunner  {
 
 
   def Q8_1(spark: SparkSession, fullDF: DataFrame=df(spark,econpath,casepath)): Unit = {
-    Question8.regionCorrelation(spark, fullDF)
+    import scala.reflect.io.Directory
+    import java.io.File
+      Question8.regionCorrelation(spark, fullDF)
+
   }
 
   def Q8_2(spark: SparkSession, fullDF: DataFrame=df(spark,econpath,casepath)): Unit = {
