@@ -51,15 +51,23 @@ win:
 
 2. **Open directory in Intellij**
 
-Don't open from the top-level 201005-reston-bigdata repo, open from the directory you want to run (eg. /kafka-consumer-scala-sample).  If you have the memory, 
-open all 3 examples in 3 separate intellij windows.
+Don't open from the top-level 201005-reston-bigdata repo, open from the directory you want to run (eg. /kafka-consumer-scala-sample). 
+
+If you have the memory, open all 3 examples in 3 separate intellij windows.
 
 3. **Edit config files**
 
-Each directory has a configuration sample file in the `/src/main/resources` directory.  Copy or rename the file to `aws-settings.conf`. Paste in your urls for
-servers 1..3 and topic names.  This configuration style, **along** with a `.gitignore` that ignores this configuration file is a good way to handle API keys.
-I included .gitignore files in each directory to specifically ignore `aws-settings.conf`.  The local directory's .gitignore will ignore the top-level 201005-reston-bigdata/
-directories .gitignore, and any global .gitignore you might have (if you setup one in your .gitconfig).
+Each directory has a configuration sample file in the `/src/main/resources` directory.  
+
+Copy or rename the file to `aws-settings.conf`. 
+
+Paste in your urls forservers 1..3 and topic names.  
+
+Using config/configFactory, **along** with a `.gitignore` hiding your secrets, is a good way to handle API keys.
+
+I included .gitignore files in each directory to specifically ignore `aws-settings.conf`.  
+
+The local directory's .gitignore will ignore the top-level 201005-reston-bigdata/ directories .gitignore, and any global .gitignore you might have (if you setup one in your .gitconfig).
 
 4. **Run**
 
