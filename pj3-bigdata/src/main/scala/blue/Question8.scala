@@ -15,7 +15,7 @@ object Question8 {
   def regionCorrelation(spark: SparkSession, df: DataFrame): Unit={
     import spark.implicits._
     val now = Calendar.getInstance()
-    val time = now.getTime()
+    val time = now.getTimeInMillis()
     val tableName = s"dfOptimize$time"
     df.write.mode("overwrite").partitionBy("region").bucketBy(40, "country").saveAsTable(tableName)
 
@@ -59,11 +59,14 @@ object Question8 {
 
   def regionFirstPeak(spark: SparkSession, df: DataFrame, resultpath: String): Unit= {
     import spark.implicits._
+    val now = Calendar.getInstance()
+    val time = now.getTimeInMillis()
+    val tableName = s"dfOptimize$time"
 
     val rRWriter = new PrintWriter(Paths.get(s"${resultpath}/region_by_time_2_first_peak.tmp").toFile)
-    df.write.partitionBy("region").bucketBy(40, "country").saveAsTable("dfOptimize")
+    df.write.partitionBy("region").bucketBy(40, "country").saveAsTable(tableName)
 
-    val regionList = spark.sql("SELECT DISTINCT region FROM dfOptimize ORDER BY region").rdd.map(_.get(0).toString).collect()
+    val regionList = spark.sql(s"SELECT DISTINCT region FROM $tableName ORDER BY region").rdd.map(_.get(0).toString).collect()
     var tempDates: Array[Double] = null
     var tempCases: Array[Double] = null
     var tempFrame: DataFrame = null
@@ -81,7 +84,7 @@ object Question8 {
         .collect()
         .map(_.get(0).asInstanceOf[String])
       for (country <- countryList){
-        tempFrame = spark.sql(s"SELECT DISTINCT country, date, new_cases FROM dfOptimize WHERE country = '$country' AND date != 'NULL' ").sort($"date").cache()
+        tempFrame = spark.sql(s"SELECT DISTINCT country, date, new_cases FROM $tableName WHERE country = '$country' AND date != 'NULL' ").sort($"date").cache()
         tempCases = tempFrame.select($"new_cases").collect().map(_.get(0).toString.toDouble)
         tempDates = tempFrame.select($"date").collect().map(_.get(0).toString).map(DateFunc.dayInYear(_).toDouble)
         peakTime = StatFunc.firstMajorPeak(tempDates, tempCases, 7, 10, 5)._1
@@ -114,6 +117,6 @@ object Question8 {
 //    for (ii <- 0 to regionList.length-1){
 //      println(s"${firstPeakTable(ii)._1}, ${firstPeakTable(ii)._2}}" )
 //    }
-    spark.sql("DROP TABLE IF EXISTS dfOptimize")
+    spark.sql(s"DROP TABLE IF EXISTS $tableName")
   }
 }
