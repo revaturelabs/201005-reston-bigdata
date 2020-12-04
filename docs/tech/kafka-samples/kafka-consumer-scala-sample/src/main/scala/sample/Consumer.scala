@@ -1,5 +1,7 @@
 package sample
 
+// https://sparkbyexamples.com/kafka/apache-kafka-consumer-producer-in-scala/
+
 import org.apache.log4j.{Level, LogManager}
 import java.util.Properties
 import com.typesafe.config.{Config, ConfigFactory}
