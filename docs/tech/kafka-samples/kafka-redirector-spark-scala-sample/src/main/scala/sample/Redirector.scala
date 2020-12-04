@@ -23,6 +23,9 @@ object Redirector {
       .master("local[*]")
       .getOrCreate()
 
+    
+    // https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html#continuous-processing
+    
     spark
       .readStream
       .format("kafka")
