@@ -17,7 +17,7 @@ object Question8 {
     val now = Calendar.getInstance()
     val time = now.getTime()
     val tableName = s"dfOptimize$time"
-    //df.write.mode("overwrite").partitionBy("region").bucketBy(40, "country")saveAsTable(tableName)
+    df.write.mode("overwrite").partitionBy("region").bucketBy(40, "country").saveAsTable(tableName)
 
     val regionNames = spark.sql(s"SELECT DISTINCT region FROM $tableName ORDER BY region").rdd.map(_.get(0).toString).collect()
 
