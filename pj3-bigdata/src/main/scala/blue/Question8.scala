@@ -63,7 +63,6 @@ object Question8 {
     val time = now.getTimeInMillis()
     val tableName = s"dfOptimize$time"
 
-    val rRWriter = new PrintWriter(Paths.get(s"${resultpath}/region_by_time_2_first_peak.tmp").toFile)
     df.write.partitionBy("region").bucketBy(40, "country").saveAsTable(tableName)
 
     val regionList = spark.sql(s"SELECT DISTINCT region FROM $tableName ORDER BY region").rdd.map(_.get(0).toString).collect()
@@ -76,14 +75,13 @@ object Question8 {
     var countryList: Array[String] = Array()
     var peakTime: Double = 0
     for (region <- regionList) {
-      val rCWriter = new PrintWriter(Paths.get(s"${resultpath}/${region}.tmp").toFile)
       countryList = df
         .select($"country")
         .where($"region" === region)
         .distinct()
         .collect()
         .map(_.get(0).asInstanceOf[String])
-      for (country <- countryList){
+      for (country <- countryList) {
         tempFrame = spark.sql(s"SELECT DISTINCT country, date, new_cases FROM $tableName WHERE country = '$country' AND date != 'NULL' ").sort($"date").cache()
         tempCases = tempFrame.select($"new_cases").collect().map(_.get(0).toString.toDouble)
         tempDates = tempFrame.select($"date").collect().map(_.get(0).toString).map(DateFunc.dayInYear(_).toDouble)
@@ -91,32 +89,22 @@ object Question8 {
         if (peakTime != -1) {
           firstPeakForCountry.append(peakTime)
 //          println(s"${country}, ${firstPeakForCountry.last}")
-          rCWriter.println(s"${country}, ${firstPeakForCountry.last}")
         }
       }
-      firstPeakTimeAvg.append(firstPeakForCountry.sum/firstPeakForCountry.length)
-//      println(s"\t\t${region}: ${firstPeakTimeAvg.last}")
-      rRWriter.println(s"${region}, ${firstPeakTimeAvg.last}")
+      firstPeakTimeAvg.append(firstPeakForCountry.sum / firstPeakForCountry.length)
+      println(s"${region} Average Days to First Major Peak: ${firstPeakTimeAvg.last}")
       firstPeakForCountry.clear()
-      rCWriter.close()
-      Files.move(
-        Paths.get(s"${resultpath}/${region}.tmp"),
-        Paths.get(s"${resultpath}/${region}.csv")
-      )
     }
-    rRWriter.close()
-    Files.move(
-      Paths.get(s"${resultpath}/region_by_time_2_first_peak.tmp"),
-      Paths.get(s"${resultpath}/region_by_time_2_first_peak.csv")
-    )
-//    val firstPeakTable: ArrayBuffer[(String, Double)] = ArrayBuffer()
-//    for (ii <- 0 to regionList.length-1){
-//      firstPeakTable.append((regionList(ii), firstPeakTimeAvg(ii)))
-//    }
-//    println("")
-//    for (ii <- 0 to regionList.length-1){
-//      println(s"${firstPeakTable(ii)._1}, ${firstPeakTable(ii)._2}}" )
-//    }
-    spark.sql(s"DROP TABLE IF EXISTS $tableName")
+
+//          val firstPeakTable: ArrayBuffer[(String, Double)] = ArrayBuffer()
+//          for (ii <- 0 to regionList.length-1){
+//            firstPeakTable.append((regionList(ii), firstPeakTimeAvg(ii)))
+//          }
+//          println("")
+//          for (ii <- 0 to regionList.length-1){
+//            println(s"${firstPeakTable(ii)._1}, ${firstPeakTable(ii)._2}}" )
+//          }
+      spark.sql(s"DROP TABLE IF EXISTS $tableName")
   }
+
 }

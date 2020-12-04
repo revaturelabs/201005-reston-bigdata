@@ -63,7 +63,7 @@ object RankRegions {
           .sort(functions.col(s"$metric"))
       }
       case "latest" => {
-        val latestDate = fullDS.select(functions.max("date")).collect().map(_.getString(0))
+        val latestDate = fullDS.filter($"date".contains("2020")).select(functions.max("date")).collect().map(_.getString(0))
         oneTimeMetric = fullDS
           .select("region", metric)
           .where($"date" === latestDate(0))
@@ -72,8 +72,8 @@ object RankRegions {
       case "max" => {
         oneTimeMetric = fullDS
           .groupBy("region")
-          .agg(functions.round(functions.sum(s"$metric") as s"$metric", 2))
-          .sort(functions.col(s"$metric"))
+          .agg(functions.round(functions.sum(s"$metric"), 2) as metric)
+          .sort(functions.col(metric))
       }
       case _ => {
         oneTimeMetric = fullDS
@@ -164,12 +164,14 @@ object RankRegions {
 //      .select($"country", $"region", $"current_prices_gdp", $"year")
     val gdp_temp = fullDS
       .select($"country", $"region", $"$metric" as "gdp", $"year")
+
     val gdp_2020 = gdp_temp
       .where($"year" === "2020")
       .where($"gdp" =!= "NULL")
       .drop("year")
       .groupBy($"region")
       .agg(functions.sum($"gdp") as "gdp_20")
+
     val gdp_2019 = gdp_temp
       .where($"year" === "2019")
       .where($"gdp" =!= "NULL")
@@ -177,13 +179,10 @@ object RankRegions {
       .groupBy($"region")
       .agg(functions.sum($"gdp") as "gdp_19")
 
-    gdp_2019.show()
-    gdp_2020.show()
     val gdp = gdp_2019
       .join(gdp_2020, "region")
       .withColumn("delta_gdp", (($"gdp_20" - $"gdp_19")/$"gdp_20")*100)
       .drop("gdp_19", "gdp_20")
-    gdp.show()
 
     rankByMetric(spark, gdp, "delta_gdp", "avg")
   }

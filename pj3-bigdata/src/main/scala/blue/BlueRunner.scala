@@ -12,16 +12,23 @@ object BlueRunner  {
 
   //Type path here
 
+  val casepath2="C:\\Users\\liamh\\V2_Project_3\\201005-reston-bigdata\\pj3-bigdata\\daily_stats.tsv"
+  val econpath2="C:\\Users\\liamh\\V2_Project_3\\201005-reston-bigdata\\economic_data_2018-2021.tsv"
+
   val casepath1="C:\\Users\\river\\IdeaProjects\\201005-reston-bigdata\\pj3-bigdata\\daily_stats.tsv"
   val econpath1="C:\\Users\\river\\IdeaProjects\\201005-reston-bigdata\\economic_data_2018-2021.tsv"
 
-  val casepath="\"s3a://adam-king-848/data/daily_stats.tsv\""
-  val econpath="\"s3a://adam-king-848/data/economic_data_2018-2021.tsv\""
+  val casepath3="s3a://adam-king-848/data/daily_stats.tsv"
+  val econpath3="s3a://adam-king-848/data/economic_data_2018-2021.tsv"
+
+  val econpath = econpath2
+  val casepath = casepath2
 
   //TODO delete this main method
   def main(args: Array[String]): Unit = {
-    Q8_1(spark)
-    //Q8_2(spark)
+    Q1(spark)
+//    Q8_1(spark)
+//    Q8_2(spark)
   }
 
   def df(spark: SparkSession, econpath:String,casepath:String): DataFrame  ={
@@ -35,12 +42,13 @@ object BlueRunner  {
     fullDF
   }
 
-  def Q1(spark:SparkSession, fullDF: DataFrame=df(spark,econpath,casepath))= Question1.initialSolution(spark, fullDF,resultpath = "results")
+  def Q1(spark:SparkSession, fullDF: DataFrame=df(spark,econpath,casepath)): Unit ={
+    Question1.initialSolution(spark, fullDF, resultpath = "results")
+  }
 
 
   def Q8_1(spark: SparkSession, fullDF: DataFrame=df(spark,econpath,casepath)): Unit = {
-      Question8.regionCorrelation(spark, fullDF)
-
+    Question8.regionCorrelation(spark, fullDF)
   }
 
   def Q8_2(spark: SparkSession, fullDF: DataFrame=df(spark,econpath,casepath)): Unit = {
