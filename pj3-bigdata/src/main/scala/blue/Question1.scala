@@ -20,10 +20,10 @@ object Question1 {
     println("Total Cases per Million People in Each Region")
     RankRegions.rankByMetricLow(spark, data, "total_cases_per_million", "max").show()
 
-    RankRegions.plotMetrics(spark, data, "new_cases_per_million", s"${resultpath}/plot_infection_rate_per_million")
-    RankRegions.plotMetrics(spark, data, "new_cases", s"${resultpath}/plot_infection_rate")
-    RankRegions.plotMetrics(spark, data, "total_cases", s"${resultpath}/plot_total_infections")
-    RankRegions.plotMetrics(spark, data, "total_cases_per_million", s"${resultpath}/plot_total_infections_per_million")
+//    RankRegions.plotMetrics(spark, data, "new_cases_per_million", s"${resultpath}/plot_infection_rate_per_million")
+//    RankRegions.plotMetrics(spark, data, "new_cases", s"${resultpath}/plot_infection_rate")
+//    RankRegions.plotMetrics(spark, data, "total_cases", s"${resultpath}/plot_total_infections")
+//    RankRegions.plotMetrics(spark, data, "total_cases_per_million", s"${resultpath}/plot_total_infections_per_million")
 
     println("")
     println("Average GDP Percent Change in Each Region")
@@ -32,5 +32,6 @@ object Question1 {
     println("")
     println("Average GDP per Capita Percent Change in Each Region")
     RankRegions.changeGDP(spark, data, "gdp_per_capita").show()
+
   }
 }

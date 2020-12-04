@@ -32,18 +32,19 @@ object Question8 {
       // Get the first peak for each country in region and gdp
       for (country <- (0 to regionCountries.length-1)) {
           val regionCountry = regionCountries(country)
-          val countryDF = spark.sql(s"SELECT DISTINCT * FROM $tableName WHERE country = '$regionCountry'" +
+          val countryDF = spark.sql(s"SELECT DISTINCT date, new_cases_per_million, gdp_per_capita FROM $tableName WHERE country = '$regionCountry'" +
             s" AND date != 'NULL' " +
             s" AND year = '2020'" +
-            s" AND current_prices_gdp != 'NULL'" +
-            s" ORDER BY date").cache()
+            s" AND gdp_per_capita != 'NULL'" +
+            s" ORDER BY date")
+            .cache()
           //val countryDF = df.where($"country" === regionCountries(country)).sort("date").filter($"date" =!= "NULL" && $"year" === "2020" && $"current_prices_gdp" =!= "NULL")
-          val tempCases = countryDF.select($"new_cases").collect().map(_.get(0).toString.toDouble)
+          val tempCases = countryDF.select($"new_cases_per_million").collect().map(_.get(0).toString.toDouble)
           val tempDates = countryDF.select($"date").collect().map(_.get(0).toString).map(DateFunc.dayInYear(_).toDouble)
           if(tempDates.length > 0 && tempCases.length > 0) {
             peak += (StatFunc.firstMajorPeak(tempDates, tempCases, 7, 10, 5)._2)
-            val tempGDP = countryDF.select($"current_prices_gdp")
-            val avgGDP = tempGDP.select(avg($"current_prices_gdp")).collect().map(_.getDouble(0))
+            val tempGDP = countryDF.select($"gdp_per_capita")
+            val avgGDP = tempGDP.select(avg($"gdp_per_capita")).collect().map(_.get(0).toString.toDouble)
             gdp += avgGDP(0)
           }
       }
