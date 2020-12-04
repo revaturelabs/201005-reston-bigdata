@@ -1,10 +1,10 @@
 ### Kafka Samples
 
-- /kafka-consumer-scala-sample: Subscribes to a topic and outputs events to console as they happen
+- `/kafka-consumer-scala-sample`: Subscribes to a topic and outputs events to console as they happen
 
-- /kafka-producer-scala-sample: Endless loop (10 sec b/w iteration) that reads a text file from URL, splits it into lines and sends each line as an event to a channel.  
+- `/kafka-producer-scala-sample`: Endless loop (10 sec b/w iteration) that reads a text file from URL, splits it into lines and sends each line as an event to a channel.  
 
-- /kafka-redirector-spark-scala-sample: Endless loop that reads in from one topic, and outputs to another topic as they happen.
+- `/kafka-redirector-spark-scala-sample`: Endless loop that reads in from one topic, and outputs to another topic as they happen.
 
 ### Instructions for use
 
