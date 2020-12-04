@@ -19,7 +19,6 @@ project/project/
 .idea/
 bin/
 out
-build.sbt
 
 /.gitignore
 
