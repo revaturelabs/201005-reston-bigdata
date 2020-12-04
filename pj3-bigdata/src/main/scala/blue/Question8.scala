@@ -2,6 +2,7 @@ package blue
 
 import java.io.PrintWriter
 import java.nio.file.{Files, Paths}
+import java.util.Calendar
 
 import org.apache.spark.sql.functions.{avg, explode}
 import org.apache.spark.sql.types.DoubleType
@@ -13,7 +14,9 @@ object Question8 {
   //TODO change this to GDP vs Value of First Infection Rate Spike
   def regionCorrelation(spark: SparkSession, df: DataFrame): Unit={
     import spark.implicits._
-    val tableName = "dfOptimize"
+    val now = Calendar.getInstance()
+    val time = now.getTime()
+    val tableName = s"dfOptimize$time"
     //df.write.mode("overwrite").partitionBy("region").bucketBy(40, "country")saveAsTable(tableName)
 
     val regionNames = spark.sql(s"SELECT DISTINCT region FROM $tableName ORDER BY region").rdd.map(_.get(0).toString).collect()

@@ -37,8 +37,6 @@ object BlueRunner  {
 
 
   def Q8_1(spark: SparkSession, fullDF: DataFrame=df(spark,econpath,casepath)): Unit = {
-    import scala.reflect.io.Directory
-    import java.io.File
       Question8.regionCorrelation(spark, fullDF)
 
   }
