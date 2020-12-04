@@ -2,7 +2,7 @@ package orange
 
 import org.apache.spark
 import org.apache.spark.SparkConf
-import org.apache.spark.sql.functions.{asc, desc, round}
+import org.apache.spark.sql.functions.{asc, desc, round, max}
 import org.apache.spark.sql.{DataFrame, SparkSession, functions}
 
 
@@ -18,10 +18,10 @@ object orangeRunner {
     spark.sparkContext.setLogLevel("WARN")
 
     //import the covid data from testData file as well as the border data from the provided border data
-//    val country_stats = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("countries_general_stats.tsv")
-      val country_stats = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("s3://adam-king-848/data/countries_general_stats.tsv")
-//    val country_data = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("daily_stats.tsv")
-      val country_data = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("s3://adam-king-848/data/daily_stats.tsv")
+    val country_stats = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("countries_general_stats.tsv")
+    //      val country_stats = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("s3://adam-king-848/data/countries_general_stats.tsv")
+    val country_data = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("daily_stats.tsv")
+//      val country_data = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("s3://adam-king-848/data/owid_daily_stats.tsv")
 
     val country_pop = country_stats.select($"COUNTRY", $"POPULATION".cast("Int"))
     val country_cases = country_data
@@ -29,8 +29,8 @@ object orangeRunner {
       .withColumn("Cases", $"TOTAL_CASES".cast("Int"))
       .select($"COUNTRY", $"Cases".as("Total Cases"))
       .groupBy($"COUNTRY")
-      .agg(functions.max($"Total Cases").as("TOTAL CASES"))
-      .sort(functions.asc("COUNTRY"))
+      .agg(max($"Total Cases").as("TOTAL CASES"))
+      .sort(asc("COUNTRY"))
 
 
     val borders = joinCodesAndBorders(spark)
@@ -40,7 +40,7 @@ object orangeRunner {
       .join(country_pop, country_cases("COUNTRY") === country_pop("COUNTRY"))
       .select(country_cases("COUNTRY"), $"TOTAL CASES", $"POPULATION",
         ($"TOTAL CASES" * 100 / $"POPULATION").as("infection_rate_per_capita"))
-      .sort(functions.desc("infection_rate_per_capita"))
+      .sort(desc("infection_rate_per_capita"))
       .withColumn("infection_rate_per_capita",'infection_rate_per_capita.cast("Decimal(5,3)"))
 
 
