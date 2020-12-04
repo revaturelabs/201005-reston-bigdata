@@ -21,7 +21,7 @@ object orangeRunner {
 //    val country_stats = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("countries_general_stats.tsv")
       val country_stats = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("s3://adam-king-848/data/countries_general_stats.tsv")
 //    val country_data = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("daily_stats.tsv")
-      val country_data = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("s3://adam-king-848/data/daily_stats.tsv")
+      val country_data = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("s3://adam-king-848/data/data/owid_daily_stats.tsv.tsv")
 
     val country_pop = country_stats.select($"COUNTRY", $"POPULATION".cast("Int"))
     val country_cases = country_data
