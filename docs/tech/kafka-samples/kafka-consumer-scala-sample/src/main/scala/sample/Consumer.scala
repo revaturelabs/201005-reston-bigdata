@@ -1,13 +1,13 @@
 package sample
 
-// https://sparkbyexamples.com/kafka/apache-kafka-consumer-producer-in-scala/
-
 import org.apache.log4j.{Level, LogManager}
 import java.util.Properties
 import com.typesafe.config.{Config, ConfigFactory}
 import scala.collection.JavaConverters._
 import java.time.Duration
 import org.apache.kafka.clients.consumer.KafkaConsumer
+
+// https://sparkbyexamples.com/kafka/apache-kafka-consumer-producer-in-scala/
 
 object Consumer {
   def main(args: Array[String]) {
