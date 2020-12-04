@@ -13,28 +13,40 @@
 Window 1 (topic 1):
 
 ```
-linux: ./bin/kafka-console-consumer.sh --bootstrap-server url:port --topic topic-name --from-beginning
-win: .\bin\windows\kafka-console-consumer.bat --bootstrap-server url:port --topic topic1-name --from-beginning
+linux: 
+./bin/kafka-console-consumer.sh --bootstrap-server url:port --topic topic1-name --from-beginning
+
+win: 
+.\bin\windows\kafka-console-consumer.bat --bootstrap-server url:port --topic topic1-name --from-beginning
 ```
 
 Window 2 (topic 2):
 
 ```
-linux: ./bin/kafka-console-consumer.sh --bootstrap-server url:port --topic topic-name --from-beginning
-win: .\bin\windows\kafka-console-consumer.bat --bootstrap-server url:port --topic topic2-name --from-beginning
+linux: 
+./bin/kafka-console-consumer.sh --bootstrap-server url:port --topic topic2-name --from-beginning
+
+win: 
+.\bin\windows\kafka-console-consumer.bat --bootstrap-server url:port --topic topic2-name --from-beginning
 ```
 
 Window 3 (topic 3):
 
 ```
-linux: ./bin/kafka-console-consumer.sh --bootstrap-server url:port --topic topic-name --from-beginning
-win: .\bin\windows\kafka-console-consumer.bat --bootstrap-server url:port --topic topic3-name --from-beginning
+linux: 
+./bin/kafka-console-consumer.sh --bootstrap-server url:port --topic topic3-name --from-beginning
+
+win: 
+.\bin\windows\kafka-console-consumer.bat --bootstrap-server url:port --topic topic3-name --from-beginning
 ```
 
 window 4 (topic list):
 ```
-linux: ./bin/kafka-topics.sh --bootstrap-server url:port --list
-win: .\bin\windows\kafka-topics.sh --bootstrap-server url:port --list
+linux: 
+./bin/kafka-topics.sh --bootstrap-server url:port --list
+
+win: 
+.\bin\windows\kafka-topics.sh --bootstrap-server url:port --list
 ```
 
 2. **Open directory in Intellij**
