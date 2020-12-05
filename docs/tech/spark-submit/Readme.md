@@ -1,5 +1,7 @@
 ## Sample Project: spark-submit on AWS EKS
 
+[UPDATE: ***The code and files from William's demo are available [here](https://github.com/RevatureGentry/spark-scala-k8s)***]
+
 ### Install AWS CLI and kubectl on Ubuntu
 
 - linux AWS CLI: https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-linux.html
