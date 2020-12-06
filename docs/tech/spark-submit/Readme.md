@@ -110,9 +110,11 @@ When I change folder/file names, I have sometimes found it necessary to use Inte
 - *Use classpath of module* 
 
 **Assembly vs Package**
+
 Assembly can produce some large (100mb+) uber-jars.  I have experimented with adding dependencies to the `--package` line using Maven directories/addresses and in that case, I am able to use sbt's `package` command, rather than `assembly`.
 
 **Deduplication errors in Assembly**
+
 If you opt for assembly, and run into **deduplication** errors, this bit of code in your `build.sbt` may help:
 ```
 assemblyMergeStrategy in assembly := {  
