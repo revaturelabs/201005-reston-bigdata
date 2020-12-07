@@ -2,9 +2,13 @@ package blue
 
 import java.io.PrintWriter
 import java.nio.file.Paths
-import org.apache.spark.sql.functions.{max, sum}
 
-import org.apache.spark.sql.{DataFrame, SparkSession}
+import breeze.linalg.DenseVector
+import breeze.plot.{Figure, plot}
+import org.apache.spark.sql.functions.{max, sum}
+import org.apache.spark.sql.{DataFrame, SparkSession, functions}
+
+import scala.collection.mutable.ArrayBuffer
 
 object Question1 {
   def initialSolution(spark: SparkSession, origdata: DataFrame, resultpath: String): Unit ={
@@ -15,6 +19,7 @@ object Question1 {
       .agg(max($"population") as "population")
       .groupBy("region")
       .agg(sum($"population") as "population")
+
     val data = origdata.join(pop_col, "region")
 
     println("")
@@ -37,10 +42,10 @@ object Question1 {
     println("Total Cases per Million People in Each Region")
     RankRegions.rankByMetricLow(spark, data, "total_cases", "maxpop").show()
 
-//    RankRegions.plotMetrics(spark, data, "new_cases_per_million", s"${resultpath}/plot_infection_rate_per_million")
-//    RankRegions.plotMetrics(spark, data, "new_cases", s"${resultpath}/plot_infection_rate")
-//    RankRegions.plotMetrics(spark, data, "total_cases", s"${resultpath}/plot_total_infections")
-//    RankRegions.plotMetrics(spark, data, "total_cases_per_million", s"${resultpath}/plot_total_infections_per_million")
+    RankRegions.plotMetrics(spark, data, "new_cases", true, s"${resultpath}/plot_infection_rate_per_million")
+    RankRegions.plotMetrics(spark, data, "new_cases", false,s"${resultpath}/plot_infection_rate")
+    RankRegions.plotMetrics(spark, data, "total_cases", false, s"${resultpath}/plot_total_infections")
+    RankRegions.plotMetrics(spark, data, "total_cases", true, s"${resultpath}/plot_total_infections_per_million")
 
     println("")
     println("Average GDP Percent Change in Each Region")
@@ -50,8 +55,5 @@ object Question1 {
     println("Average GDP per Capita Percent Change in Each Region")
     RankRegions.changeGDP(spark, data, "gdp_per_capita", false).show()
 
-    println("")
-    println("Average GDP per Capita Percent Change in Each Region ()")
-    RankRegions.changeGDP(spark, data, "current_prices_gdp", true).show()
   }
 }

@@ -131,26 +131,29 @@ object RankRegions {
     importantData
   }
 
-  def plotMetrics(spark: SparkSession, data: DataFrame, metric: String, filename: String): Unit ={
+  def plotMetrics(spark: SparkSession, data: DataFrame, metric: String, pop: Boolean, filename: String): Unit ={
     import spark.implicits._
 
     val regionList = data.select("region").distinct().collect().map(_.getString(0))
-    val dates: Array[Double] = data
-      .select("date")
-      .where($"region" === regionList(0))
-      .distinct()
-      .sort($"date")
-      .rdd
-      .collect()
-      .map(date => DateFunc.dayInYear(date(0).asInstanceOf[String]).toDouble)
 
     val datePlottable: ArrayBuffer[Array[Double]] = ArrayBuffer()
     val metricPlottable: ArrayBuffer[Array[Double]] = ArrayBuffer()
-    val dataGrouped = data
-      .select($"region", $"date", $"$metric")
-      .groupBy($"region", $"date")
-      .agg(functions.sum($"$metric") as metric)
-      .cache()
+    val dataGrouped = if (pop) {
+      data
+        .where($"date" < "2020-11-20")
+        .select($"region", $"population", $"date", $"$metric")
+        .groupBy($"region", $"date", $"population")
+        .agg(functions.sum($"$metric")/$"population" as metric)
+        .drop($"population")
+        .cache()
+    } else {
+      data
+        .where($"date" < "2020-11-20")
+        .select($"region", $"date", $"$metric")
+        .groupBy($"region", $"date")
+        .agg(functions.sum($"$metric") as metric)
+        .cache()
+    }
 
     for (region <- regionList) {
       metricPlottable.append(dataGrouped
@@ -177,7 +180,12 @@ object RankRegions {
     }
     p.legend = true
     p.xlabel = "Days since 1st of January, 2020"
-    p.ylabel = metric
+
+    p.ylabel = if (pop){
+      s"${metric}_per_million"
+    } else {
+      metric
+    }
 //    f.refresh()
     f.saveas(s"${filename}.png")
 
