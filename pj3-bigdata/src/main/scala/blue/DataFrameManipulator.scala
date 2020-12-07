@@ -1,20 +1,27 @@
 package blue
 
 import org.apache.spark.sql.{DataFrame, SparkSession}
-import org.apache.spark.sql.functions.explode
+import org.apache.spark.sql.functions.{explode, when}
 
 object DataFrameManipulator {
   def caseJoin(spark: SparkSession, regionDF: DataFrame, caseDF: DataFrame): DataFrame ={
     import spark.implicits._
 
     val regionDict = regionDF
-      .select($"name", explode($"countries") as "country")
-      .select($"name", $"agg_population", $"country.name" as "country")
+      .select($"name", explode($"countries") as "country2")
+//      .select($"name", $"agg_population", $"country")
 
     caseDF
-      .select( $"date", $"country", $"total_cases", $"new_cases")
-      .join(regionDict, $"country")
-
+      .select( $"date", $"country", $"total_cases", $"total_cases_per_million", $"new_cases", $"new_cases_per_million")
+      .join(regionDict, $"country" === $"country2")
+//      .where($"date" =!= null)
+      .drop($"country2")
+      .withColumn("new_cases", when($"new_cases"==="NULL", 0).otherwise($"new_cases"))
+      .withColumn("total_cases", when($"total_cases"==="NULL", 0).otherwise($"total_cases"))
+      .withColumn("new_cases_per_million", when($"new_cases_per_million"==="NULL", 0).otherwise($"new_cases_per_million"))
+      .withColumn("total_cases_per_million", when($"total_cases_per_million"==="NULL", 0).otherwise($"total_cases_per_million"))
+      .filter($"date" =!= "null")
+      .sort($"date" desc_nulls_first)
   }
 
    def econJoin(spark: SparkSession, regionDF: DataFrame, econDF: DataFrame): DataFrame ={
@@ -22,24 +29,25 @@ object DataFrameManipulator {
 
     val regionDict = regionDF
       .select($"name", explode($"countries") as "country")
-      .select($"name" as "region", $"agg_population", $"country.name" as "country")
+      .select($"name" as "region", $"country" as "country2")
 
+     econDF
+       .join(regionDict, $"name" === $"country2")
+       .select($"year",$"region",$"name" as "country",$"gdp_currentPrices" as "current_prices_gdp" ,$"gdp_perCap_currentPrices" as "gdp_per_capita")
+       .drop($"country2")
+   }
 
-
-    econDF
-      .select($"year",$"region", $"country", $"GDP")
-      .join(regionDict, $"country")
-  }
-  
 
   def joinCaseEcon(spark: SparkSession, caseDF: DataFrame, econDF: DataFrame): DataFrame = {
+    import spark.implicits._
     econDF.createOrReplaceTempView("econDFTemp")
     caseDF.createOrReplaceTempView("caseDFTemp")
     val caseEconDF = spark.sql(
-      "SELECT c.region, c.country, e.gdp, c.new_cases" +
-        " FROM econDFTemp e JOIN caseDFTemp c" +
-        "ON e.country = c.country" +
-        "ORDER BY region, gdp")
+      "SELECT e.year, e.region, c.country, e.current_prices_gdp, e.gdp_per_capita, c.total_cases, c.new_cases, c.new_cases_per_million, c.total_cases_per_million,c.date " +
+        " FROM econDFTemp e JOIN caseDFTemp c " +
+        "ON e.country == c.country " +
+        "ORDER BY region, gdp_per_capita")
+
     caseEconDF
   }
 }

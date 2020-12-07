@@ -16,7 +16,7 @@ import org.apache.spark.sql.{DataFrame, SparkSession}
 
 
 object Runner {
-  def main(args: Array[String]): Unit = {
+   def main(args: Array[String]): Unit = {
     // Command Line Interface format that accepts params
 
     // Configs that William so kindly provided us with.
