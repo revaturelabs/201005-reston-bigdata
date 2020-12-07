@@ -80,6 +80,7 @@ object RankRegions {
           .sort(functions.col(metric))
       }
       case "pop" => {
+        fullDS.select($"region", $"population").distinct().show()
         oneTimeMetric = fullDS
           .select($"region", $"date", $"country", $"population", functions.round(functions.col(metric)) as metric)
           .distinct()
@@ -87,6 +88,8 @@ object RankRegions {
           .where($"$metric" =!= 0)
           .groupBy($"region", $"country", $"population")
           .agg((functions.avg(s"$metric")) as s"${metric}")
+
+        oneTimeMetric = oneTimeMetric
           .groupBy($"region", $"population")
           .agg(functions.sum(s"${metric}")/$"population" as s"${metric}_per_million")
           .drop("population")
