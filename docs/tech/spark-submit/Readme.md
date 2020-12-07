@@ -327,6 +327,14 @@ The `-f` flag means "follow" and attaches your terminal to the cluster.
 
 To see your logs after it finishes you can use the `kubectl logs` command with your pod name, but without `-f`.
 
+#### Spark Web Browser UI
+
+Job progress can also be monitored on your web browser, by forwarding the port of the Kubernetes pod to your kubectl proxy:
+```
+k port-forward s3-example-df4606763e1accc6-driver 4040:4040
+```
+
+Visit localhost:4040 in your web browser to view UI.
 
 #### Deleting your job
 
