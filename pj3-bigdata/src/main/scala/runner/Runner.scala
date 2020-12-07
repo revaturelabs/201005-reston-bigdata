@@ -13,6 +13,10 @@ import scala.concurrent.Future._
 import scala.sys.exit
 
 import org.apache.spark.sql.{DataFrame, SparkSession}
+import green.Q4.Question4
+import green.Q5.Question5
+import org.apache.spark.sql.SparkSession
+
 
 
 object Runner {
@@ -23,6 +27,9 @@ object Runner {
     if (args.length <= 2) {
       System.err.println("EXPECTED 3 ARGUMENTS: AWS Access Key, then AWS Secret Key, then S3 Bucket")
       System.exit(1)
+//      case Array(func,param1) if(func == "Q4") => Question4.PrintQuestion4(spark)
+//      case Array(func,param1) if(func == "Q5") => Question5.getMostDiscussion(spark)
+
     }
     val accessKey = args.apply(0)
     val secretKey = args.apply(1)
@@ -47,7 +54,7 @@ object Runner {
 
     // End of main()
   }
-
+  
   // Declaring spark session at global scope
   val spark = SparkSession.builder().appName("Nahshon-test").getOrCreate()
 

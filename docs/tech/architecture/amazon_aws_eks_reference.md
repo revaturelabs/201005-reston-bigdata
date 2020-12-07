@@ -124,3 +124,24 @@ Screenshot:
 ![k8 dashboard screenshot](k8-dashboard.jpg)
 
 
+---
+
+### Interesting `kubectl get <name/shortname>` commands:
+<pre>
+NAME                              SHORTNAMES          APIGROUP                       NAMESPACED   KIND
+componentstatuses                 cs                                                 false        ComponentStatus
+nodes                             no                                                 false        Node
+persistentvolumeclaims            pvc                                                true         PersistentVolumeClaim
+persistentvolumes                 pv                                                 false        PersistentVolume
+pods                              po                                                 true         Pod
+services                          svc                                                true         Service
+daemonsets                        ds                  apps                           true         DaemonSet
+deployments                       deploy              apps                           true         Deployment
+replicasets                       rs                  apps                           true         ReplicaSet
+statefulsets                      sts                 apps                           true         StatefulSet
+cronjobs                          cj                  batch                          true         CronJob
+jobs                                                  batch                          true         Job
+nodes                                                 metrics.k8s.io                 false        NodeMetrics
+pods                                                  metrics.k8s.io                 true         PodMetrics
+sparkapplications                 sparkapp            sparkoperator.k8s.io           true         SparkApplication
+</pre>
