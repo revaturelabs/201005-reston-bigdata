@@ -58,7 +58,7 @@ object Question8 {
   }
 
 
-  def regionFirstPeak(spark: SparkSession, df: DataFrame, resultpath: String): Unit= {
+  def regionFirstPeak(spark: SparkSession, df: DataFrame): Unit= {
     import spark.implicits._
     val now = Calendar.getInstance()
     val time = now.getTimeInMillis()
@@ -97,14 +97,6 @@ object Question8 {
       firstPeakForCountry.clear()
     }
 
-//          val firstPeakTable: ArrayBuffer[(String, Double)] = ArrayBuffer()
-//          for (ii <- 0 to regionList.length-1){
-//            firstPeakTable.append((regionList(ii), firstPeakTimeAvg(ii)))
-//          }
-//          println("")
-//          for (ii <- 0 to regionList.length-1){
-//            println(s"${firstPeakTable(ii)._1}, ${firstPeakTable(ii)._2}}" )
-//          }
       spark.sql(s"DROP TABLE IF EXISTS $tableName")
   }
 

@@ -52,6 +52,6 @@ object BlueRunner  {
   }
 
   def Q8_2(spark: SparkSession, fullDF: DataFrame=df(spark,econpath,casepath)): Unit = {
-    Question8.regionFirstPeak(spark, fullDF, "results")
+    Question8.regionFirstPeak(spark, fullDF)
   }
 }
