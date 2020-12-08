@@ -119,19 +119,19 @@ object orangeRunner {
     i.e. First, Second, or Third.
     Shows the country name, the country's development, and the infection rate per capita for the country.
  */
-    println("Highest infection rate with first world countries by HDI (Human Development Index)")
+    println("Highest infection rate with the highest ranking countries by HDI (Human Development Index)")
     rankingsWithRate.select("country_name", "infection_rate_per_capita")
       .where(rankingsWithRate("ranking") === "First")
       .orderBy(desc("infection_rate_per_capita"))
       .show(5)
 
-    println("Highest infection rate with second world countries by HDI (Human Development Index)")
+    println("Highest infection rate with the average ranking countries by HDI (Human Development Index)")
     rankingsWithRate.select("country_name", "infection_rate_per_capita")
       .where(rankingsWithRate("ranking") === "Second")
       .orderBy(desc("infection_rate_per_capita"))
       .show(5)
 
-    println("Highest infection rate with third world countries by HDI (Human Development Index)")
+    println("Highest infection rate with the lowest ranking countries by HDI (Human Development Index)")
     rankingsWithRate.select("country_name", "infection_rate_per_capita")
       .where(rankingsWithRate("ranking") === "Third")
       .orderBy(desc("infection_rate_per_capita"))

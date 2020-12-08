@@ -69,7 +69,7 @@ package object dictionaries {
     "GQ" -> 	"Equatorial Guinea",
     "ER" -> 	"Eritrea",
     "EE" -> 	"Estonia",
-    "SZ" -> 	"Eswatini",
+    "SZ" -> 	"Swaziland",
     "ET" -> 	"Ethiopia",
     "FK" -> 	"Falkland Islands",
     "FO" -> 	"Faeroe Islands",
@@ -121,6 +121,7 @@ package object dictionaries {
     "KR" -> 	"South Korea",
     "KW" -> 	"Kuwait",
     "KG" -> 	"Kyrgyzstan",
+    "XK" ->   "Kosovo",
     "LA" -> 	"Laos",
     "LV" -> 	"Latvia",
     "LB" -> 	"Lebanon",
@@ -792,6 +793,12 @@ package object dictionaries {
       "Turkmenistan",
       "Uzbekistan"
     ),
+    "Kosovo" -> List(
+      "Albania",
+      "Macedonia",
+      "Montenegro",
+      "Serbia"
+    ),
     "Laos" -> List(
       "China",
       "Cambodia",
@@ -921,7 +928,7 @@ package object dictionaries {
     ),
     "Mozambique" -> List(
       "Malawi",
-      "Eswatini",
+      "Swaziland",
       "South Africa",
       "Tanzania",
       "Zambia",
@@ -1151,7 +1158,7 @@ package object dictionaries {
       "Lebanon",
       "Turkey"
     ),
-    "Eswatini" -> List(
+    "Swaziland" -> List(
       "Mozambique",
       "South Africa"
     ),
@@ -1274,7 +1281,7 @@ package object dictionaries {
       "Lesotho",
       "Mozambique",
       "Namibia",
-      "Eswatini",
+      "Swaziland",
       "Zimbabwe"
     ),
     "Zambia" -> List(
@@ -1760,7 +1767,7 @@ package object dictionaries {
       "Micronesia",
       "Sao Tome and Principe",
       "Congo",
-      "Eswatini",
+      "Swaziland",
       "Laos",
       "Vanuatu",
       "Ghana",
