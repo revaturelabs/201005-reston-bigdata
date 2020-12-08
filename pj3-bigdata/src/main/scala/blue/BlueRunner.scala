@@ -12,15 +12,6 @@ object BlueRunner  {
 
   //Type path here
 
-  //  val casepath2="C:\\Users\\liamh\\V2_Project_3\\201005-reston-bigdata\\pj3-bigdata\\daily_stats.tsv"
-  //  val econpath2="C:\\Users\\liamh\\V2_Project_3\\201005-reston-bigdata\\economic_data_2018-2021.tsv"
-  //
-  //  val casepath1="C:\\Users\\river\\IdeaProjects\\201005-reston-bigdata\\pj3-bigdata\\daily_stats.tsv"
-  //  val econpath1="C:\\Users\\river\\IdeaProjects\\201005-reston-bigdata\\economic_data_2018-2021.tsv"
-  //
-  //  val casepath4="C:\\Users\\issac\\IdeaProjects\\project 3\\daily_stats.tsv"
-  //  val econpath4="C:\\Users\\issac\\IdeaProjects\\project 3\\economic_data_2018-2021.tsv"
-
 
   val casepath3="s3a://adam-king-848/data/daily_stats.tsv"
   val econpath3="s3a://adam-king-848/data/economic_data_2018-2021.tsv"
@@ -67,7 +58,6 @@ object BlueRunner  {
 
   def df(spark: SparkSession, econpath:String,casepath:String): DataFrame  ={
     val regionDF = spark.read.json("s3a://adam-king-848/data/regionDict.json")
-    //val regionDF = spark.read.json("regionDict")
 
     val econRawDF = spark.read.option("delimiter","\t").option("header",true).csv(econpath)
     val caseRawDF = spark.read.option("delimiter","\t").option("header",true)
@@ -80,7 +70,6 @@ object BlueRunner  {
 
   def Q1(spark:SparkSession, fullDF: DataFrame=df(spark,econpath,casepath)): Unit ={
     Question1.initialSolution(spark, fullDF, resultpath = "s3a://adam-king-848/results/blue/")
-    //    Question1.initialSolution(spark, fullDF, resultpath = "results")
 
   }
 
@@ -91,7 +80,6 @@ object BlueRunner  {
 
   def Q8_2(spark: SparkSession, fullDF: DataFrame=df(spark,econpath,casepath)): Unit = {
     Question8.regionFirstPeak(spark, fullDF, "s3a://adam-king-848/results/blue/")
-    //    Question8.regionFirstPeak(spark, fullDF, "results")
   }
 
 }

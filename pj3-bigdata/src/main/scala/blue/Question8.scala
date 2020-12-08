@@ -21,7 +21,6 @@ object Question8 {
 
     val regionNames = spark.sql(s"SELECT DISTINCT region FROM $tableName ORDER BY region").rdd.map(_.get(0).toString).collect()
 
-    //val regionNames = df.select("region").sort("region").distinct().rdd.map(_.get(0).toString).collect()
 
     for(region <- (0 to regionNames.length-1)){
       var gdp = ArrayBuffer[Double]()
@@ -29,7 +28,6 @@ object Question8 {
       val specificRegion = regionNames(region)
 
       val regionCountries = spark.sql(s"SELECT DISTINCT country, region FROM $tableName WHERE region = '$specificRegion' ").rdd.map(_.get(0).toString).collect()
-      //       val regionCountries = df.select("country").filter($"region" === regionNames(region)).distinct().rdd.map(_.get(0).toString).collect()
       // Get the first peak for each country in region and gdp
       for (country <- (0 to regionCountries.length-1)) {
         val regionCountry = regionCountries(country)
@@ -39,9 +37,7 @@ object Question8 {
           s" AND gdp_per_capita != 'NULL'" +
           s" ORDER BY date")
           .cache()
-        //        val countryDF = df.select($"date",$"gdp_per_capita",$"new_cases_per_million")
-        //        .where($"country" === regionCountries(country))
-        //        .filter($"date" =!= "NULL" && $"year" === "2020" && $"gdp_per_capita" =!= "NULL").sort("date").distinct()
+
 
         val tempCases = countryDF.select($"new_cases_per_million").collect().map(_.get(0).toString.toDouble)
         val tempDates = countryDF.select($"date").collect().map(_.get(0).toString).map(DateFunc.dayInYear(_).toDouble)
@@ -92,22 +88,12 @@ object Question8 {
         peakTime = StatFunc.firstMajorPeak(tempDates, tempCases, 7, 10, 5)._1
         if (peakTime != -1) {
           firstPeakForCountry.append(peakTime)
-          //          println(s"${country}, ${firstPeakForCountry.last}")
         }
       }
       firstPeakTimeAvg.append(firstPeakForCountry.sum / firstPeakForCountry.length)
       println(s"${region} Average Days to First Major Peak: ${firstPeakTimeAvg.last}")
       firstPeakForCountry.clear()
     }
-
-    //          val firstPeakTable: ArrayBuffer[(String, Double)] = ArrayBuffer()
-    //          for (ii <- 0 to regionList.length-1){
-    //            firstPeakTable.append((regionList(ii), firstPeakTimeAvg(ii)))
-    //          }
-    //          println("")
-    //          for (ii <- 0 to regionList.length-1){
-    //            println(s"${firstPeakTable(ii)._1}, ${firstPeakTable(ii)._2}}" )
-    //          }
     spark.sql(s"DROP TABLE IF EXISTS $tableName")
   }
 

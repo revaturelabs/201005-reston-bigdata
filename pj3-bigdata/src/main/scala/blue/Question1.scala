@@ -42,10 +42,6 @@ object Question1 {
     println("Total Cases per Million People in Each Region")
     RankRegions.rankByMetricLow(spark, data, "total_cases", "maxpop").show()
 
-    //    RankRegions.plotMetrics(spark, data, "new_cases", true, s"${resultpath}/plot_infection_rate_per_million")
-    //    RankRegions.plotMetrics(spark, data, "new_cases", false,s"${resultpath}/plot_infection_rate")
-    //    RankRegions.plotMetrics(spark, data, "total_cases", false, s"${resultpath}/plot_total_infections")
-    //    RankRegions.plotMetrics(spark, data, "total_cases", true, s"${resultpath}/plot_total_infections_per_million")
 
     println("")
     println("Average GDP Percent Change in Each Region")

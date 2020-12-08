@@ -187,7 +187,6 @@ object RankRegions {
     } else {
       metric
     }
-//    f.refresh()
     f.saveas(s"${filename}.png")
 
   }
@@ -195,10 +194,6 @@ object RankRegions {
   def changeGDP(spark: SparkSession, fullDS: DataFrame, metric: String, percapita: Boolean): DataFrame = {
     import spark.implicits._
 
-//    val temp = fullDS
-//      .withColumn("delta_gdp", (($"2020_GDP"-$"2019_GDP")/$"2019_GDP")*100)
-//    val gdp_tot = fullDS
-//      .select($"country", $"region", $"current_prices_gdp", $"year")
     val gdp_temp = fullDS
       .select($"country", $"region", $"population", $"$metric" as "gdp", $"year")
 
