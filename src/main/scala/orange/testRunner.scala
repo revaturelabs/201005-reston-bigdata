@@ -13,7 +13,7 @@ object testRunner {
     val secretKey = args.apply(1)
     val filePath = args.apply(2)
 
-    val spark = SparkSession.builder().appName("s3-example").getOrCreate()
+    val spark = SparkSession.builder().appName("orange-team-rules").getOrCreate()
 
     // The following is required in order for this to work properly
     spark.sparkContext.addJar("https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-aws/2.7.4/hadoop-aws-2.7.4.jar")

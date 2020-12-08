@@ -21,13 +21,13 @@ object orangeRunner {
     //val country_stats = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("countries_general_stats.tsv")
     val country_stats = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("s3a://adam-king-848/data/countries_general_stats.tsv")
    //val country_data = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("daily_stats.tsv")
-      val country_data = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("s3a://adam-king-848/data/daily_stats.tsv")
+      val country_data = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("s3a://adam-king-848/data/owid_daily_stats.tsv")
 
     val country_pop = country_stats.select($"COUNTRY", $"POPULATION".cast("Int"))
     val country_cases = country_data
       .filter($"TOTAL_CASES" =!= "NULL")
       .withColumn("Cases", $"TOTAL_CASES".cast("Int"))
-      .select($"COUNTRY", $"Cases".as("Total Cases"))
+      .select($"location".as("COUNTRY"), $"Cases".as("Total Cases"))
       .groupBy($"COUNTRY")
       .agg(max($"Total Cases").as("TOTAL CASES"))
       .sort(asc("COUNTRY"))
