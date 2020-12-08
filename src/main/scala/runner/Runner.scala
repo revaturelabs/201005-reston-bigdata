@@ -7,7 +7,7 @@ import org.apache.spark.sql.SparkSession
 
 
 object Runner {
-  def main(args: Array[String]): Unit = {
+  def notMain(args: Array[String]): Unit = {
     // Command Line Interface format that accepts params
     //Have a use case for your question below
     val spark = SparkSession.builder()
