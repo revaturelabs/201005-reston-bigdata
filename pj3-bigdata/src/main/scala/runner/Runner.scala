@@ -101,7 +101,7 @@ object Runner {
 
         // We call the above defined future here, but wait only 1 minute before the
         // final timeout and close program. If the future continues the program (by
-        // setting loopagain equal to true), then we set the timeout for 5 more
+        // setting loop again equal to true), then we set the timeout for 5 more
         // minutes, and head back up to the while loop.
         try {
           Await.ready(continueOption, 1.minute)
@@ -118,7 +118,7 @@ object Runner {
                 "\nrate per capita. (Jan 1 2020 - Oct 31 2020)\n")
               println("running code...")
 
-              //        blue.BlueRunner.Question1(spark)
+              //        blue.BlueRunner.Q1(spark)
               println("Returning to main menu...")
               Menu.printMenu()
               println("\nPlease enter an option: ")
@@ -189,8 +189,8 @@ object Runner {
                 "\nGDP and Infection Rate per capita? What is the average amount of time" +
                 "\nit took for each region to reach its first peak in infection rate per capita?\n")
               println("running code...")
-              //        blue.Question8.regionCorrelation(spark)
-              //        blue.Question8.regionFirstPeak(spark)
+              //  blue.BlueRunner.Q8_1(spark)
+              //  blue.BlueRunner.Q8_2(spark)
               println("Returning to main menu...")
               Menu.printMenu()
               println("\nPlease enter an option: ")
