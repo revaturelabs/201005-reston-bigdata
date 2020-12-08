@@ -2,7 +2,7 @@ package orange
 
 import org.apache.spark
 import org.apache.spark.SparkConf
-import org.apache.spark.sql.functions.{asc, desc, round}
+import org.apache.spark.sql.functions.{asc, desc, round, max}
 import org.apache.spark.sql.{DataFrame, SparkSession, functions}
 
 
@@ -18,19 +18,19 @@ object orangeRunner {
     spark.sparkContext.setLogLevel("WARN")
 
     //import the covid data from testData file as well as the border data from the provided border data
-//    val country_stats = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("countries_general_stats.tsv")
-      val country_stats = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("s3://adam-king-848/data/countries_general_stats.tsv")
-//    val country_data = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("daily_stats.tsv")
-      val country_data = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("s3://adam-king-848/data/data/owid_daily_stats.tsv.tsv")
+    //val country_stats = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("countries_general_stats.tsv")
+    val country_stats = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("s3a://adam-king-848/data/countries_general_stats.tsv")
+   //val country_data = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("daily_stats.tsv")
+      val country_data = spark.read.option("multiline", "true").option("header", "true").option("sep", "\t").csv("s3a://adam-king-848/data/owid_daily_stats.tsv")
 
     val country_pop = country_stats.select($"COUNTRY", $"POPULATION".cast("Int"))
     val country_cases = country_data
       .filter($"TOTAL_CASES" =!= "NULL")
       .withColumn("Cases", $"TOTAL_CASES".cast("Int"))
-      .select($"COUNTRY", $"Cases".as("Total Cases"))
+      .select($"location".as("COUNTRY"), $"Cases".as("Total Cases"))
       .groupBy($"COUNTRY")
-      .agg(functions.max($"Total Cases").as("TOTAL CASES"))
-      .sort(functions.asc("COUNTRY"))
+      .agg(max($"Total Cases").as("TOTAL CASES"))
+      .sort(asc("COUNTRY"))
 
 
     val borders = joinCodesAndBorders(spark)
@@ -40,7 +40,7 @@ object orangeRunner {
       .join(country_pop, country_cases("COUNTRY") === country_pop("COUNTRY"))
       .select(country_cases("COUNTRY"), $"TOTAL CASES", $"POPULATION",
         ($"TOTAL CASES" * 100 / $"POPULATION").as("infection_rate_per_capita"))
-      .sort(functions.desc("infection_rate_per_capita"))
+      .sort(desc("infection_rate_per_capita"))
       .withColumn("infection_rate_per_capita",'infection_rate_per_capita.cast("Decimal(5,3)"))
 
 
@@ -119,19 +119,19 @@ object orangeRunner {
     i.e. First, Second, or Third.
     Shows the country name, the country's development, and the infection rate per capita for the country.
  */
-    println("Highest infection rate with first world countries by HDI (Human Development Index)")
+    println("Highest infection rate with the highest ranking countries by HDI (Human Development Index)")
     rankingsWithRate.select("country_name", "infection_rate_per_capita")
       .where(rankingsWithRate("ranking") === "First")
       .orderBy(desc("infection_rate_per_capita"))
       .show(5)
 
-    println("Highest infection rate with second world countries by HDI (Human Development Index)")
+    println("Highest infection rate with the average ranking countries by HDI (Human Development Index)")
     rankingsWithRate.select("country_name", "infection_rate_per_capita")
       .where(rankingsWithRate("ranking") === "Second")
       .orderBy(desc("infection_rate_per_capita"))
       .show(5)
 
-    println("Highest infection rate with third world countries by HDI (Human Development Index)")
+    println("Highest infection rate with the lowest ranking countries by HDI (Human Development Index)")
     rankingsWithRate.select("country_name", "infection_rate_per_capita")
       .where(rankingsWithRate("ranking") === "Third")
       .orderBy(desc("infection_rate_per_capita"))
@@ -199,4 +199,3 @@ def createWaterLocked(infectionFrame: DataFrame , spark:SparkSession): DataFrame
   }
 
 }
-
