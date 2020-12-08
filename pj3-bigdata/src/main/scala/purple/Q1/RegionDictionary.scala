@@ -265,4 +265,8 @@ object RegionDictionary {
     )
     "Country Not Found"
   }
+
+    def getRegionList: List[String] = {
+        regionMap.keys.toList
+    }
 }

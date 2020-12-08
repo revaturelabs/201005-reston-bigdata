@@ -2,19 +2,14 @@ package purple.Q2
 
 import org.apache.spark.sql.{DataFrame, SparkSession, functions}
 import purple.FileUtil.FileWriter.writeDataFrameToFile
-
 import scala.collection.convert.ImplicitConversions.`collection AsScalaIterable`
 
 object HashtagsWithCovid {
 
   def getHashtagsWithCovid(spark: SparkSession): Unit = {
     //What are the top 10 commonly used hashtags used alongside COVID hashtags?
-
-    //val staticDf = spark.read.json("s3://adam-king-848/data/twitter_data_testing.json")
-    val sampleStaticDf = spark.read.json("src/main/scala/purple/twitter_data_testing.json")
-
-    println("QUESTION 2 (with Sample Data)")
-    question2(spark, sampleStaticDf)
+    val staticDf = spark.read.json("s3a://adam-king-848/data/twitter_data.json")
+    question2(spark, staticDf)
   }
 
   private def question2(spark: SparkSession, df: DataFrame): Unit = {
@@ -53,9 +48,7 @@ object HashtagsWithCovid {
       .count()
       .orderBy(functions.desc("Count"))
 
-    newDf.show(10)
-
-    val outputFilename: String = s"hwc-$startTime"
-    writeDataFrameToFile(newDf, outputFilename, 10)
+    val outputFilename: String = s"hwc-full-$startTime"
+    writeDataFrameToFile(newDf, outputFilename)
   }
 }

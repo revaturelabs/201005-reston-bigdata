@@ -9,6 +9,6 @@ object FileWriter {
         .limit(maxRecords)
         .write
         .format("csv")
-        .save(s"$outputFilename")
+        .save(s"s3a://adam-king-848/results/purple/$outputFilename")
   }
 }
