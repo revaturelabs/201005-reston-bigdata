@@ -10,7 +10,9 @@
   
 | dir | description |
 |---|---|
-|/git|git cheatsheet and sample gitignore, gitconfig files|
 |/architecture| Kubernetes, Docker and system architecture related |
-|/sbt| sbt related stuff, only multi-project jar build.sbt sample file.
-
+|/git|git cheatsheet and sample gitignore, gitconfig files|
+|/kafka-sample|sample scala code for kafka consumers/producers|
+|/sbt| sbt related stuff, only multi-project jar build.sbt sample file.|
+|/scala|not much|
+|/spark-submit|using spark-submit in k8 cluster example|
