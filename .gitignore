@@ -5,6 +5,7 @@
 *.jar
 
 # sbt specific
+.bsp/
 .cache/
 .history
 .lib/
@@ -19,5 +20,8 @@ project/project/
 bin/
 out
 
+/.gitignore
+
 # jetbrains
 .idea/workspace.xml
+pj3-bigdata/.bsp/sbt.json

@@ -18,7 +18,7 @@ object GraphFunc {
     fig.refresh()
   }
 
-  def hist(data: Array[Double], bins: Int,  name: String = null,legend: Boolean = false, title: String = "X vs Y Plot", xlabel: String = "X", ylabel: String = "Y"): Unit={
+  def hist(data: Array[Double], bins: Int,  name: String = null,legend: Boolean = false, title: String = "Data Histogram", xlabel: String = "Data", ylabel: String = "Bin Size"): Unit={
     val fig = Figure()
     val p = fig.subplot(0)
     p += breeze.plot.hist(data, bins, name = name)

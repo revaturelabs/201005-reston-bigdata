@@ -1,0 +1,51 @@
+package data_parsing
+
+case class EconomicsData(
+                          name: String,
+                          year: Int,
+                          gdp_constPrices: Long = null,
+                          gdp_constPrices_delta: Double = null,
+                          gdp_currentPrices: Long = null,
+                          gdp_currentPrices_usd: Long = null,
+                          gdp_currentPrices_ppp: Long = null,            //ppp = purchasing power parity
+                          gdp_deflator: Int = null,
+                          gdp_perCap_constPrices: Long = null,
+                          gdp_perCap_constPrices_ppp: Double = null,
+                          gdp_perCap_currentPrices: Long = null,
+                          gdp_perCap_currentPrices_usd: Long = null,
+                          gdp_perCap_currentPrices_ppp: Double = null,
+                          output_gap_pGDP: Double = null,
+                          gdp_ppp_frac_of_total_world: Double = null,
+                          implied_ppp: Double = null,                    //National Currency per current international dollar
+                          total_investment: Double = null,               //as percent of GDP
+                          gross_national_savings: Double = null,         //as percent of GDP
+                          inflation_avgConsumerPrices: Double = null,
+                          inflation_avgConsumerPrices_delta: Double = null,
+                          inflation_eopConsumerPrices: Double = null,
+                          inflation_eopConsumerPrices_delta: Double = null,
+                          six_month_LIBOR: Double = null,
+                          vol_imports_goods_and_services_delta: Double = null,
+                          vol_imports_goods_delta: Double = null,
+                          vol_exports_goods_and_services_delta: Double = null,
+                          vol_exports_goods_delta: Double = null,
+                          unemployment_rate: Double = null,
+                          employed_persons: Long = null,
+                          population: Long = null,
+                          government_revenue_currency: Long = null,
+                          government_revenue_percent: Double = null,
+                          government_total_expenditure_currency: Long = null,
+                          government_total_expenditure_percent: Double = null,
+                          government_net_lb_currency: Long = null,
+                          government_net_lb_percent: Double = null,
+                          government_structural_balance_currency: Long = null,
+                          government_structural_balance_percent_pGDP: Double = null,
+                          government_primary_net_lb_currency: Long = null,
+                          government_primary_net_lb_percent: Double = null,
+                          government_net_debt_currency: Long = null,
+                          government_net_debt_percent: Double = null,
+                          government_gross_debt_currency: Long = null,
+                          government_gross_debt_percent: Double = null,
+                          gdp_of_fiscal_year: Long = null,
+                          current_account_balance_usd: Long = null,
+                          current_account_balance_percentGDP: Double = null
+                        )

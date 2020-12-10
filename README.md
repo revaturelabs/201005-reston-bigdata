@@ -2,11 +2,18 @@
 monorepo for 201005-reston-bigdata batch project 3
 
 ## Datasets
-- [IMF](https://www.imf.org/en/Publications/SPROLLS/world-economic-outlook-databases#sort=%40imfdate%20descending)
-  - October 2019/2020
-  - April 2020
-- [COVID-19](https://ourworldindata.org/coronavirus-source-data)
-- [Twitter COVID-19 Stream](https://developer.twitter.com/en/docs/labs/covid19-stream/overview)
+- Covid 19 Case Reporting from the CDC
+  - [COVID-19 Case Surveillance Public Use Data | Data | Centers for Disease Control and Prevention](https://data.cdc.gov/Case-Surveillance/COVID-19-Case-Surveillance-Public-Use-Data/vbim-akqf/data)
+- Conglomeration of datasets from the UN, European CDPC, Johns Hopkins, World Bank and national government reports 
+  - [Our World in Data - Coronavirus Source Data](https://ourworldindata.org/coronavirus-source-data)
+- World Economic Outlook Database ( Bi - Annual )
+  - [IMF - World Economic Outlook Database](https://www.imf.org/en/Publications/SPROLLS/world-economic-outlook-databases#sort=%40imfdate%20descending)
+- A large-scale COVID-19 Twitter chatter dataset for open scientific research and international collaboration from Panacea Lab - Georgia State University
+  - [Zenodo link](https://zenodo.org/record/3783737#.X85hTmhKhPY)
+- API call formatting and updated statistics for live updating application
+  - [Disease.sh](https://disease.sh/docs/) - provides formatting for proper API calls
+  - [worldometers](https://www.worldometers.info/coronavirus/) - provides statistics updated every 10 minutes
+
 
 ## Problem Statement
 - Which Regions handled COVID-19 the best assuming our metrics are change in GDP by percentage and COVID-19 infection rate per capita. (Jan 1 2020 - Oct

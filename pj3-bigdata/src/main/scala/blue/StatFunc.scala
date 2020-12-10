@@ -10,44 +10,30 @@ object StatFunc {
    * @param xArray the independent data series
    * @param yArray the dependent data series
    * @param neighbors number of data points to evaluate after a potential peak
-   * @param minDifference number to filter out noise where noise is difference between peak and avg value of neighbors
+   * @param percentDifference percentage to filter out noise where noise is difference between peak and avg value of neighbors
+   * @param minCasePercent floor to start evaluating values with respect to maximum value percentage
    * @return a first peak coordinate that satisfies conditions
    */
-  def firstPeak(xArray: Array[Double], yArray: Array[Double], neighbors: Int, minDifference: Double): (Double, Double) ={
-
-    for(i <- (0 to (xArray.length - 1))){
-      if(i == 0 && yArray(i) > yArray(i + 1)){
-        var sum: Double = 0.0
-        for(neighbor <- (1 to neighbors)){
-          sum += yArray(i + neighbor)
-        }
-        val avgSum = sum/neighbors
-        if(yArray(i) - avgSum >= minDifference){
-          return (xArray(i),yArray(i))
-        }
-      }
-      else if (i == xArray.length-1 && yArray(i) > yArray(i-1)){
-        var sum: Double = 0.0
-        for(neighbor <- (1 to neighbors)){
-          sum += yArray(i - neighbor)
-        }
-        val avgSum = sum/neighbors
-        if(yArray(i) - avgSum >= minDifference){
-          return (xArray(i),yArray(i))
-        }
-      }
-      else if(i!= 0 && i!= xArray.length-1 && yArray(i) > yArray(i - 1) && yArray(i) > yArray(i + 1)){
-        var sum: Double = 0.0
-        for(neighbor <- (1 to neighbors)){
-          sum += yArray(i + neighbor)
-        }
-        val avgSum = sum/neighbors
-        if(yArray(i) - avgSum >= minDifference){
-          return (xArray(i),yArray(i))
-        }
+  def firstMajorPeak(xArray: Array[Double], yArray: Array[Double], neighbors: Int, percentDifference: Double, minCasePercent: Double): (Double, Double) ={
+    var avgSum: Double = 0.0
+    var sum: Double = 0.0
+    var minDifference: Double = 0.0
+    val minCase = minCasePercent*.01*yArray.max
+    val start = yArray.indexWhere(_ > minCase)
+    if (start != -1) {
+      for(i <- start to (xArray.length - neighbors - 1)){
+          sum = 0.0
+          for(neighbor <- (1 to neighbors)){
+            sum += yArray(i + neighbor)
+          }
+          avgSum = sum/neighbors
+          minDifference = .01*percentDifference*yArray(i)
+          if(yArray(i) - avgSum > minDifference){
+            return (xArray(i),yArray(i))
+          }
       }
     }
-    null
+    (-1, yArray(0))
   }
 
   /**
