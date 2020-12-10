@@ -17,7 +17,8 @@ import green.Q4.Question4
 import green.Q5.Question5
 import org.apache.spark.sql.SparkSession
 
-
+import purple.Q1.HashtagsByRegion
+import purple.Q2.HashtagsWithCovid
 
 object Runner {
    def main(args: Array[String]): Unit = {
