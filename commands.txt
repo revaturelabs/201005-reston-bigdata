@@ -1,0 +1,19 @@
+These commands assume we already have docker and
+they make use of the Dockerfile and crondemo.yaml
+to specify to Docker how to build the image and to
+specify to k8s how to run the image as a cronjob
+
+Command necessary to authenticate with ECR:
+REDACTED
+
+Command to build the docker image:
+docker build . -t 855430746673.dkr.ecr.us-east-1.amazonaws.com/adam-king-848:kevin
+
+Command to push to ECR:
+docker push 855430746673.dkr.ecr.us-east-1.amazonaws.com/adam-king-848
+
+Command to actually run the job on k8s:
+kubectl apply -f crondemo.yaml
+
+Command to get info on the job:
+kubectl get cronjob kevin-q3-cron
