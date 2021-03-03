@@ -3,7 +3,7 @@
 ### intro
 The goal of this guide is to stand up a Docker container with Kafka.  
 
-The guide at https://kafka.apache.org/quickstart-docker is garbage.  A much better intro, which was used to compose this document is by Jacek Laskowski here - https://jaceklaskowski.gitbooks.io/apache-kafka/content/kafka-docker.html.
+The guide at https://kafka.apache.org/quickstart-docker is not optimal.  A much better intro, which was used to compose this document is by Jacek Laskowski here - https://jaceklaskowski.gitbooks.io/apache-kafka/content/kafka-docker.html.
 
 If you're still not sure how it all fits together, this was a good (55 minute) introduction to "Microservices, Docker, Kubernetes" by James Quigley [youTube](https://www.youtube.com/watch?v=1xo-0gCVhTU.)
 
